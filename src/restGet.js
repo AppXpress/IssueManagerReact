@@ -9,10 +9,6 @@ export function getAuthToken(dataKey, username, password, eid, onResponse){
   	var toEncode  = username + ":" + password;
   	}
 
-
-  	var respon;
-
-
 	return fetch('https://demo.gtnexus.com/rest/310?dataKey=' + dataKey,
 		{
 			method: "GET",
@@ -23,6 +19,7 @@ export function getAuthToken(dataKey, username, password, eid, onResponse){
 
 		}).then(
 		function (response){
+			
 			onResponse(response);
 		}
 

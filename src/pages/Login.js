@@ -10,7 +10,8 @@ import {
 	TextInput,
 	ScrollView,
 	StatusBar,
-	ActivityIndicator
+	ActivityIndicator,
+	AsyncStorage,
 } from 'react-native';
 
 import Button from '../SoHo/Button';
@@ -25,6 +26,10 @@ export default class Login extends Component {
 
 	static navigationOptions = {
 		title: 'Welcome',
+		headerTintColor: '#D58F4A',
+		headerStyle: {
+			backgroundColor: '#368ac0',
+		},
 	};
 
 	constructor(props) {
@@ -82,19 +87,28 @@ export default class Login extends Component {
 		);
 	}
 
-	_handleLogin(event) {
+ _handleLogin(event) {
 
 
 		this.setState({ loading: true });
-		var response = getAuthToken(dataKey, this.state.username, this.state.password, this.state.eid, (response) => {
+		var response = getAuthToken(dataKey, this.state.username, this.state.password, this.state.eid, async (response) => {
 			this.setState({ loading: false });
 			if (response.status != 200) {
 				Alert.alert('error');
-			}
-			console.log(response);
-		});
+			}else{
+				console.log(response.headers.get('Authorization'));
 
-	}
+				try {
+				await AsyncStorage.setItem("authToken", response.headers.get('Authorization'));
+				}catch(error){
+					console.log(error);
+				}
+				this.props.navigation.navigate('Home');
+				}
+			});
+
+
+		}
 }
 
 

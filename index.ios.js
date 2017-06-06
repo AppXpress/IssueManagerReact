@@ -21,7 +21,7 @@ import Home from './src/pages/Home';
 
 const IssueManager = StackNavigator({
 	Main: { screen: Login },
-
+  Home: { screen: Home },
 });
 
 

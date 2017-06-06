@@ -10,18 +10,41 @@ import {
 	ScrollView,
 	StatusBar,
 	Button,
-	ActivityIndicator
+	ActivityIndicator,
+	AsyncStorage,
 } from 'react-native';
 
 export default class Home extends Component {
 
+	constructor(props) {
+		super(props);
+
+		this.state = {
+			token: getToken()
+		};
+	}
+
 	render() {
     	return (
     		<View>
+    		<Text>
+    		{this.state.token.text}
+    		</Text>
     		</View>
 
     	);		
     }	
+
+}
+
+async function getToken(){
+
+	try{
+
+		return await AsyncStorage.getItem('authToken');
+	}catch (error){
+		console.log(error);
+	}
 
 }	
 
