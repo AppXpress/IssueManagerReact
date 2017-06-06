@@ -6,7 +6,7 @@ React Native app for GTn Issue Manager
 Set up your computer according to the React Native documentation
 
 Clone the project repository
-In the project folder, run `npm restore`
+In the project folder, run `npm install`
 
 Create the file `./src/dataKey.js` with the following contents:
 ```export const dataKey='[YOUR DATA KEY HERE]';```
