@@ -4,32 +4,28 @@
  * @flow
  */
 
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import {
   AppRegistry,
   StyleSheet,
   Text,
-  View
+  View,
+  NavigatorIOS,
+  TouchableHighlight
 } from 'react-native';
 
-export default class IssueManager extends Component {
+import Login from './src/pages/Login';
+
+export default class IssueReact extends Component {
   render() {
     return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.ios.js
-        </Text>
-        <Text style={styles.instructions}>
-          Press Cmd+R to reload,{'\n'}
-          Cmd+D or shake for dev menu
-        </Text>
-      </View>
+      <Login />
     );
   }
 }
+
+
+
 
 const styles = StyleSheet.create({
   container: {
@@ -50,4 +46,4 @@ const styles = StyleSheet.create({
   },
 });
 
-AppRegistry.registerComponent('IssueManager', () => IssueManager);
+AppRegistry.registerComponent('IssueReact', () => IssueReact);
