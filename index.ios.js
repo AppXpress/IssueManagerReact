@@ -16,7 +16,7 @@ import {
 
 import Login from './src/pages/Login';
 
-export default class IssueReact extends Component {
+export default class IssueManager extends Component {
   render() {
     return (
       <Login />
@@ -46,4 +46,4 @@ const styles = StyleSheet.create({
   },
 });
 
-AppRegistry.registerComponent('IssueReact', () => IssueReact);
+AppRegistry.registerComponent('IssueManager', () => IssueManager);
