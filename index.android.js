@@ -4,41 +4,25 @@
  * @flow
  */
 
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import {
 	AppRegistry,
 	StyleSheet,
 	Text,
-	View
+	View,
 } from 'react-native';
 
+import {
+	StackNavigator,
+} from 'react-navigation';
+
 import Login from './src/pages/Login';
+import Home from './src/pages/Home';
 
-export default class IssueManager extends Component {
-	render() {
-		return (
-			<Login />
-		);
-	}
-}
+const IssueManager = StackNavigator({
+	Main: { screen: Login },
 
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center',
-		backgroundColor: '#F5FCFF',
-	},
-	welcome: {
-		fontSize: 20,
-		textAlign: 'center',
-		margin: 10,
-	},
-	instructions: {
-		textAlign: 'center',
-		color: '#333333',
-		marginBottom: 5,
-	},
 });
+
 
 AppRegistry.registerComponent('IssueManager', () => IssueManager);

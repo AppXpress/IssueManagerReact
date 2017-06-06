@@ -6,22 +6,22 @@
 
 import React, { Component, PropTypes } from 'react';
 import {
-  AppRegistry,
-  StyleSheet,
-  Text,
-  View,
+	AppRegistry,
+	StyleSheet,
+	Text,
+	View,
 } from 'react-native';
 
 import {
-  StackNavigator,
+	StackNavigator,
 } from 'react-navigation';
 
 import Login from './src/pages/Login';
 import Home from './src/pages/Home';
 
 const IssueManager = StackNavigator({
-  Main: {screen: Login},
-  
+	Main: { screen: Login },
+
 });
 
 
