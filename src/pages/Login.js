@@ -7,28 +7,28 @@ import {
 	StyleSheet,
 	Text,
 	View,
-	TextInput,
 	ScrollView,
 	StatusBar,
 	ActivityIndicator,
 	AsyncStorage,
 } from 'react-native';
 
-import Button from '../SoHo/Button';
+import {
+	Button,
+	Card,
+	ListCard,
+	TextInput
+} from '../soho/All';
 
-import Container from '../components/Container';
-
-import Label from '../components/Label';
-
-import { getAuthToken } from '../restGet';
+import { getAuthToken, setToken } from '../restGet';
 
 export default class Login extends Component {
 
 	static navigationOptions = {
 		title: 'Welcome',
-		headerTintColor: '#D58F4A',
+		headerTintColor: '#ffffff',
 		headerStyle: {
-			backgroundColor: '#368ac0',
+			backgroundColor: '#2578a9',
 		},
 	};
 
@@ -45,89 +45,62 @@ export default class Login extends Component {
 
 	render() {
 		return (
-
 			<ScrollView style={styles.scroll}>
-				<Container>
-				</Container>
-				<Container>
-
+				<Card>
 					<TextInput
-						style={styles.inp}
-						placeholder='Username'
+						label='Username'
 						onChangeText={(text) => this.setState({ username: text })}
 						autoCapitalize='none'
+						required
 					/>
-
 					<TextInput
-						secureTextEntry={true}
-						style={styles.inp}
-						placeholder='Password'
+						label='Password'
 						onChangeText={(text) => this.setState({ password: text })}
+						secureTextEntry={true}
+						required
 					/>
 					<TextInput
-						secureTextEntry={true}
-						style={styles.inp}
-						placeholder='EID (Leave Blank if Unnecesarry)'
+						label='EID'
 						onChangeText={(text) => this.setState({ eid: text })}
+						secureTextEntry={true}
+						placeholder='Leave Blank if Unnecesarry'
 					/>
-				</Container>
-
-				<Container>
 					<Button
+						title='Login'
 						onPress={this._handleLogin.bind(this)}
-						title="Login"
+						disabled={this.state.loading || !this.state.username || !this.state.password}
 						primary
-						disabled={this.state.loading}
 					/>
-
-					<ActivityIndicator animating={this.state.loading} size="large" />
-				</Container>
-
+				</Card>
+				<ActivityIndicator animating={this.state.loading} size="large" />
 			</ScrollView>
 		);
 	}
 
- _handleLogin(event) {
-
-
+	async _handleLogin(event) {
 		this.setState({ loading: true });
-		var response = getAuthToken(dataKey, this.state.username, this.state.password, this.state.eid, async (response) => {
-			this.setState({ loading: false });
-			if (response.status != 200) {
-				Alert.alert('error');
-			}else{
-				console.log(response.headers.get('Authorization'));
+		var response = await getAuthToken(dataKey, this.state.username, this.state.password, this.state.eid);
+		this.setState({ loading: false });
 
-				try {
-				await AsyncStorage.setItem("authToken", response.headers.get('Authorization'));
-				}catch(error){
-					console.log(error);
-				}
-				this.props.navigation.navigate('Home');
-				}
-			});
+		if (response.status != 200) {
+			Alert.alert('error');
+			console.log(response);
 
+		} else {
 
+			//console.log(response.headers.get('Authorization'));
+			setToken(response.headers.get('Authorization'));
+
+			this.props.navigation.navigate('Home');
 		}
-}
 
+	}
+}
 
 const styles = StyleSheet.create({
 	scroll: {
 		backgroundColor: '#F0F0F0',
 		padding: 0,
 		flexDirection: 'column'
-	},
-	label: {
-		color: 'black',
-		fontSize: 28
-	},
-	inp: {
-		backgroundColor: '#FFFFFF',
-		height: 40,
-		borderColor: 'gray',
-		borderWidth: 1,
-		alignSelf: 'stretch'
 	}
 });
-

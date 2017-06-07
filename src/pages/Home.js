@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import dataKey from '../dataKey';
 import {
 	Alert,
 	AppRegistry,
@@ -12,7 +12,13 @@ import {
 	Button,
 	ActivityIndicator,
 	AsyncStorage,
+	ListView,
 } from 'react-native';
+
+import {
+	getToken,
+	getObjects
+} from '../restGet';
 
 export default class Home extends Component {
 
@@ -20,33 +26,61 @@ export default class Home extends Component {
 		super(props);
 
 		this.state = {
-			token: getToken()
+			token: getToken(),
+			issueData: new ListView.DataSource({
+				rowHasChanged: (row1, row2) => row1 !== row2,
+			}),
+			
 		};
+	}
+
+
+	async getDataSource(){
+		var results;
+    	results = await getObjects('$IssueT3');
+    	
+    	return  results;
+    }	
+
+
+
+	async componentDidMount(){
+		var data = await this.getDataSource();
+		console.log(data);
+		this.setState({
+			issueData: this.state.issueData.cloneWithRows(data.result)
+		});
+		
+	
+	}
+
+	renderRow(issue){
+		return (
+			<View>
+			<Text>{issue.createdBy}</Text>
+			</View>
+			)
 	}
 
 	render() {
     	return (
     		<View>
-    		<Text>
-    		{this.state.token.text}
-    		</Text>
+    			<ListView                     
+          		dataSource={this.state.issueData}
+        		renderRow={this.renderRow.bind(this)}
+          	
+          		enableEmptySections={true}
+        />
     		</View>
 
     	);		
-    }	
+    }
+
+	
 
 }
 
-async function getToken(){
 
-	try{
-
-		return await AsyncStorage.getItem('authToken');
-	}catch (error){
-		console.log(error);
-	}
-
-}	
 
 const styles = StyleSheet.create({
 	scroll: {
