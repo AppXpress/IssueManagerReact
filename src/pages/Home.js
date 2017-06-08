@@ -68,7 +68,9 @@ export default class Home extends Component {
 	renderRow(issue) {
 		return (
 			<View>
-				<ListCard main={issue.subject} secondary={issue.createdBy} tertiary={issue.description}></ListCard>
+				<ListCard main={issue.subject} secondary={issue.createdBy} tertiary={issue.description} 
+				onPress={() => this.props.navigation.navigate('IssueScreen', {issue:issue})} 
+				></ListCard>
 			</View>
 		)
 	}
