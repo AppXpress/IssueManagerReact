@@ -79,7 +79,6 @@ export default class Home extends Component {
 			<Button
 				title='+Create'
 				onPress={() => this.props.navigation.navigate('Create')}
-				disabled={this.state.loading || !this.state.username || !this.state.password}
 				primary
 			/>
 				<ListView

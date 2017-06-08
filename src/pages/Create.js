@@ -11,6 +11,7 @@ import {
 	ActivityIndicator,
 	AsyncStorage,
 	ListView,
+  Picker,
 } from 'react-native';
 
 import {
@@ -22,10 +23,70 @@ import {
 
 export default class Create extends Component {
 
+  constructor(props) {
+		super(props);
+
+		this.state = {
+			subject: '',
+			issueType: '',
+			severity: '',
+      desc: '',
+		};
+  }
+
   render() {
     return (
-      <Text>Hello world!</Text>
+      <ScrollView style={styles.scroll}>
+				<Card>
+					<TextInput
+						label='Subject'
+						onChangeText={(text) => this.setState({ subject: text })}
+						autoCapitalize='none'
+						autoFocus={true}
+						required
+					/>
+          <Picker
+            selectedValue={this.state.issueType}
+            onValueChange={(item, index) => this.setState({issueType: item})}>
+            <Picker.Item label="Shipping" value="Shipping" />
+            <Picker.Item label="Factory" value="Factory" />
+            <Picker.Item label="Quality Control" value="Quality Control" />
+          </Picker>
+          <Picker
+            selectedValue={this.state.severity}
+            onValueChange={(item, index) => this.setState({severity: item})}>
+            <Picker.Item label="Low" value="Low" />
+            <Picker.Item label="Medium" value="Medium" />
+            <Picker.Item label="High" value="High" />
+          </Picker>
+          <TextInput
+						label='Description'
+						onChangeText={(text) => this.setState({ desc: text })}
+						autoCapitalize='none'
+						required
+					/>
+				</Card>
+				<ActivityIndicator animating={this.state.loading} size="large" />
+			</ScrollView>
     );
   }
 
 }
+const styles = StyleSheet.create({
+	scroll: {
+		backgroundColor: '#F0F0F0',
+		padding: 0,
+		flexDirection: 'column'
+	},
+	label: {
+		color: 'black',
+		fontSize: 28
+	},
+	inp: {
+		backgroundColor: '#FFFFFF',
+		height: 40,
+		borderColor: 'gray',
+		borderWidth: 1,
+		alignSelf: 'stretch'
+	}
+});
