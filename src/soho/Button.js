@@ -9,6 +9,10 @@ import {
 	Text
 } from 'react-native';
 
+import {
+	getHandler
+} from './Tools';
+
 export default class Button extends Component {
 	constructor(props) {
 		super(props);
@@ -48,31 +52,30 @@ export default class Button extends Component {
 		}
 	}
 
+	getView() {
+		return (
+			<View
+				{...this.props}
+				style={[styles.view, this.viewDisabled(), this.viewType(), this.props.style]}
+			>
+				<Text style={[styles.text, this.textType()]}>
+					{this.props.title.toUpperCase()}
+				</Text>
+			</View>
+		);
+	}
+
 	render() {
 		if (Platform.OS == 'android') {
 			return (
-				<TouchableNativeFeedback
-					{...this.props}
-					onPress={this.props.onPress.bind(this)}
-				>
-					<View style={[styles.view, this.viewDisabled(), this.viewType()]}>
-						<Text style={[styles.text, this.textType()]}>
-							{this.props.title.toUpperCase()}
-						</Text>
-					</View>
+				<TouchableNativeFeedback onPress={getHandler(this, 'onPress')}>
+					{this.getView()}
 				</TouchableNativeFeedback>
 			);
 		} else {
 			return (
-				<TouchableHighlight
-					{...this.props}
-					onPress={this.props.onPress.bind(this)}
-				>
-					<View style={[styles.view, this.viewDisabled(), this.viewType()]}>
-						<Text style={[styles.text, this.textType()]}>
-							{this.props.title.toUpperCase()}
-						</Text>
-					</View>
+				<TouchableHighlight onPress={getHandler(this, 'onPress')}>
+					{this.getView()}
 				</TouchableHighlight>
 			);
 		}
