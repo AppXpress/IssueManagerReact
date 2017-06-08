@@ -23,6 +23,11 @@ import {
 	authorize
 } from '../RestBase';
 
+import {
+	storageGet,
+	storageSet
+} from '../Utilities';
+
 export default class Login extends Component {
 
 	static navigationOptions = {
@@ -42,6 +47,18 @@ export default class Login extends Component {
 			eid: '',
 			loading: false
 		};
+
+		this.getCredentials();
+	}
+
+	async getCredentials() {
+		this.setState({ username: await storageGet('username') });
+		this.setState({ password: await storageGet('password') });
+	}
+
+	async setCredentials() {
+		await storageSet('username', this.state.username);
+		await storageSet('password', this.state.password);
 	}
 
 	render() {
@@ -50,12 +67,14 @@ export default class Login extends Component {
 				<Card>
 					<TextInput
 						label='Username'
+						value={this.state.username}
 						onChangeText={(text) => this.setState({ username: text })}
 						autoCapitalize='none'
 						required
 					/>
 					<TextInput
 						label='Password'
+						value={this.state.password}
 						onChangeText={(text) => this.setState({ password: text })}
 						secureTextEntry={true}
 						required
@@ -84,6 +103,7 @@ export default class Login extends Component {
 		this.setState({ loading: false });
 
 		if (authenticated) {
+			this.setCredentials();
 			this.props.navigation.navigate('Home');
 		} else {
 			Alert.alert('Login failed. Please try again.');

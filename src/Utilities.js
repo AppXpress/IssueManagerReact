@@ -2,77 +2,23 @@ import {
 	AsyncStorage
 } from 'react-native';
 
-import dataKey from './dataKey';
-
-export async function getAuthToken(dataKey, username, password, eid) {
-
-	if (eid != '') {
-		var toEncode = username + ":" + password + ":" + eid;
-	} else {
-
-		var toEncode = username + ":" + password;
-	}
-
-	
-
-	let response = await fetch('https://network-rctq.qa.gtnexus.com/rest/310?dataKey=' + dataKey,
-		{
-			method: "GET",
-			headers: {
-				"Authorization": base64Encode(toEncode),
-				"Content-Type": "application/json"
-			}
-
-		});
-
-	return response;
-
-}
-
-export async function getObjects(identifier) {
-
-	var token;
-
-	token = await getToken();
-	console.log(token);
-
-	var response;
-
-	response = await fetch('https://network-rctq.qa.gtnexus.com/rest/310/' + identifier + '/query?dataKey=' + dataKey,
-		{
-			method: "GET",
-			headers: {
-				"Authorization": token,
-				"Content-Type": "application/json"
-			},
-		});
-	return response.json();
-
-}
-
-export async function setToken(authToken) {
-
+export async function storageGet(key) {
 	try {
-		await AsyncStorage.setItem("authToken", authToken);
+		return await AsyncStorage.getItem(key);
 	} catch (error) {
 		console.log(error);
 	}
-
 }
 
-export async function getToken(onResponse) {
-
+export async function storageSet(key, value) {
 	try {
-		var result = await AsyncStorage.getItem('authToken');
-
+		await AsyncStorage.setItem(key, value);
 	} catch (error) {
 		console.log(error);
 	}
-
-	return result;
 }
 
-function base64Encode(toEncode) {
+export function base64Encode(toEncode) {
 
 	var base64chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 	var padding = "";
@@ -106,9 +52,4 @@ function base64Encode(toEncode) {
 
 	return "Basic " + encodedString;
 
-
 }
-
-
-
-

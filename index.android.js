@@ -20,8 +20,9 @@ import Login from './src/pages/Login';
 import Home from './src/pages/Home';
 
 const IssueManager = StackNavigator({
-	Main: { screen: Login },
 
+	Main: { screen: Login },
+	Home: { screen: Home },
 });
 
 

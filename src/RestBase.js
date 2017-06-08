@@ -7,7 +7,11 @@ import {
 	dataKey
 } from './Environment';
 
-import base64Encode from './base64';
+import {
+	storageGet,
+	storageSet,
+	base64Encode
+} from './Utilities';
 
 export async function authorize(username, password, eid) {
 	var toEncode = username + ':' + password;
@@ -16,8 +20,7 @@ export async function authorize(username, password, eid) {
 		toEncode += ':' + eid;
 	}
 
-	var response = await new Rest()
-		.base()
+	var response = await (await new Rest().base())
 		.header('Authorization', base64Encode(toEncode))
 		.get();
 
@@ -25,25 +28,8 @@ export async function authorize(username, password, eid) {
 		return false;
 	}
 
-	await setToken(response.headers.get('Authorization'));
+	await storageSet('token', response.headers.get('Authorization'));
 	return true;
-}
-
-async function setToken(authToken) {
-	try {
-		await AsyncStorage.setItem("authToken", authToken);
-	} catch (error) {
-		console.log(error);
-	}
-}
-
-async function getToken(onResponse) {
-	try {
-		var result = await AsyncStorage.getItem('authToken');
-	} catch (error) {
-		console.log(error);
-	}
-	return result;
 }
 
 export default class Rest {
@@ -82,10 +68,10 @@ export default class Rest {
 		}
 	}
 
-	base() {
+	async base() {
 		this._url = restUrl;
 		this._params['dataKey'] = dataKey;
-		this._headers['Authorization'] = 'NO TOKEN YET';
+		this._headers['Authorization'] = await storageGet('token');
 		this._headers['Content-Type'] = 'application/json';
 		return this;
 	}
