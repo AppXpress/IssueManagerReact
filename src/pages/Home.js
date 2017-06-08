@@ -76,6 +76,12 @@ export default class Home extends Component {
 	render() {
 		return (
 			<View>
+			<Button
+				title='+Create'
+				onPress={() => this.props.navigation.navigate('Create')}
+				disabled={this.state.loading || !this.state.username || !this.state.password}
+				primary
+			/>
 				<ListView
 					dataSource={this.state.issueData}
 					renderRow={this.renderRow.bind(this)}
