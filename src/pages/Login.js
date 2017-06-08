@@ -16,6 +16,7 @@ import {
 	Button,
 	Card,
 	ListCard,
+	Switch,
 	TextInput
 } from '../soho/All';
 
@@ -47,18 +48,63 @@ export default class Login extends Component {
 			eid: '',
 			loading: false
 		};
+	}
 
-		this.getCredentials();
+	async componentDidMount() {
+		if (__DEV__) {
+			this.getCredentials();
+		}
 	}
 
 	async getCredentials() {
-		this.setState({ username: await storageGet('username') });
-		this.setState({ password: await storageGet('password') });
+		var username = await storageGet('username');
+		if (username) {
+			this.setState({
+				saveUser: true,
+				username: username
+			});
+
+			var password = await storageGet('password');
+			if (password) {
+				this.setState({
+					savePass: true,
+					password: password
+				});
+			}
+		}
 	}
 
 	async setCredentials() {
-		await storageSet('username', this.state.username);
-		await storageSet('password', this.state.password);
+		if (this.state.saveUser) {
+			await storageSet('username', this.state.username);
+
+			if (this.state.savePass) {
+				await storageSet('password', this.state.password);
+			}
+			else {
+				await storageSet('password', '');
+			}
+		}
+		else {
+			await storageSet('username', '');
+			await storageSet('password', '');
+		}
+	}
+
+	async login(event) {
+		this.setState({ loading: true });
+		var authenticated = await authorize(this.state.username, this.state.password, this.state.eid);
+		this.setState({ loading: false });
+
+		if (authenticated) {
+			if (__DEV__) {
+				this.setCredentials()
+			}
+
+			this.props.navigation.navigate('Home');
+		} else {
+			Alert.alert('Login failed. Please try again.');
+		}
 	}
 
 	render() {
@@ -67,7 +113,7 @@ export default class Login extends Component {
 				<Card>
 					<TextInput
 						label='Username'
-						defaultValue={this.state.username}
+						value={this.state.username}
 						onChangeText={(text) => this.setState({ username: text })}
 						autoCapitalize='none'
 						autoFocus={true}
@@ -75,7 +121,7 @@ export default class Login extends Component {
 					/>
 					<TextInput
 						label='Password'
-						defaultValue={this.state.password}
+						value={this.state.password}
 						onChangeText={(text) => this.setState({ password: text })}
 						secureTextEntry={true}
 						required
@@ -86,6 +132,20 @@ export default class Login extends Component {
 						secureTextEntry={true}
 						placeholder='Leave Blank if Unnecesary'
 					/>
+					{__DEV__ &&
+						<View>
+							<Switch
+								label='(DEV) Remember username'
+								value={this.state.saveUser}
+								onValueChange={(value) => { this.setState({ saveUser: value }) }}
+							/>
+							<Switch
+								label='(DEV) Remember password'
+								value={this.state.savePass}
+								onValueChange={(value) => { this.setState({ savePass: value }) }}
+							/>
+						</View>
+					}
 					<Button
 						title='Login'
 						onPress={this.login.bind(this)}
@@ -96,19 +156,6 @@ export default class Login extends Component {
 				<ActivityIndicator animating={this.state.loading} size="large" />
 			</ScrollView>
 		);
-	}
-
-	async login(event) {
-		this.setState({ loading: true });
-		var authenticated = await authorize(this.state.username, this.state.password, this.state.eid);
-		this.setState({ loading: false });
-
-		if (authenticated) {
-			this.setCredentials();
-			this.props.navigation.navigate('Home');
-		} else {
-			Alert.alert('Login failed. Please try again.');
-		}
 	}
 }
 

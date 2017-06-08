@@ -23,9 +23,7 @@ export default class TextInput extends Component {
 	}
 
 	componentWillReceiveProps(next) {
-		if (!this.state.text && next.defaultValue) {
-			this.setState({ text: next.defaultValue });
-		}
+		this.setState({ text: next.value });
 	}
 
 	getLabel() {
