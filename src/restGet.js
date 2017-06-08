@@ -13,7 +13,7 @@ export async function getAuthToken(dataKey, username, password, eid) {
 		var toEncode = username + ":" + password;
 	}
 
-	alert(dataKey);
+	
 
 	let response = await fetch('https://network-rctq.qa.gtnexus.com/rest/310?dataKey=' + dataKey,
 		{

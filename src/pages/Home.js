@@ -6,10 +6,8 @@ import {
 	StyleSheet,
 	Text,
 	View,
-	TextInput,
 	ScrollView,
 	StatusBar,
-	Button,
 	ActivityIndicator,
 	AsyncStorage,
 	ListView,
@@ -19,6 +17,13 @@ import {
 	getToken,
 	getObjects
 } from '../restGet';
+
+import {
+	Button,
+	Card,
+	ListCard,
+	TextInput
+} from '../soho/All';
 
 export default class Home extends Component {
 
@@ -32,6 +37,14 @@ export default class Home extends Component {
 			}),
 			
 		};
+	}
+
+	static navigationOptions = {
+		title: 'Issues',
+		headerTintColor: '#ffffff',
+		headerStyle: {
+			backgroundColor: '#2578a9',
+		},
 	}
 
 
@@ -57,7 +70,7 @@ export default class Home extends Component {
 	renderRow(issue){
 		return (
 			<View>
-			<Text>{issue.createdBy}</Text>
+			<ListCard main={issue.subject} secondary={issue.createdBy} tertiary={issue.description}></ListCard>
 			</View>
 			)
 	}
