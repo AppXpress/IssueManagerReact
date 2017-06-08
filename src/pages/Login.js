@@ -83,7 +83,7 @@ export default class Login extends Component {
 						label='EID'
 						onChangeText={(text) => this.setState({ eid: text })}
 						secureTextEntry={true}
-						placeholder='Leave Blank if Unnecesarry'
+						placeholder='Leave Blank if Unnecesary'
 					/>
 					<Button
 						title='Login'
