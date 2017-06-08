@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import dataKey from '../dataKey';
 
 import {
 	Alert,
@@ -20,7 +19,9 @@ import {
 	TextInput
 } from '../soho/All';
 
-import { getAuthToken, setToken } from '../restGet';
+import {
+	authorize
+} from '../RestBase';
 
 export default class Login extends Component {
 
@@ -67,7 +68,7 @@ export default class Login extends Component {
 					/>
 					<Button
 						title='Login'
-						onPress={this._handleLogin.bind(this)}
+						onPress={this.login.bind(this)}
 						disabled={this.state.loading || !this.state.username || !this.state.password}
 						primary
 					/>
@@ -77,23 +78,16 @@ export default class Login extends Component {
 		);
 	}
 
-	async _handleLogin(event) {
+	async login(event) {
 		this.setState({ loading: true });
-		var response = await getAuthToken(dataKey, this.state.username, this.state.password, this.state.eid);
+		var authenticated = await authorize(this.state.username, this.state.password, this.state.eid);
 		this.setState({ loading: false });
 
-		if (response.status != 200) {
-			Alert.alert('error');
-			console.log(response);
-
-		} else {
-
-			//console.log(response.headers.get('Authorization'));
-			setToken(response.headers.get('Authorization'));
-
+		if (authenticated) {
 			this.props.navigation.navigate('Home');
+		} else {
+			Alert.alert('Login failed. Please try again.');
 		}
-
 	}
 }
 
