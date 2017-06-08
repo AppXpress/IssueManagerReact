@@ -7,6 +7,10 @@ import {
 	TextInput as TextInputBase
 } from 'react-native';
 
+import {
+	getHandler
+} from './Tools';
+
 export default class TextInput extends Component {
 	constructor(props) {
 		super(props);
@@ -15,6 +19,12 @@ export default class TextInput extends Component {
 		this.state = {
 			leftEmpty: false,
 			text: ''
+		}
+	}
+
+	componentWillReceiveProps(next) {
+		if (!this.state.text && next.defaultValue) {
+			this.setState({ text: next.defaultValue });
 		}
 	}
 
@@ -49,11 +59,16 @@ export default class TextInput extends Component {
 		}
 	}
 
-	setText(text) {
-		if (this.props.onChangeText) {
-			this.props.onChangeText(text);
-		}
+	onChangeText(text) {
 		this.setState({ text: text });
+	}
+
+	onFocus() {
+		this.setState({ blurred: false });
+	}
+
+	onBlur() {
+		this.setState({ blurred: true });
 	}
 
 	render() {
@@ -62,10 +77,11 @@ export default class TextInput extends Component {
 				{this.getLabel()}
 				<TextInputBase
 					{...this.props }
-					style={[styles.text, this.isDisabled(), this.props.style]}
 					underlineColorAndroid='transparent'
-					onChangeText={(text) => this.setText(text)}
-					onBlur={() => this.setState({ blurred: true })}
+					style={[styles.text, this.isDisabled(), this.props.style]}
+					onChangeText={getHandler(this, 'onChangeText')}
+					onFocus={getHandler(this, 'onFocus')}
+					onBlur={getHandler(this, 'onBlur')}
 				/>
 				{this.getError()}
 			</View>

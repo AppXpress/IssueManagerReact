@@ -67,14 +67,15 @@ export default class Login extends Component {
 				<Card>
 					<TextInput
 						label='Username'
-						value={this.state.username}
+						defaultValue={this.state.username}
 						onChangeText={(text) => this.setState({ username: text })}
 						autoCapitalize='none'
+						autoFocus={true}
 						required
 					/>
 					<TextInput
 						label='Password'
-						value={this.state.password}
+						defaultValue={this.state.password}
 						onChangeText={(text) => this.setState({ password: text })}
 						secureTextEntry={true}
 						required

@@ -9,6 +9,10 @@ import {
 	Text
 } from 'react-native';
 
+import {
+	getHandler
+} from './Tools';
+
 export default class Card extends Component {
 	constructor(props) {
 		super(props);
@@ -16,31 +20,11 @@ export default class Card extends Component {
 		this.props = props;
 	}
 
-	getMain() {
-		if (this.props.main) {
+	getText(type) {
+		if (this.props[type]) {
 			return (
-				<Text style={styles.main}>
-					{this.props.main}
-				</Text>
-			);
-		}
-	}
-
-	getSecondary() {
-		if (this.props.secondary) {
-			return (
-				<Text style={styles.secondary}>
-					{this.props.secondary}
-				</Text>
-			);
-		}
-	}
-
-	getTertiary() {
-		if (this.props.tertiary) {
-			return (
-				<Text style={styles.tertiary}>
-					{this.props.tertiary}
+				<Text style={styles[type]}>
+					{this.props[type]}
 				</Text>
 			);
 		}
@@ -49,17 +33,13 @@ export default class Card extends Component {
 	getButton() {
 		if (Platform.OS == 'android') {
 			return (
-				<TouchableNativeFeedback
-					onPress={this.props.onPress}
-				>
+				<TouchableNativeFeedback onPress={getHandler(this, 'onPress')}>
 					{this.getView()}
 				</TouchableNativeFeedback>
 			);
 		}
 		return (
-			<TouchableHighlight
-				onPress={this.props.onPress}
-			>
+			<TouchableHighlight onPress={getHandler(this, 'onPress')}>
 				{this.getView()}
 			</TouchableHighlight>
 		);
@@ -67,10 +47,13 @@ export default class Card extends Component {
 
 	getView() {
 		return (
-			<View style={styles.view}>
-				{this.getMain()}
-				{this.getSecondary()}
-				{this.getTertiary()}
+			<View
+				{...this.props}
+				style={[styles.view, this.props.style]}
+			>
+				{this.getText('main')}
+				{this.getText('secondary')}
+				{this.getText('tertiary')}
 			</View>
 		);
 	}

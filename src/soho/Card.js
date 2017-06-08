@@ -27,7 +27,10 @@ export default class Card extends Component {
 
 	render() {
 		return (
-			<View style={styles.view}>
+			<View
+				{...this.props}
+				style={styles.view}
+			>
 				{this.getTitle()}
 				{this.props.children}
 			</View>
