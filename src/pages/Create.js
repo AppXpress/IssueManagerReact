@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import dataKey from '../dataKey';
+
 import {
 	Alert,
 	AppRegistry,
@@ -11,7 +11,7 @@ import {
 	ActivityIndicator,
 	AsyncStorage,
 	ListView,
-  Picker,
+	Picker,
 } from 'react-native';
 
 import {
@@ -23,20 +23,20 @@ import {
 
 export default class Create extends Component {
 
-  constructor(props) {
+	constructor(props) {
 		super(props);
 
 		this.state = {
 			subject: '',
 			issueType: '',
 			severity: '',
-      desc: '',
+			desc: '',
 		};
-  }
+	}
 
-  render() {
-    return (
-      <ScrollView style={styles.scroll}>
+	render() {
+		return (
+			<ScrollView style={styles.scroll}>
 				<Card>
 					<TextInput
 						label='Subject'
@@ -45,21 +45,21 @@ export default class Create extends Component {
 						autoFocus={true}
 						required
 					/>
-          <Picker
-            selectedValue={this.state.issueType}
-            onValueChange={(item, index) => this.setState({issueType: item})}>
-            <Picker.Item label="Shipping" value="Shipping" />
-            <Picker.Item label="Factory" value="Factory" />
-            <Picker.Item label="Quality Control" value="Quality Control" />
-          </Picker>
-          <Picker
-            selectedValue={this.state.severity}
-            onValueChange={(item, index) => this.setState({severity: item})}>
-            <Picker.Item label="Low" value="Low" />
-            <Picker.Item label="Medium" value="Medium" />
-            <Picker.Item label="High" value="High" />
-          </Picker>
-          <TextInput
+					<Picker
+						selectedValue={this.state.issueType}
+						onValueChange={(item, index) => this.setState({ issueType: item })}>
+						<Picker.Item label="Shipping" value="Shipping" />
+						<Picker.Item label="Factory" value="Factory" />
+						<Picker.Item label="Quality Control" value="Quality Control" />
+					</Picker>
+					<Picker
+						selectedValue={this.state.severity}
+						onValueChange={(item, index) => this.setState({ severity: item })}>
+						<Picker.Item label="Low" value="Low" />
+						<Picker.Item label="Medium" value="Medium" />
+						<Picker.Item label="High" value="High" />
+					</Picker>
+					<TextInput
 						label='Description'
 						onChangeText={(text) => this.setState({ desc: text })}
 						autoCapitalize='none'
@@ -68,8 +68,8 @@ export default class Create extends Component {
 				</Card>
 				<ActivityIndicator animating={this.state.loading} size="large" />
 			</ScrollView>
-    );
-  }
+		);
+	}
 
 }
 const styles = StyleSheet.create({
