@@ -10,7 +10,8 @@ import {
 } from 'react-native';
 
 import {
-	getHandler
+	getHandler,
+	getColor
 } from './Tools';
 
 export default class Card extends Component {
@@ -69,21 +70,21 @@ export default class Card extends Component {
 const styles = StyleSheet.create({
 	view: {
 		padding: 20,
-		backgroundColor: '#ffffff',
+		backgroundColor: getColor('white-0'),
 		borderBottomWidth: 1,
-		borderBottomColor: '#bdbdbd'
+		borderBottomColor: getColor('graphite-3')
 	},
 	main: {
 		fontSize: 14,
-		color: '#1a1a1a'
+		color: getColor('graphite-10')
 	},
 	secondary: {
 		fontSize: 12,
-		color: '#5c5c5c'
+		color: getColor('graphite-6')
 	},
 	tertiary: {
 		fontSize: 10,
-		color: '#999999',
+		color: getColor('graphite-4'),
 		fontWeight: 'bold'
 	}
 });

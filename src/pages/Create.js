@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import dataKey from '../dataKey';
+
 import {
 	Alert,
 	AppRegistry,
@@ -11,7 +11,7 @@ import {
 	ActivityIndicator,
 	AsyncStorage,
 	ListView,
-  Picker,
+	Picker,
 } from 'react-native';
 
 import {
@@ -23,7 +23,7 @@ import {
 
 export default class Create extends Component {
 
-  constructor(props) {
+	constructor(props) {
 		super(props);
 
 		this.state = {
@@ -33,11 +33,11 @@ export default class Create extends Component {
       desc: '',
 			loading: false,
 		};
-  }
+	}
 
-  render() {
-    return (
-      <ScrollView style={styles.scroll}>
+	render() {
+		return (
+			<ScrollView style={styles.scroll}>
 				<Card>
 					<TextInput
 						label='Subject'
@@ -46,6 +46,7 @@ export default class Create extends Component {
 						autoFocus={true}
 						required
 					/>
+					</Picker>
 					<TextInput
 						label='Description'
 						onChangeText={(text) => this.setState({ desc: text })}
@@ -69,8 +70,8 @@ export default class Create extends Component {
 				</Card>
 				<ActivityIndicator animating={this.state.loading} size="large" />
 			</ScrollView>
-    );
-  }
+		);
+	}
 
 }
 const styles = StyleSheet.create({

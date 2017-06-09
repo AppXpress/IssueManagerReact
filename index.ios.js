@@ -18,13 +18,20 @@ import {
 
 import Login from './src/pages/Login';
 import Home from './src/pages/Home';
+
+import IssueScreen from './src/pages/IssueScreen';
+
 import Create from './src/pages/Create';
 
 const IssueManager = StackNavigator({
 
 	Main: { screen: Login },
   	Home: { screen: Home },
+
+  	IssueScreen: { screen: IssueScreen},
+
 		Create: { screen: Create },
+
 });
 
 

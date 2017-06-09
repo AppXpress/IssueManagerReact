@@ -16,7 +16,10 @@ import {
 	Button,
 	Card,
 	ListCard,
-	TextInput
+	Switch,
+	TextInput,
+
+	getColor
 } from '../soho/All';
 
 import {
@@ -32,9 +35,9 @@ export default class Login extends Component {
 
 	static navigationOptions = {
 		title: 'Welcome',
-		headerTintColor: '#ffffff',
+		headerTintColor: getColor('white-0'),
 		headerStyle: {
-			backgroundColor: '#2578a9',
+			backgroundColor: getColor('ruby-7'),
 		},
 	};
 
@@ -47,55 +50,47 @@ export default class Login extends Component {
 			eid: '',
 			loading: false
 		};
+	}
 
-		this.getCredentials();
+	async componentDidMount() {
+		if (__DEV__) {
+			this.getCredentials();
+		}
 	}
 
 	async getCredentials() {
-		this.setState({ username: await storageGet('username') });
-		this.setState({ password: await storageGet('password') });
+		var username = await storageGet('username');
+		if (username) {
+			this.setState({
+				saveUser: true,
+				username: username
+			});
+
+			var password = await storageGet('password');
+			if (password) {
+				this.setState({
+					savePass: true,
+					password: password
+				});
+			}
+		}
 	}
 
 	async setCredentials() {
-		await storageSet('username', this.state.username);
-		await storageSet('password', this.state.password);
-	}
+		if (this.state.saveUser) {
+			await storageSet('username', this.state.username);
 
-	render() {
-		return (
-			<ScrollView style={styles.scroll}>
-				<Card>
-					<TextInput
-						label='Username'
-						defaultValue={this.state.username}
-						onChangeText={(text) => this.setState({ username: text })}
-						autoCapitalize='none'
-						autoFocus={true}
-						required
-					/>
-					<TextInput
-						label='Password'
-						defaultValue={this.state.password}
-						onChangeText={(text) => this.setState({ password: text })}
-						secureTextEntry={true}
-						required
-					/>
-					<TextInput
-						label='EID'
-						onChangeText={(text) => this.setState({ eid: text })}
-						secureTextEntry={true}
-						placeholder='Leave Blank if Unnecesary'
-					/>
-					<Button
-						title='Login'
-						onPress={this.login.bind(this)}
-						disabled={this.state.loading || !this.state.username || !this.state.password}
-						primary
-					/>
-				</Card>
-				<ActivityIndicator animating={this.state.loading} size="large" />
-			</ScrollView>
-		);
+			if (this.state.savePass) {
+				await storageSet('password', this.state.password);
+			}
+			else {
+				await storageSet('password', '');
+			}
+		}
+		else {
+			await storageSet('username', '');
+			await storageSet('password', '');
+		}
 	}
 
 	async login(event) {
@@ -104,11 +99,66 @@ export default class Login extends Component {
 		this.setState({ loading: false });
 
 		if (authenticated) {
-			this.setCredentials();
+			if (__DEV__) {
+				this.setCredentials()
+			}
+
 			this.props.navigation.navigate('Home');
 		} else {
 			Alert.alert('Login failed. Please try again.');
 		}
+	}
+
+	render() {
+		return (
+			<ScrollView style={styles.scroll}>
+				<Card>
+					<TextInput
+						label='Username'
+						value={this.state.username}
+						onChangeText={(text) => this.setState({ username: text })}
+						autoCapitalize='none'
+						autoFocus={true}
+						required
+					/>
+					<TextInput
+						label='Password'
+						value={this.state.password}
+						onChangeText={(text) => this.setState({ password: text })}
+						secureTextEntry={true}
+						required
+					/>
+					<TextInput
+						label='EID'
+						value={this.state.eid}
+						onChangeText={(text) => this.setState({ eid: text })}
+						secureTextEntry={true}
+						placeholder='Leave Blank if Unnecesary'
+					/>
+					{__DEV__ &&
+						<View>
+							<Switch
+								label='(DEV) Remember username'
+								value={this.state.saveUser}
+								onValueChange={(value) => { this.setState({ saveUser: value }) }}
+							/>
+							<Switch
+								label='(DEV) Remember password'
+								value={this.state.savePass}
+								onValueChange={(value) => { this.setState({ savePass: value }) }}
+							/>
+						</View>
+					}
+					<Button
+						title='Login'
+						onPress={this.login.bind(this)}
+						enabled={!this.state.loading && this.state.username && this.state.password}
+						primary
+					/>
+				</Card>
+				<ActivityIndicator animating={this.state.loading} size="large" />
+			</ScrollView>
+		);
 	}
 }
 

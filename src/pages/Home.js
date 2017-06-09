@@ -11,6 +11,7 @@ import {
 	ActivityIndicator,
 	AsyncStorage,
 	ListView,
+	TouchableOpacity,
 } from 'react-native';
 
 import {
@@ -37,12 +38,19 @@ export default class Home extends Component {
 		};
 	}
 
-	static navigationOptions = {
+	static navigationOptions = ({ navigation }) => {
+
+		return {
+		headerRight: (<Text style={{fontSize:25, color: '#ffffff',fontWeight: "300",paddingRight: 10}} onPress={() =>navigation.navigate('Create')}>+</Text>),
+
+
 		title: 'Issues',
 		headerTintColor: '#ffffff',
 		headerStyle: {
 			backgroundColor: '#2578a9',
 		},
+		}			
+      
 	}
 
 
@@ -68,37 +76,37 @@ export default class Home extends Component {
 	renderRow(issue) {
 		return (
 			<View>
-				<ListCard main={issue.subject} secondary={issue.createdBy} tertiary={issue.description}></ListCard>
+				<ListCard main={issue.subject} secondary={issue.createdBy} tertiary={issue.description} 
+				onPress={() => this.props.navigation.navigate('IssueScreen', {issue:issue})} 
+				></ListCard>
 			</View>
 		)
 	}
 
 	render() {
 		return (
-			<View>
-			<Button
-				title='+Create'
-				onPress={() => this.props.navigation.navigate('Create')}
-				primary
-			/>
+			
 				<ListView
 					dataSource={this.state.issueData}
 					renderRow={this.renderRow.bind(this)}
 
 					enableEmptySections={true}
 				/>
-			</View>
+			
 
 		);
 	}
 
-
+ goToCreate(){
+ 	this.props.navigation.navigate('Create');
+ }
 
 }
 
 
 
 const styles = StyleSheet.create({
+	
 	scroll: {
 		backgroundColor: '#F0F0F0',
 		padding: 0,

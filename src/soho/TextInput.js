@@ -8,7 +8,8 @@ import {
 } from 'react-native';
 
 import {
-	getHandler
+	getHandler,
+	getColor
 } from './Tools';
 
 export default class TextInput extends Component {
@@ -23,9 +24,7 @@ export default class TextInput extends Component {
 	}
 
 	componentWillReceiveProps(next) {
-		if (!this.state.text && next.defaultValue) {
-			this.setState({ text: next.defaultValue });
-		}
+		this.setState({ text: next.value });
 	}
 
 	getLabel() {
@@ -51,14 +50,6 @@ export default class TextInput extends Component {
 		}
 	}
 
-	isDisabled() {
-		if (this.props.editable == false) {
-			return {
-				backgroundColor: '#d8d8d8'
-			};
-		}
-	}
-
 	onChangeText(text) {
 		this.setState({ text: text });
 	}
@@ -71,17 +62,30 @@ export default class TextInput extends Component {
 		this.setState({ blurred: true });
 	}
 
+	getTextStyle() {
+		var style = [styles.text];
+
+		if (this.props.editable == false) {
+			style.push({
+				backgroundColor: getColor('graphite-2')
+			});
+		}
+
+		return style;
+	}
+
 	render() {
 		return (
 			<View style={styles.view}>
 				{this.getLabel()}
 				<TextInputBase
-					{...this.props }
+					{...this.props}
+					style={this.getTextStyle()}
 					underlineColorAndroid='transparent'
-					style={[styles.text, this.isDisabled(), this.props.style]}
-					onChangeText={getHandler(this, 'onChangeText')}
 					onFocus={getHandler(this, 'onFocus')}
 					onBlur={getHandler(this, 'onBlur')}
+					onChangeText={getHandler(this, 'onChangeText')}
+					value={this.props.value}
 				/>
 				{this.getError()}
 			</View>
@@ -95,7 +99,7 @@ const styles = StyleSheet.create({
 	},
 	label: {
 		fontSize: 12,
-		color: '#5c5c5c'
+		color: getColor('graphite-6')
 	},
 	text: {
 		height: 34,
@@ -103,11 +107,11 @@ const styles = StyleSheet.create({
 		fontSize: 14,
 		padding: 0,
 		paddingLeft: 10,
-		color: '#1a1a1a',
+		color: getColor('graphite-10'),
 		borderWidth: 1,
-		borderColor: '#999999'
+		borderColor: getColor('graphite-4')
 	},
 	error: {
-		color: '#e84f4f'
+		color: getColor('alert-1')
 	}
 });
