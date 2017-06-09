@@ -46,7 +46,6 @@ export default class Create extends Component {
 						autoFocus={true}
 						required
 					/>
-					</Picker>
 					<TextInput
 						label='Description'
 						onChangeText={(text) => this.setState({ desc: text })}
