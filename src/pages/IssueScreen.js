@@ -10,8 +10,13 @@ import {
 	StatusBar,
 	ActivityIndicator,
 	AsyncStorage,
+	ListView,
 } from 'react-native';
 
+import {
+	getObjects,
+	getObjectsOQL,
+} from '../RestMethods';
 
 import {
 	Button,
@@ -26,13 +31,36 @@ export default class IssueScreen extends Component {
 		super(props);
 		
 		this.state = {
-			
+			messageList : new ListView.DataSource({
+				rowHasChanged: (row1, row2) => row1 !== row2,
+			}),
 			issue: this.props.navigation.state.params.issue,
 		};
 
 		
 	}
+	renderRow(message) {
+		return (
+			<View>
+				<ListCard main={message.createdBy} secondary={message.text}  
+				 
+				></ListCard>
+			</View>
+		)
+	}
 
+	async componentDidMount() {
+		var data = await this.getComments();
+		if (!data) {
+			return;
+		}
+		console.log(data);
+		this.setState({
+			messageList: this.state.messageList.cloneWithRows(data.result)
+		});
+
+
+	}
 
 	static navigationOptions = ( { navigation }) => ({
 
@@ -43,6 +71,9 @@ export default class IssueScreen extends Component {
 		},
 		});
 
+	async getComments(){
+		return await getObjectsOQL('$MessageT4',"issue.rootId = "+this.state.issue.uid);
+	}
 	
 
 	render(){
@@ -104,11 +135,19 @@ export default class IssueScreen extends Component {
 				{this.getAssignedTo()}
 				</Text>
 			</Card>
-			
+			<Card>
+			<Text style={styles.secondary}>
+			Messages:
+			</Text>
+			<ListView dataSource={this.state.messageList}
+					renderRow={this.renderRow.bind(this)}
+
+					enableEmptySections={true}
+			/>
+			</Card>
 
 
-
-			</ScrollView>
+		</ScrollView>
 
 			);
 	}
