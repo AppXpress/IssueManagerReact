@@ -14,8 +14,7 @@ import {
 } from 'react-native';
 
 import {
-	getObjects,
-	getObjectsOQL,
+	query
 } from '../RestMethods';
 
 import {
@@ -28,7 +27,7 @@ import {
 	TextInput
 } from '../soho/All';
 
-export default class IssueScreen extends Component {
+export default class IssueDetails extends Component {
 
 	static navigationOptions = Navigataion({
 		title: (context) => {
@@ -78,7 +77,7 @@ export default class IssueScreen extends Component {
 	}
 
 	async getComments() {
-		return await getObjectsOQL('$MessageT4', "issue.rootId = " + this.state.issue.uid);
+		return await query('$MessageT4', 'issue.rootId = ' + this.state.issue.uid);
 	}
 
 

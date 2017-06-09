@@ -15,7 +15,7 @@ import {
 } from 'react-native';
 
 import {
-	getObjects
+	query
 } from '../RestMethods';
 
 import {
@@ -26,7 +26,7 @@ import {
 	TextInput
 } from '../soho/All';
 
-export default class Home extends Component {
+export default class IssueList extends Component {
 
 	constructor(props) {
 		super(props);
@@ -47,7 +47,7 @@ export default class Home extends Component {
 			return (
 				<Text
 					style={{ fontSize: 25, color: '#ffffff', fontWeight: "300", paddingRight: 10 }}
-					onPress={() => context.navigation.navigate('Create')}
+					onPress={() => context.navigation.navigate('CreateIssue')}
 				>
 					+
 				</Text>
@@ -72,7 +72,7 @@ export default class Home extends Component {
 
 
 	async getDataSource() {
-		return await getObjects('$IssueT3');
+		return await query('$IssueT3');
 	}
 
 
@@ -94,7 +94,7 @@ export default class Home extends Component {
 		return (
 			<View>
 				<ListCard main={issue.subject} secondary={issue.createdBy} tertiary={issue.description}
-					onPress={() => this.props.navigation.navigate('IssueScreen', { issue: issue })}
+					onPress={() => this.props.navigation.navigate('IssueDetails', { issue: issue })}
 				></ListCard>
 			</View>
 		)
@@ -115,7 +115,7 @@ export default class Home extends Component {
 	}
 
 	goToCreate() {
-		this.props.navigation.navigate('Create');
+		this.props.navigation.navigate('CreateIssue');
 	}
 
 }

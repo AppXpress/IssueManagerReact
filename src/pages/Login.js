@@ -19,9 +19,7 @@ import {
 	ListCard,
 	Navigataion,
 	Switch,
-	TextInput,
-
-	getColor
+	TextInput
 } from '../soho/All';
 
 import {
@@ -101,7 +99,7 @@ export default class Login extends Component {
 				this.setCredentials()
 			}
 
-			this.props.navigation.navigate('Home');
+			this.props.navigation.navigate('IssueList');
 		} else {
 			Alert.alert('Login failed. Please try again.');
 		}

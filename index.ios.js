@@ -17,22 +17,15 @@ import {
 } from 'react-navigation';
 
 import Login from './src/pages/Login';
-import Home from './src/pages/Home';
-
-import IssueScreen from './src/pages/IssueScreen';
-
-import Create from './src/pages/Create';
+import IssueList from './src/pages/IssueList';
+import IssueDetails from './src/pages/IssueDetails';
+import CreateIssue from './src/pages/CreateIssue';
 
 const IssueManager = StackNavigator({
-
 	Main: { screen: Login },
-  	Home: { screen: Home },
-
-  	IssueScreen: { screen: IssueScreen},
-
-		Create: { screen: Create },
-
+	IssueList: { screen: IssueList },
+	IssueDetails: { screen: IssueDetails },
+	CreateIssue: { screen: CreateIssue },
 });
-
 
 AppRegistry.registerComponent('IssueManager', () => IssueManager);

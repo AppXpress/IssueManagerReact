@@ -22,7 +22,7 @@ import {
 	TextInput
 } from '../soho/All';
 
-export default class Create extends Component {
+export default class CreateIssue extends Component {
 
 	static navigationOptions = Navigataion({
 		title: 'New Issue',

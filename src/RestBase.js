@@ -20,19 +20,30 @@ export async function authorize(username, password, eid) {
 		toEncode += ':' + eid;
 	}
 
-	var response = await (await new Rest().base())
+	var query = await (await new Rest().base())
 		.header('Authorization', base64Encode(toEncode))
 		.get();
+
+	try {
+		var response = await query;
+	} catch (error) {
+		console.log(error);
+		return false;
+	}
 
 	if (!response) {
 		return false;
 	}
 
-	await storageSet('token', response.headers.get('Authorization'));
+	token = response.headers.get('Authorization');
 	return true;
 }
 
+var token;
+
 export default class Rest {
+	static token;
+
 	constructor() {
 		this._url = '';
 		this._params = {};
@@ -68,10 +79,10 @@ export default class Rest {
 		}
 	}
 
-	async base() {
+	base() {
 		this._url = restUrl;
 		this._params['dataKey'] = dataKey;
-		this._headers['Authorization'] = await storageGet('token');
+		this._headers['Authorization'] = token;
 		this._headers['Content-Type'] = 'application/json';
 		return this;
 	}
