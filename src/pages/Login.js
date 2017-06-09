@@ -15,6 +15,7 @@ import {
 import {
 	Button,
 	Card,
+	Field,
 	ListCard,
 	Navigataion,
 	Switch,
@@ -153,7 +154,9 @@ export default class Login extends Component {
 						primary
 					/>
 				</Card>
-				<ActivityIndicator animating={this.state.loading} size="large" />
+				{this.state.loading &&
+					<ActivityIndicator animating={true} size="large" />
+				}
 			</ScrollView>
 		);
 	}
