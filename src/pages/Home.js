@@ -25,6 +25,9 @@ import {
 	TextInput
 } from '../soho/All';
 
+
+
+
 export default class Home extends Component {
 
 	constructor(props) {
@@ -34,6 +37,7 @@ export default class Home extends Component {
 			issueData: new ListView.DataSource({
 				rowHasChanged: (row1, row2) => row1 !== row2,
 			}),
+			searchtext: '',
 
 		};
 	}
@@ -67,7 +71,7 @@ export default class Home extends Component {
 		}
 		console.log(data);
 		this.setState({
-			issueData: this.state.issueData.cloneWithRows(data.result)
+			issueData: this.state.issueData.cloneWithRows(data.result),
 		});
 
 
@@ -85,7 +89,17 @@ export default class Home extends Component {
 
 	render() {
 		return (
-			
+			<ScrollView
+			backgroundColor= '#ffffff'>
+			<TextInput
+						label='Search'
+						onChangeText={(text) => this.setState({ username: text })}
+						autoCapitalize='none'
+						autoFocus={true}
+						backgroundColor= '#ffffff'
+						
+					/>
+
 				<ListView
 					dataSource={this.state.issueData}
 					renderRow={this.renderRow.bind(this)}
@@ -93,15 +107,19 @@ export default class Home extends Component {
 					enableEmptySections={true}
 				/>
 			
-
+			</ScrollView>	
 		);
 	}
 
- goToCreate(){
- 	this.props.navigation.navigate('Create');
- }
+
+
+
+	
+
 
 }
+
+
 
 
 

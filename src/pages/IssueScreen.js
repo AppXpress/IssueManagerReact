@@ -63,7 +63,7 @@ export default class IssueScreen extends Component {
 		}
 		console.log(data);
 		this.setState({
-			messageList: this.state.messageList.cloneWithRows(data.result),
+			messageList: this.state.messageList.cloneWithRows(data.result.reverse()),
 			loading: false,
 		});
 
