@@ -10,7 +10,8 @@ import {
 } from 'react-native';
 
 import {
-	getHandler
+	getHandler,
+	getColor
 } from './Tools';
 
 export default class Button extends Component {
@@ -20,45 +21,48 @@ export default class Button extends Component {
 		this.props = props;
 	}
 
-	viewDisabled() {
-		if (this.props.disabled) {
-			return {
+	getViewStyle() {
+		var style = [styles.view];
+
+		if (this.props.primary) {
+			style.push({
+				backgroundColor: getColor(this.props.hue + '-6', 'azure-6')
+			});
+		} else if (this.props.secondary) {
+			style.push({
+				backgroundColor: getColor('graphite-3')
+			});
+		}
+
+		if (this.props.enabled == false) {
+			style.push({
 				opacity: 0.5
-			};
+			});
 		}
+
+		return style;
 	}
 
-	viewType() {
-		if (this.props.primary) {
-			return {
-				backgroundColor: '#368ac0'
-			};
-		} else if (this.props.secondary) {
-			return {
-				backgroundColor: '#bdbdbd'
-			};
-		}
-	}
+	getTextStyle() {
+		var style = [styles.text];
 
-	textType() {
 		if (this.props.primary) {
-			return {
-				color: '#ffffff'
-			};
+			style.push({
+				color: getColor('white-0')
+			});
 		} else if (this.props.secondary) {
-			return {
-				color: '#454545'
-			};
+			style.push({
+				color: getColor(this.props.hue + '-7', 'graphite-7')
+			});
 		}
+
+		return style;
 	}
 
 	getView() {
 		return (
-			<View
-				{...this.props}
-				style={[styles.view, this.viewDisabled(), this.viewType(), this.props.style]}
-			>
-				<Text style={[styles.text, this.textType()]}>
+			<View style={this.getViewStyle()}>
+				<Text style={this.getTextStyle()}>
 					{this.props.title.toUpperCase()}
 				</Text>
 			</View>
@@ -68,13 +72,21 @@ export default class Button extends Component {
 	render() {
 		if (Platform.OS == 'android') {
 			return (
-				<TouchableNativeFeedback onPress={getHandler(this, 'onPress')}>
+				<TouchableNativeFeedback
+					{...this.props}
+					onPress={getHandler(this, 'onPress')}
+					style={{}}
+				>
 					{this.getView()}
 				</TouchableNativeFeedback>
 			);
 		} else {
 			return (
-				<TouchableHighlight onPress={getHandler(this, 'onPress')}>
+				<TouchableHighlight
+					{...this.props}
+					onPress={getHandler(this, 'onPress')}
+					style={{}}
+				>
 					{this.getView()}
 				</TouchableHighlight>
 			);
@@ -93,6 +105,6 @@ const styles = StyleSheet.create({
 	text: {
 		fontSize: 12,
 		fontWeight: 'bold',
-		color: '#5c5c5c'
+		color: getColor('graphite-6')
 	}
 });

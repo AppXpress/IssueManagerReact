@@ -17,7 +17,9 @@ import {
 	Card,
 	ListCard,
 	Switch,
-	TextInput
+	TextInput,
+
+	getColor
 } from '../soho/All';
 
 import {
@@ -33,9 +35,9 @@ export default class Login extends Component {
 
 	static navigationOptions = {
 		title: 'Welcome',
-		headerTintColor: '#ffffff',
+		headerTintColor: getColor('white-0'),
 		headerStyle: {
-			backgroundColor: '#2578a9',
+			backgroundColor: getColor('ruby-7'),
 		},
 	};
 
@@ -128,6 +130,7 @@ export default class Login extends Component {
 					/>
 					<TextInput
 						label='EID'
+						value={this.state.eid}
 						onChangeText={(text) => this.setState({ eid: text })}
 						secureTextEntry={true}
 						placeholder='Leave Blank if Unnecesary'
@@ -149,7 +152,7 @@ export default class Login extends Component {
 					<Button
 						title='Login'
 						onPress={this.login.bind(this)}
-						disabled={this.state.loading || !this.state.username || !this.state.password}
+						enabled={!this.state.loading && this.state.username && this.state.password}
 						primary
 					/>
 				</Card>

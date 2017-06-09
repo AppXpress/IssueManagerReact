@@ -8,7 +8,8 @@ import {
 } from 'react-native';
 
 import {
-	getHandler
+	getHandler,
+	getColor
 } from './Tools';
 
 export default class Switch extends Component {
@@ -29,26 +30,24 @@ export default class Switch extends Component {
 		this.setState({ value: value })
 	}
 
-	thumbColor() {
+	getThumbTintColor() {
 		if (this.state.value) {
-			return '#368ac0';
+			return getColor(this.props.hue + '-6', 'azure-6');
 		}
-		return '#ffffff';
+		return getColor('white-0');
 	}
 
 	render() {
 		return (
-			<View
-				{...this.props}
-				style={styles.view}
-			>
+			<View style={styles.view}>
 				<SwitchBase
+					{...this.props}
 					style={styles.switch}
-					tintColor='#999999'
-					onTintColor='#8dc9e6'
-					thumbTintColor={this.thumbColor()}
+					tintColor={getColor('graphite-4')}
+					onTintColor={getColor(this.props.hue + '-3', 'azure-3')}
+					thumbTintColor={this.getThumbTintColor()}
 					onValueChange={getHandler(this, 'onValueChange')}
-					value={this.state.value}
+					value={this.props.value}
 				/>
 				<Text style={styles.label}>
 					{this.props.label}
