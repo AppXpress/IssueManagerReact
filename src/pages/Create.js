@@ -18,10 +18,16 @@ import {
 	Button,
 	Card,
 	ListCard,
+	Navigataion,
 	TextInput
 } from '../soho/All';
 
 export default class Create extends Component {
+
+	static navigationOptions = Navigataion({
+		title: 'New Issue',
+		hue: 'ruby'
+	});
 
 	constructor(props) {
 		super(props);

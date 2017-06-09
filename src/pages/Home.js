@@ -22,6 +22,7 @@ import {
 	Button,
 	Card,
 	ListCard,
+	Navigataion,
 	TextInput
 } from '../soho/All';
 
@@ -29,6 +30,8 @@ export default class Home extends Component {
 
 	constructor(props) {
 		super(props);
+
+		this.props = props;
 
 		this.state = {
 			issueData: new ListView.DataSource({
@@ -38,20 +41,34 @@ export default class Home extends Component {
 		};
 	}
 
-	static navigationOptions = ({ navigation }) => {
+	static navigationOptions = Navigataion({
+		title: 'Issue List',
+		right: (context) => {
+			return (
+				<Text
+					style={{ fontSize: 25, color: '#ffffff', fontWeight: "300", paddingRight: 10 }}
+					onPress={() => context.navigation.navigate('Create')}
+				>
+					+
+				</Text>
+			);
+		}
+	});
 
-		return {
-		headerRight: (<Text style={{fontSize:25, color: '#ffffff',fontWeight: "300",paddingRight: 10}} onPress={() =>navigation.navigate('Create')}>+</Text>),
+	// static navigationOptions = ({ navigation }) => {
+
+	// 	return {
+	// 	headerRight: (<Text style={{fontSize:25, color: '#ffffff',fontWeight: "300",paddingRight: 10}} onPress={() =>navigation.navigate('Create')}>+</Text>),
 
 
-		title: 'Issues',
-		headerTintColor: '#ffffff',
-		headerStyle: {
-			backgroundColor: '#2578a9',
-		},
-		}			
-      
-	}
+	// 	title: 'Issues',
+	// 	headerTintColor: '#ffffff',
+	// 	headerStyle: {
+	// 		backgroundColor: '#2578a9',
+	// 	},
+	// 	}			
+
+	// }
 
 
 	async getDataSource() {
@@ -76,8 +93,8 @@ export default class Home extends Component {
 	renderRow(issue) {
 		return (
 			<View>
-				<ListCard main={issue.subject} secondary={issue.createdBy} tertiary={issue.description} 
-				onPress={() => this.props.navigation.navigate('IssueScreen', {issue:issue})} 
+				<ListCard main={issue.subject} secondary={issue.createdBy} tertiary={issue.description}
+					onPress={() => this.props.navigation.navigate('IssueScreen', { issue: issue })}
 				></ListCard>
 			</View>
 		)
@@ -85,28 +102,28 @@ export default class Home extends Component {
 
 	render() {
 		return (
-			
-				<ListView
-					dataSource={this.state.issueData}
-					renderRow={this.renderRow.bind(this)}
 
-					enableEmptySections={true}
-				/>
-			
+			<ListView
+				dataSource={this.state.issueData}
+				renderRow={this.renderRow.bind(this)}
+
+				enableEmptySections={true}
+			/>
+
 
 		);
 	}
 
- goToCreate(){
- 	this.props.navigation.navigate('Create');
- }
+	goToCreate() {
+		this.props.navigation.navigate('Create');
+	}
 
 }
 
 
 
 const styles = StyleSheet.create({
-	
+
 	scroll: {
 		backgroundColor: '#F0F0F0',
 		padding: 0,
