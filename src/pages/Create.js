@@ -37,6 +37,7 @@ export default class Create extends Component {
 			issueType: '',
 			severity: '',
 			desc: '',
+			loading: false,
 		};
 	}
 
@@ -49,6 +50,12 @@ export default class Create extends Component {
 						onChangeText={(text) => this.setState({ subject: text })}
 						autoCapitalize='none'
 						autoFocus={true}
+						required
+					/>
+					<TextInput
+						label='Description'
+						onChangeText={(text) => this.setState({ desc: text })}
+						autoCapitalize='none'
 						required
 					/>
 					<Picker
@@ -65,12 +72,6 @@ export default class Create extends Component {
 						<Picker.Item label="Medium" value="Medium" />
 						<Picker.Item label="High" value="High" />
 					</Picker>
-					<TextInput
-						label='Description'
-						onChangeText={(text) => this.setState({ desc: text })}
-						autoCapitalize='none'
-						required
-					/>
 				</Card>
 				<ActivityIndicator animating={this.state.loading} size="large" />
 			</ScrollView>

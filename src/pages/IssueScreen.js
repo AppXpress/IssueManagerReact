@@ -42,6 +42,7 @@ export default class IssueScreen extends Component {
 				rowHasChanged: (row1, row2) => row1 !== row2,
 			}),
 			issue: this.props.navigation.state.params.issue,
+			loading: true,
 		};
 
 
@@ -58,13 +59,21 @@ export default class IssueScreen extends Component {
 
 	async componentDidMount() {
 		var data = await this.getComments();
-		if (!data) {
+
+		if (!data.result) {
+			this.setState({
+				messageList: false,
+				loading: false,
+			});
+			console.log(data);
 			return;
 		}
 		console.log(data);
 		this.setState({
-			messageList: this.state.messageList.cloneWithRows(data.result)
+			messageList: this.state.messageList.cloneWithRows(data.result),
+			loading: false,
 		});
+
 
 
 	}
@@ -129,21 +138,34 @@ export default class IssueScreen extends Component {
 					<Text style={styles.secondary}>
 						Assigned To:
 				</Text>
-					<Text style={styles.primary}>
-						{this.getAssignedTo()}
-					</Text>
 				</Card>
-				<Card>
-					<Text style={styles.secondary}>
-						Messages:
+
+				{this.state.loading &&
+					<ActivityIndicator animating={true} size="large" />
+				}
+
+				{this.state.messageList && !this.state.loading &&
+					<Card>
+						<Text style={styles.secondary}>
+							Messages:
+						</Text>
+
+
+						<ListView dataSource={this.state.messageList}
+							renderRow={this.renderRow.bind(this)}
+
+							enableEmptySections={true}
+						/>
+					</Card>
+				}
+
+				{!this.state.messageList && !this.state.loading &&
+					<Card>
+						<Text style={styles.secondary}>
+							There are no messages Yet.
 			</Text>
-					<ListView dataSource={this.state.messageList}
-						renderRow={this.renderRow.bind(this)}
-
-						enableEmptySections={true}
-					/>
-				</Card>
-
+					</Card>
+				}
 
 			</ScrollView>
 
