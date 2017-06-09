@@ -19,6 +19,7 @@ import {
 	Card,
 	ListCard,
 	Navigataion,
+	Page,
 	TextInput
 } from '../soho/All';
 
@@ -43,7 +44,7 @@ export default class CreateIssue extends Component {
 
 	render() {
 		return (
-			<ScrollView style={styles.scroll}>
+			<Page>
 				<Card>
 					<TextInput
 						label='Subject'
@@ -74,26 +75,8 @@ export default class CreateIssue extends Component {
 					</Picker>
 				</Card>
 				<ActivityIndicator animating={this.state.loading} size="large" />
-			</ScrollView>
+			</Page>
 		);
 	}
 
 }
-const styles = StyleSheet.create({
-	scroll: {
-		backgroundColor: '#F0F0F0',
-		padding: 0,
-		flexDirection: 'column'
-	},
-	label: {
-		color: 'black',
-		fontSize: 28
-	},
-	inp: {
-		backgroundColor: '#FFFFFF',
-		height: 40,
-		borderColor: 'gray',
-		borderWidth: 1,
-		alignSelf: 'stretch'
-	}
-});

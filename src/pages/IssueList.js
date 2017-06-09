@@ -23,6 +23,7 @@ import {
 	Card,
 	ListCard,
 	Navigataion,
+	Page,
 	TextInput
 } from '../soho/All';
 
@@ -102,15 +103,14 @@ export default class IssueList extends Component {
 
 	render() {
 		return (
+			<Page>
+				<ListView
+					dataSource={this.state.issueData}
+					renderRow={this.renderRow.bind(this)}
 
-			<ListView
-				dataSource={this.state.issueData}
-				renderRow={this.renderRow.bind(this)}
-
-				enableEmptySections={true}
-			/>
-
-
+					enableEmptySections={true}
+				/>
+			</Page>
 		);
 	}
 

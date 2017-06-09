@@ -3,6 +3,7 @@ import Card from './Card';
 import Field from './Field';
 import ListCard from './ListCard';
 import Navigataion from './Navigation';
+import Page from './Page';
 import Switch from './Switch';
 import TextInput from './TextInput';
 
@@ -14,6 +15,7 @@ const SoHo = {
 	get Field() { return Field; },
 	get ListCard() { return ListCard; },
 	get Navigataion() { return Navigataion; },
+	get Page() { return Page; },
 	get Switch() { return Switch },
 	get TextInput() { return TextInput; },
 

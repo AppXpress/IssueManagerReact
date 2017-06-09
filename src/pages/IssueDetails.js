@@ -24,6 +24,7 @@ import {
 	List,
 	ListCard,
 	Navigataion,
+	Page,
 	TextInput
 } from '../soho/All';
 
@@ -83,8 +84,7 @@ export default class IssueDetails extends Component {
 
 	render() {
 		return (
-			<ScrollView>
-
+			<Page>
 				<Card>
 					<Field label='Created by' entry={this.state.issue.createdBy} />
 					<Field label='Created on' entry={this.state.issue.createdOn} />
@@ -120,9 +120,7 @@ export default class IssueDetails extends Component {
 						<Field entry='No messages' />
 					</Card>
 				}
-
-			</ScrollView>
-
+			</Page>
 		);
 	}
 

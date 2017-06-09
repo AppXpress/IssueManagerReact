@@ -15,9 +15,9 @@ import {
 import {
 	Button,
 	Card,
-	Field,
 	ListCard,
 	Navigataion,
+	Page,
 	Switch,
 	TextInput
 } from '../soho/All';
@@ -107,7 +107,7 @@ export default class Login extends Component {
 
 	render() {
 		return (
-			<ScrollView style={styles.scroll}>
+			<Page>
 				<Card>
 					<TextInput
 						label='Username'
@@ -155,15 +155,8 @@ export default class Login extends Component {
 				{this.state.loading &&
 					<ActivityIndicator animating={true} size="large" />
 				}
-			</ScrollView>
+			</Page>
 		);
 	}
 }
 
-const styles = StyleSheet.create({
-	scroll: {
-		backgroundColor: '#F0F0F0',
-		padding: 0,
-		flexDirection: 'column'
-	}
-});
