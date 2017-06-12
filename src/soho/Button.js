@@ -63,7 +63,7 @@ export default class Button extends Component {
 		return (
 			<View style={this.getViewStyle()}>
 				<Text style={this.getTextStyle()}>
-					{this.props.title.toUpperCase()}
+					{(this.props.title || '').toUpperCase()}
 				</Text>
 			</View>
 		);
