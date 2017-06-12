@@ -15,8 +15,8 @@ import {
 } from 'react-native';
 
 import {
-	query
-} from '../RestMethods';
+	AppX
+} from '../gtn/All';
 
 import {
 	Button,
@@ -60,7 +60,7 @@ export default class IssueList extends Component {
 
 
 	async getDataSource() {
-		return await query('$IssueT3');
+		return await AppX.query('$IssueT3');
 	}
 
 
@@ -91,7 +91,7 @@ export default class IssueList extends Component {
 
 	render() {
 		return (
-			<Page backgroundColor='#ffffff'>
+			<Page>
 				<Card>
 					<ListCard>
 						<TextInput
@@ -104,36 +104,29 @@ export default class IssueList extends Component {
 					<ListView
 						dataSource={this.state.issueData}
 						renderRow={this.renderRow.bind(this)}
-
 						enableEmptySections={true}
 					/>
 				</Card>
 			</Page>
 		);
-
 	}
+
 	setSearchText(event) {
 		let searchText = event;
-
 		this.setState({ searchtext: searchText });
 
 		let filteredData = this.filterIssues(searchText, this.state.rawData);
 		this.setState({ issueData: this.state.issueData.cloneWithRows(filteredData) });
-
-
 	}
 
 	filterIssues(searchText, issueData) {
 		let text = searchText.toLowerCase();
 
-
 		return issueData.result.filter((n) => {
-
 			if (n.subject) {
 				let iss = n.subject.toLowerCase()
 				return iss.search(text) !== -1;
 			}
 		});
-
 	}
 }

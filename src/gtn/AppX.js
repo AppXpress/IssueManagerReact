@@ -1,4 +1,4 @@
-import Rest from './RestBase';
+import Rest from './Rest';
 
 export async function fetch(type, uid) {
 	try {
@@ -34,22 +34,19 @@ export async function query(type, oql) {
 		alert('An error occurred. Please try again later.');
 		console.log(error);
 	}
-
-
 }
 
-export async function post(type, data){
+export async function create(type, data) {
 	try {
 		var post = new Rest()
-		.base()
-		.path(type)
-		.post(data);
+			.base()
+			.path(type)
+			.post(data);
 		return await post;
 	}
 
-	catch(error) {
+	catch (error) {
 		alert('An error occured. Please try again later.');
 		console.log(error);
 	}
-	
-}	
+}
