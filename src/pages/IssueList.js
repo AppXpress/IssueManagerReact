@@ -39,7 +39,7 @@ export default class IssueList extends Component {
 				rowHasChanged: (row1, row2) => row1 !== row2,
 			}),
 			searchtext: '',
-
+			rawData: '',
 		};
 	}
 
@@ -57,20 +57,6 @@ export default class IssueList extends Component {
 		}
 	});
 
-	// static navigationOptions = ({ navigation }) => {
-
-	// 	return {
-	// 	headerRight: (<Text style={{fontSize:25, color: '#ffffff',fontWeight: "300",paddingRight: 10}} onPress={() =>navigation.navigate('Create')}>+</Text>),
-
-
-	// 	title: 'Issues',
-	// 	headerTintColor: '#ffffff',
-	// 	headerStyle: {
-	// 		backgroundColor: '#2578a9',
-	// 	},
-	// 	}			
-
-	// }
 
 
 	async getDataSource() {
@@ -86,6 +72,7 @@ export default class IssueList extends Component {
 		}
 		console.log(data);
 		this.setState({
+			rawData: data,
 			issueData: this.state.issueData.cloneWithRows(data.result),
 		});
 
@@ -107,7 +94,7 @@ export default class IssueList extends Component {
 			<Page>
 				<TextInput
 					label='Search'
-					onChangeText={(text) => this.setState({ username: text })}
+					onChangeText={this.setSearchText.bind(this)}
 					autoCapitalize='none'
 					autoFocus={true}
 				/>
@@ -119,7 +106,34 @@ export default class IssueList extends Component {
 				/>
 			</Page>
 		);
+
 	}
+		setSearchText(event){
+		let searchText = event;
+		console.log(event);
+		this.setState({searchtext: searchText});
+
+		let filteredData = this.filterIssues(searchText, this.state.rawData);
+		this.setState({issueData :this.state.issueData.cloneWithRows(filteredData)});
+
+
+	}
+
+	filterIssues(searchText, issueData){
+		let text = searchText.toLowerCase();
+		
+		
+		return issueData.result.filter( (n) =>{
+			console.log(n);
+			if(n.subject){
+			let iss  = n.subject.toLowerCase()
+			return iss.search(text) !== -1;
+		}
+		});
+	
+	}
+	
+
 }
 
 
