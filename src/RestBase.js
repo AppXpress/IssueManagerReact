@@ -66,12 +66,22 @@ export default class Rest {
 			return encodeURI(this._url + '?' + params);
 		}
 
-		this._run = async (method) => {
+		this._run = async (method, body) => {
 			try {
-				return await fetch(this._getUrl(), {
+				var args = {
 					method: method,
 					headers: this._headers
-				});
+				}
+
+				if (body) {
+					if (typeof body == 'string') {
+						args.body = body;
+					} else {
+						args.body = JSON.stringify(body);
+					}
+				}
+
+				return await fetch(this._getUrl(), args);
 			}
 			catch (error) {
 				return error;
@@ -107,7 +117,6 @@ export default class Rest {
 	}
 
 	async post(body) {
-		// implement body
 		return await this._run('POST');
 	}
 }
