@@ -97,6 +97,7 @@ export default class IssueList extends Component {
 					onChangeText={this.setSearchText.bind(this)}
 					autoCapitalize='none'
 					autoFocus={true}
+					color='#ffffff'
 				/>
 				<ListView
 					dataSource={this.state.issueData}
@@ -110,7 +111,7 @@ export default class IssueList extends Component {
 	}
 		setSearchText(event){
 		let searchText = event;
-		console.log(event);
+		
 		this.setState({searchtext: searchText});
 
 		let filteredData = this.filterIssues(searchText, this.state.rawData);
@@ -124,7 +125,7 @@ export default class IssueList extends Component {
 		
 		
 		return issueData.result.filter( (n) =>{
-			console.log(n);
+			
 			if(n.subject){
 			let iss  = n.subject.toLowerCase()
 			return iss.search(text) !== -1;
