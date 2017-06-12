@@ -1,33 +1,37 @@
 import Rest from './RestBase';
 
-export async function getObjects(identifier) {
-	var response = await (await new Rest().base())
-		.path(identifier)
-		.path('query')
-		.get();
-
+export async function fetch(type, uid) {
 	try {
-		return await response.json()
-	}
-	catch (error) {
+		var query = await new Rest()
+			.base()
+			.path(type)
+			.path(id)
+			.get();
+
+		return await query.json();
+	} catch (error) {
+		alert('An error occurred. Please try again later.');
 		console.log(error);
 	}
-
-
 }
 
-
-export async function getObjectsOQL(identifier,OQL) {
-	var response = await (await new Rest().base())
-		.path(identifier)
-		.header('oql', OQL)
-		.path('query')
-		.get();
-
+export async function query(type, oql) {
 	try {
-		return await response.json()
+		var query = new Rest()
+			.base()
+			.path(type)
+			.path('query')
+
+		if (oql) {
+			query = query.param('oql', oql);
+		}
+
+		query = await query.get();
+
+		return await query.json();
 	}
 	catch (error) {
+		alert('An error occurred. Please try again later.');
 		console.log(error);
 	}
-}	
+}

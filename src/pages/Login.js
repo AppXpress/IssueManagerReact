@@ -17,10 +17,9 @@ import {
 	Card,
 	ListCard,
 	Navigataion,
+	Page,
 	Switch,
-	TextInput,
-
-	getColor
+	TextInput
 } from '../soho/All';
 
 import {
@@ -100,7 +99,7 @@ export default class Login extends Component {
 				this.setCredentials()
 			}
 
-			this.props.navigation.navigate('Home');
+			this.props.navigation.navigate('IssueList');
 		} else {
 			Alert.alert('Login failed. Please try again.');
 		}
@@ -108,7 +107,7 @@ export default class Login extends Component {
 
 	render() {
 		return (
-			<ScrollView style={styles.scroll}>
+			<Page>
 				<Card>
 					<TextInput
 						label='Username'
@@ -153,16 +152,11 @@ export default class Login extends Component {
 						primary
 					/>
 				</Card>
-				<ActivityIndicator animating={this.state.loading} size="large" />
-			</ScrollView>
+				{this.state.loading &&
+					<ActivityIndicator animating={true} size="large" />
+				}
+			</Page>
 		);
 	}
 }
 
-const styles = StyleSheet.create({
-	scroll: {
-		backgroundColor: '#F0F0F0',
-		padding: 0,
-		flexDirection: 'column'
-	}
-});

@@ -69,7 +69,7 @@ export default class Button extends Component {
 		);
 	}
 
-	render() {
+	getPlatform() {
 		if (Platform.OS == 'android') {
 			return (
 				<TouchableNativeFeedback
@@ -92,11 +92,21 @@ export default class Button extends Component {
 			);
 		}
 	}
+
+	render() {
+		return (
+			<View style={styles.outerView}>
+				{this.getPlatform()}
+			</View>
+		);
+	}
 };
 
 const styles = StyleSheet.create({
+	outerView: {
+		margin: 10
+	},
 	view: {
-		margin: 10,
 		height: 34,
 		borderRadius: 2,
 		alignItems: 'center',
