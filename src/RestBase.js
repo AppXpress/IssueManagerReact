@@ -112,6 +112,6 @@ export default class Rest {
 	}
 
 	async post(body) {
-		return await this._run('POST');
+		return await this._run('POST', body);
 	}
 }
