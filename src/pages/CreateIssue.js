@@ -30,7 +30,10 @@ import {
 
 import Rest from '../RestBase';
 
-import dataKey from '../Environment'
+import {
+	dataKey,
+	restURL
+}from '../Environment'
 
 export default class CreateIssue extends Component {
 
@@ -53,10 +56,9 @@ export default class CreateIssue extends Component {
 
 	async createIssue(){
 		rest = new Rest();
-		rest.params = {dataKey};
-		return await rest.post({
+		return await rest.base().path('$IssueT3').post({
 			"type": "$IssueT3",
-  		"subject": "jack test 2",
+  		"subject": "jack test 3",
   		"description": "testing",
   		"licensee": {
     		"partyRoleCode": "Buyer",
