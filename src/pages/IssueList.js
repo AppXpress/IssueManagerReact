@@ -91,20 +91,24 @@ export default class IssueList extends Component {
 
 	render() {
 		return (
-			<Page>
+			<Page backgroundColor='#ffffff'>
+			<Card>
+			<ListCard>
 				<TextInput
 					label='Search'
 					onChangeText={this.setSearchText.bind(this)}
 					autoCapitalize='none'
-					autoFocus={true}
 					color='#ffffff'
 				/>
+			</ListCard>	
+			
 				<ListView
 					dataSource={this.state.issueData}
 					renderRow={this.renderRow.bind(this)}
 
 					enableEmptySections={true}
 				/>
+			</Card>	
 			</Page>
 		);
 
