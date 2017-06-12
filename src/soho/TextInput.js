@@ -81,11 +81,13 @@ export default class TextInput extends Component {
 				style.push({
 					height: (this.props.rows * 20 + 20)
 				});
-			}
-
-			if (this.props.style && this.props.style.height) {
+			} else if (this.props.style && this.props.style.height) {
 				style.push({
 					height: this.props.style.height
+				});
+			} else {
+				style.push({
+					height: 40
 				});
 			}
 		}

@@ -24,8 +24,7 @@ import {
 } from '../soho/All';
 
 import {
-	AppX,
-	Rest
+	AppX
 } from '../gtn/All';
 
 export default class CreateIssue extends Component {
@@ -48,16 +47,13 @@ export default class CreateIssue extends Component {
 	}
 
 	async createIssue() {
-		var response = new Rest().base().path('$IssueT3');
-
-		console.log(await new Rest().base().get());
-
-		console.log(response);
-
-		response = await response.post('{"type":"$IssueT3","subject":"jack test 4","description":"testing","licensee":{"partyRoleCode":"Buyer","memberId":"5717989018004281","name":"QA Tech Buyer","contact":{},"address":{"addressLine1":"75 Maiden Lane","addressLine2":"12th Floor","city":"New York","stateOrProvince":"NY","postalCodeNumber":"10038","countryCode":"US"}}}');
-
-		console.log(response);
-		return response;
+		await AppX.create({
+			type: '$IssueT3',
+			subject: 'Test',
+			licensee: {
+				memberId: '5717989018004281'
+			}
+		});
 	}
 
 	render() {
@@ -66,6 +62,7 @@ export default class CreateIssue extends Component {
 				<Card>
 					<TextInput
 						label='Subject'
+						value={this.state.subject}
 						onChangeText={(text) => this.setState({ subject: text })}
 						autoCapitalize='none'
 						autoFocus={true}
@@ -73,6 +70,7 @@ export default class CreateIssue extends Component {
 					/>
 					<TextInput
 						label='Description'
+						value={this.state.desc}
 						onChangeText={(text) => this.setState({ desc: text })}
 						autoCapitalize='none'
 						required
@@ -95,7 +93,7 @@ export default class CreateIssue extends Component {
 					<Button
 						title='Create'
 						onPress={this.createIssue}
-						enabled={this.state.subject && this.state.Description}
+						enabled={this.state.subject && this.state.desc}
 					/>
 				</Card>
 				<ActivityIndicator animating={this.state.loading} size="large" />

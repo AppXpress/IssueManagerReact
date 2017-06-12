@@ -51,10 +51,12 @@ export default class CreateMessage extends Component {
 					<TextInput
 						label='Message Text'
 						onChangeText={(text) => this.setState({ message: text })}
+						multiline
+						rows={5}
 					/>
 
 					<Button
-						title='send'
+						title='Save'
 						onPress={this.postMessage.bind(this)}
 						primary
 					/>
