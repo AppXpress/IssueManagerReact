@@ -15,7 +15,7 @@ import {
 } from 'react-native';
 
 import {
-	query
+	getObjects
 } from '../RestMethods';
 
 import {
@@ -23,18 +23,13 @@ import {
 	Card,
 	ListCard,
 	Navigataion,
-	Page,
 	TextInput
 } from '../soho/All';
 
-<<<<<<< HEAD:src/pages/Home.js
 
 
 
 export default class Home extends Component {
-=======
-export default class IssueList extends Component {
->>>>>>> 770782a4c8ddee2e404bc93ca824d5545c5dc91f:src/pages/IssueList.js
 
 	constructor(props) {
 		super(props);
@@ -56,7 +51,7 @@ export default class IssueList extends Component {
 			return (
 				<Text
 					style={{ fontSize: 25, color: '#ffffff', fontWeight: "300", paddingRight: 10 }}
-					onPress={() => context.navigation.navigate('CreateIssue')}
+					onPress={() => context.navigation.navigate('Create')}
 				>
 					+
 				</Text>
@@ -81,7 +76,7 @@ export default class IssueList extends Component {
 
 
 	async getDataSource() {
-		return await query('$IssueT3');
+		return await getObjects('$IssueT3');
 	}
 
 
@@ -103,7 +98,7 @@ export default class IssueList extends Component {
 		return (
 			<View>
 				<ListCard main={issue.subject} secondary={issue.createdBy} tertiary={issue.description}
-					onPress={() => this.props.navigation.navigate('IssueDetails', { issue: issue })}
+					onPress={() => this.props.navigation.navigate('IssueScreen', { issue: issue })}
 				></ListCard>
 			</View>
 		)
@@ -111,7 +106,6 @@ export default class IssueList extends Component {
 
 	render() {
 		return (
-<<<<<<< HEAD:src/pages/Home.js
 <<<<<<< HEAD
 			<ScrollView
 			backgroundColor= '#ffffff'>
@@ -124,16 +118,12 @@ export default class IssueList extends Component {
 						
 					/>
 
-=======
-			<Page>
->>>>>>> 770782a4c8ddee2e404bc93ca824d5545c5dc91f:src/pages/IssueList.js
 				<ListView
 					dataSource={this.state.issueData}
 					renderRow={this.renderRow.bind(this)}
 
 					enableEmptySections={true}
 				/>
-<<<<<<< HEAD:src/pages/Home.js
 			
 			</ScrollView>	
 		);
@@ -154,14 +144,11 @@ export default class IssueList extends Component {
 			/>
 
 
-=======
-			</Page>
->>>>>>> 770782a4c8ddee2e404bc93ca824d5545c5dc91f:src/pages/IssueList.js
 		);
 	}
 
 	goToCreate() {
-		this.props.navigation.navigate('CreateIssue');
+		this.props.navigation.navigate('Create');
 	}
 >>>>>>> 81b5cda72c3fd7b41d26f251250ecae53600f91c
 
