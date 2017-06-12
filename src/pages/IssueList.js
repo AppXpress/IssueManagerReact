@@ -92,52 +92,51 @@ export default class IssueList extends Component {
 	render() {
 		return (
 			<Page backgroundColor='#ffffff'>
-			<Card>
-			<ListCard>
-				<TextInput
-					label='Search'
-					onChangeText={this.setSearchText.bind(this)}
-					autoCapitalize='none'
-					color='#ffffff'
-				/>
-			</ListCard>	
-			
-				<ListView
-					dataSource={this.state.issueData}
-					renderRow={this.renderRow.bind(this)}
+				<Card>
+					<ListCard>
+						<TextInput
+							label='Search'
+							onChangeText={this.setSearchText.bind(this)}
+							autoCapitalize='none'
+						/>
+					</ListCard>
 
-					enableEmptySections={true}
-				/>
-			</Card>	
+					<ListView
+						dataSource={this.state.issueData}
+						renderRow={this.renderRow.bind(this)}
+
+						enableEmptySections={true}
+					/>
+				</Card>
 			</Page>
 		);
 
 	}
-		setSearchText(event){
+	setSearchText(event) {
 		let searchText = event;
-		
-		this.setState({searchtext: searchText});
+
+		this.setState({ searchtext: searchText });
 
 		let filteredData = this.filterIssues(searchText, this.state.rawData);
-		this.setState({issueData :this.state.issueData.cloneWithRows(filteredData)});
+		this.setState({ issueData: this.state.issueData.cloneWithRows(filteredData) });
 
 
 	}
 
-	filterIssues(searchText, issueData){
+	filterIssues(searchText, issueData) {
 		let text = searchText.toLowerCase();
-		
-		
-		return issueData.result.filter( (n) =>{
-			
-			if(n.subject){
-			let iss  = n.subject.toLowerCase()
-			return iss.search(text) !== -1;
-		}
+
+
+		return issueData.result.filter((n) => {
+
+			if (n.subject) {
+				let iss = n.subject.toLowerCase()
+				return iss.search(text) !== -1;
+			}
 		});
-	
+
 	}
-	
+
 
 }
 

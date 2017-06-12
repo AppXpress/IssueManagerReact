@@ -4,10 +4,8 @@
  * @flow
  */
 
-import React, { Component, PropTypes } from 'react';
 import {
-	AppRegistry,
-	Text,
+	AppRegistry
 } from 'react-native';
 
 import {
