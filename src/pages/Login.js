@@ -134,7 +134,7 @@ export default class Login extends Component {
 						secureTextEntry={true}
 						placeholder='Leave Blank if Unnecesary'
 					/>
-										{__DEV__ &&
+					{__DEV__ &&
 						<View>
 							<Switch
 								label='(DEV) Remember username'

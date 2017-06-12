@@ -136,27 +136,4 @@ export default class IssueList extends Component {
 		});
 
 	}
-
-
 }
-
-
-const styles = StyleSheet.create({
-
-	scroll: {
-		backgroundColor: '#F0F0F0',
-		padding: 0,
-		flexDirection: 'column'
-	},
-	label: {
-		color: 'black',
-		fontSize: 28
-	},
-	inp: {
-		backgroundColor: '#FFFFFF',
-		height: 40,
-		borderColor: 'gray',
-		borderWidth: 1,
-		alignSelf: 'stretch'
-	}
-});
