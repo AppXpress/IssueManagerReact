@@ -5,7 +5,7 @@ export async function fetch(type, uid) {
 		var query = await new Rest()
 			.base()
 			.path(type)
-			.path(id)
+			.path(uid)
 			.get();
 
 		return await query.json();

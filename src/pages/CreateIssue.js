@@ -23,6 +23,18 @@ import {
 	TextInput
 } from '../soho/All';
 
+import {
+	fetch,
+	query,
+} from '../RestMethods';
+
+import Rest from '../RestBase';
+
+import {
+	dataKey,
+	restURL
+}from '../Environment'
+
 export default class CreateIssue extends Component {
 
 	static navigationOptions = Navigataion({
@@ -40,6 +52,29 @@ export default class CreateIssue extends Component {
 			desc: '',
 			loading: false,
 		};
+	}
+
+	async createIssue(){
+		rest = new Rest();
+		return await rest.base().path('$IssueT3').post({
+			"type": "$IssueT3",
+  		"subject": "jack test 3",
+  		"description": "testing",
+  		"licensee": {
+    		"partyRoleCode": "Buyer",
+    		"memberId": "5717989018004281",
+    		"name": "QA Tech Buyer",
+    		"contact": {},
+    		"address": {
+      		"addressLine1": "75 Maiden Lane",
+      		"addressLine2": "12th Floor",
+      		"city": "New York",
+      		"stateOrProvince": "NY",
+      		"postalCodeNumber": "10038",
+      		"countryCode": "US"
+    		}
+  		}
+		})
 	}
 
 	render() {
@@ -73,6 +108,12 @@ export default class CreateIssue extends Component {
 						<Picker.Item label="Medium" value="Medium" />
 						<Picker.Item label="High" value="High" />
 					</Picker>
+
+					<Button
+						title='Create'
+						onPress={this.createIssue}
+						enabled={this.state.subject && this.state.Description}
+					/>
 				</Card>
 				<ActivityIndicator animating={this.state.loading} size="large" />
 			</Page>

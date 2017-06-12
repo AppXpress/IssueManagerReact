@@ -20,23 +20,18 @@ export async function authorize(username, password, eid) {
 		toEncode += ':' + eid;
 	}
 
-	var query = await (await new Rest().base())
-		.header('Authorization', base64Encode(toEncode))
-		.get();
-
 	try {
-		var response = await query;
+		var response = await new Rest()
+			.base()
+			.header('Authorization', base64Encode(toEncode))
+			.get();
+
+		token = response.headers.get('Authorization');
+		return true;
 	} catch (error) {
 		console.log(error);
 		return false;
 	}
-
-	if (!response) {
-		return false;
-	}
-
-	token = response.headers.get('Authorization');
-	return true;
 }
 
 var token;
