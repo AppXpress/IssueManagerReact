@@ -27,14 +27,7 @@ import {
 	TextInput
 } from '../soho/All';
 
-<<<<<<< HEAD:src/pages/Home.js
-
-
-
-export default class Home extends Component {
-=======
 export default class IssueList extends Component {
->>>>>>> 770782a4c8ddee2e404bc93ca824d5545c5dc91f:src/pages/IssueList.js
 
 	constructor(props) {
 		super(props);
@@ -111,64 +104,23 @@ export default class IssueList extends Component {
 
 	render() {
 		return (
-<<<<<<< HEAD:src/pages/Home.js
-<<<<<<< HEAD
-			<ScrollView
-			backgroundColor= '#ffffff'>
-			<TextInput
-						label='Search'
-						onChangeText={(text) => this.setState({ username: text })}
-						autoCapitalize='none'
-						autoFocus={true}
-						backgroundColor= '#ffffff'
-						
-					/>
-
-=======
 			<Page>
->>>>>>> 770782a4c8ddee2e404bc93ca824d5545c5dc91f:src/pages/IssueList.js
+				<TextInput
+					label='Search'
+					onChangeText={(text) => this.setState({ username: text })}
+					autoCapitalize='none'
+					autoFocus={true}
+				/>
 				<ListView
 					dataSource={this.state.issueData}
 					renderRow={this.renderRow.bind(this)}
 
 					enableEmptySections={true}
 				/>
-<<<<<<< HEAD:src/pages/Home.js
-			
-			</ScrollView>	
-		);
-	}
-
-
-
-
-	
-
-=======
-
-			<ListView
-				dataSource={this.state.issueData}
-				renderRow={this.renderRow.bind(this)}
-
-				enableEmptySections={true}
-			/>
-
-
-=======
 			</Page>
->>>>>>> 770782a4c8ddee2e404bc93ca824d5545c5dc91f:src/pages/IssueList.js
 		);
 	}
-
-	goToCreate() {
-		this.props.navigation.navigate('CreateIssue');
-	}
->>>>>>> 81b5cda72c3fd7b41d26f251250ecae53600f91c
-
 }
-
-
-
 
 
 const styles = StyleSheet.create({
