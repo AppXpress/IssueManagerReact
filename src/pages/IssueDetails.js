@@ -107,6 +107,13 @@ export default class IssueDetails extends Component {
 
 				{this.state.messageList && !this.state.loading &&
 					<Card title='Messages'>
+					<ListCard>
+					<Button 
+						title='New Message'
+						onPress={() => this.props.navigation.navigate('CreateMessage', { issue: this.state.issue })}
+					/>
+					</ListCard>
+
 						<ListView
 							dataSource={this.state.messageList}
 							renderRow={this.renderRow.bind(this)}
@@ -116,7 +123,14 @@ export default class IssueDetails extends Component {
 				}
 
 				{!this.state.messageList && !this.state.loading &&
-					<Card>
+					<Card title='Messages'>
+						<ListCard>
+					<Button 
+						title='New Message'
+						onPress={() => this.props.navigation.navigate('CreateMessage', { issue: this.state.issue })}
+					/>
+					</ListCard>
+
 						<Field entry='No messages' />
 					</Card>
 				}

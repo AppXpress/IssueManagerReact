@@ -34,4 +34,22 @@ export async function query(type, oql) {
 		alert('An error occurred. Please try again later.');
 		console.log(error);
 	}
+
+
 }
+
+export async function post(type, data){
+	try {
+		var post = new Rest()
+		.base()
+		.path(type)
+		.post(data);
+		return await post;
+	}
+
+	catch(error) {
+		alert('An error occured. Please try again later.');
+		console.log(error);
+	}
+	
+}	
