@@ -18,10 +18,16 @@ import {
 	Button,
 	Card,
 	ListCard,
+	Navigataion,
 	TextInput
 } from '../soho/All';
 
 export default class Create extends Component {
+
+	static navigationOptions = Navigataion({
+		title: 'New Issue',
+		hue: 'ruby'
+	});
 
 	constructor(props) {
 		super(props);
@@ -30,7 +36,7 @@ export default class Create extends Component {
 			subject: '',
 			issueType: '',
 			severity: '',
-      desc: '',
+			desc: '',
 			loading: false,
 		};
 	}
@@ -52,20 +58,20 @@ export default class Create extends Component {
 						autoCapitalize='none'
 						required
 					/>
-          <Picker
-            selectedValue={this.state.issueType}
-            onValueChange={(item, index) => this.setState({issueType: item})}>
-            <Picker.Item label="Shipping" value="Shipping" />
-            <Picker.Item label="Factory" value="Factory" />
-            <Picker.Item label="Quality Control" value="Quality Control" />
-          </Picker>
-          <Picker
-            selectedValue={this.state.severity}
-            onValueChange={(item, index) => this.setState({severity: item})}>
-            <Picker.Item label="Low" value="Low" />
-            <Picker.Item label="Medium" value="Medium" />
-            <Picker.Item label="High" value="High" />
-          </Picker>
+					<Picker
+						selectedValue={this.state.issueType}
+						onValueChange={(item, index) => this.setState({ issueType: item })}>
+						<Picker.Item label="Shipping" value="Shipping" />
+						<Picker.Item label="Factory" value="Factory" />
+						<Picker.Item label="Quality Control" value="Quality Control" />
+					</Picker>
+					<Picker
+						selectedValue={this.state.severity}
+						onValueChange={(item, index) => this.setState({ severity: item })}>
+						<Picker.Item label="Low" value="Low" />
+						<Picker.Item label="Medium" value="Medium" />
+						<Picker.Item label="High" value="High" />
+					</Picker>
 				</Card>
 				<ActivityIndicator animating={this.state.loading} size="large" />
 			</ScrollView>

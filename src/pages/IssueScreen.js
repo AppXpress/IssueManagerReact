@@ -22,29 +22,36 @@ import {
 	Button,
 	Card,
 	ListCard,
+	Navigataion,
 	TextInput
 } from '../soho/All';
 
 export default class IssueScreen extends Component {
 
+	static navigationOptions = Navigataion({
+		title: (context) => {
+			return context.navigation.state.params.issue.subject
+		}
+	});
+
 	constructor(props) {
 		super(props);
-		
+
 		this.state = {
-			messageList : new ListView.DataSource({
+			messageList: new ListView.DataSource({
 				rowHasChanged: (row1, row2) => row1 !== row2,
 			}),
 			issue: this.props.navigation.state.params.issue,
 			loading: true,
 		};
 
-		
+
 	}
 	renderRow(message) {
 		return (
 			<View>
-				<ListCard main={message.createdBy} secondary={message.text}  
-				 
+				<ListCard main={message.createdBy} secondary={message.text}
+
 				></ListCard>
 			</View>
 		)
@@ -52,10 +59,10 @@ export default class IssueScreen extends Component {
 
 	async componentDidMount() {
 		var data = await this.getComments();
-		
+
 		if (!data.result) {
 			this.setState({
-				messageList : false,
+				messageList: false,
 				loading: false,
 			});
 			console.log(data);
@@ -71,158 +78,146 @@ export default class IssueScreen extends Component {
 
 	}
 
-	static navigationOptions = ( { navigation }) => ({
-
-		title: navigation.state.params.issue.subject,
-		headerTintColor: '#ffffff',
-		headerStyle: {
-			backgroundColor: '#2578a9',
-		},
-		});
-
-	async getComments(){
-		return await getObjectsOQL('$MessageT4',"issue.rootId = "+this.state.issue.uid);
+	async getComments() {
+		return await getObjectsOQL('$MessageT4', "issue.rootId = " + this.state.issue.uid);
 	}
-	
 
-	render(){
-		return(
+
+	render() {
+		return (
 			<ScrollView>
 
-			<Card>
-				<Text style = {styles.main}>
-					Issue Created By:
+				<Card>
+					<Text style={styles.main}>
+						Issue Created By:
 				</Text>
-				<Text style={styles.secondary}>
-					{this.state.issue.createdBy}
+					<Text style={styles.secondary}>
+						{this.state.issue.createdBy}
+					</Text>
+					<Text style={styles.main}>
+						Issue Created On:
 				</Text>
-				<Text style={styles.main}>
-					Issue Created On:
+					<Text style={styles.secondary}>
+						{this.state.issue.createdOn}
+					</Text>
+
+				</Card>
+
+				<Card>
+					<Text style={styles.secondary}>
+						Description:
 				</Text>
-				<Text style={styles.secondary}>
-					{this.state.issue.createdOn}
-				</Text>	
+					<Text style={styles.primary}>
+						{this.state.issue.description}
+					</Text>
 
-			</Card>
-
-			<Card>
-				<Text style = {styles.secondary}>
-					Description:
-				</Text>
-				<Text style = {styles.primary}>
-					{this.state.issue.description}
-				</Text>	
-
-				<Text style = {styles.secondary}>
-					Status:					
+					<Text style={styles.secondary}>
+						Status:
 
 				</Text>
-				<Text style = {styles.primary}>
-					{this.state.issue.status}
-				</Text>	
+					<Text style={styles.primary}>
+						{this.state.issue.status}
+					</Text>
 
-				<Text style = {styles.secondary}>
-					Issue Type:					
+					<Text style={styles.secondary}>
+						Issue Type:
 				</Text>
-				<Text style = {styles.primary}>
-					{getType(this.state.issue.issueType)}
-				</Text>	
-				<Text style = {styles.secondary}>
-					Severity:					
+					<Text style={styles.primary}>
+						{getType(this.state.issue.issueType)}
+					</Text>
+					<Text style={styles.secondary}>
+						Severity:
 				</Text>
-				<Text style = {styles.primary}>
-					{getSeverity(this.state.issue.severity)}
-				</Text>	
+					<Text style={styles.primary}>
+						{getSeverity(this.state.issue.severity)}
+					</Text>
 
-			</Card>
+				</Card>
 
-			<Card>
-				<Text style={styles.secondary}>
-				Assigned To:
+				<Card>
+					<Text style={styles.secondary}>
+						Assigned To:
 				</Text>
-				<Text style={styles.primary}>
-				{this.getAssignedTo()}
-				</Text>
-			</Card>
+				</Card>
 
-			{this.state.loading &&
-				<ActivityIndicator animating={true} size="large" />
-			}
+				{this.state.loading &&
+					<ActivityIndicator animating={true} size="large" />
+				}
 
-			{this.state.messageList && !this.state.loading &&
-			<Card>
-			<Text style={styles.secondary}>
-			Messages:
+				{this.state.messageList && !this.state.loading &&
+					<Card>
+						<Text style={styles.secondary}>
+							Messages:
+						</Text>
+
+
+						<ListView dataSource={this.state.messageList}
+							renderRow={this.renderRow.bind(this)}
+
+							enableEmptySections={true}
+						/>
+					</Card>
+				}
+
+				{!this.state.messageList && !this.state.loading &&
+					<Card>
+						<Text style={styles.secondary}>
+							There are no messages Yet.
 			</Text>
-			
+					</Card>
+				}
 
-			<ListView dataSource={this.state.messageList}
-					renderRow={this.renderRow.bind(this)}
+			</ScrollView>
 
-					enableEmptySections={true}
-			/>
-			</Card>
-		}
-
-		{!this.state.messageList && !this.state.loading &&
-			<Card>
-			<Text style ={styles.secondary}>
-			There are no messages Yet.
-			</Text>
-			</Card>
-		}
-
-		</ScrollView>
-
-			);
+		);
 	}
-	 getAssignedTo(){
-	 	
-		if(this.state.issue.participants[1]){
+	getAssignedTo() {
+
+		if (this.state.issue.participants[1]) {
 			return this.state.issue.participants[1].party.name;
-		}else{
+		} else {
 			return 'Unassigned';
 		}
 
 	}
 
-}	
+}
 
 
 
-function getType(level){
+function getType(level) {
 
-	if (level == 3){
+	if (level == 3) {
 		return 'Quality Control';
 
 	}
 
-	if (level == 2){
+	if (level == 2) {
 		return 'Factory Supply';
-		
+
 	}
 
-	if (level == 1){
+	if (level == 1) {
 		return 'Shipping';
-		
+
 	}
 
 }
-function getSeverity(level){
+function getSeverity(level) {
 
-	if (level == 3){
+	if (level == 3) {
 		return 'High';
 
 	}
 
-	if (level == 2){
+	if (level == 2) {
 		return 'Medium';
-		
+
 	}
 
-	if (level == 1){
+	if (level == 1) {
 		return 'Low';
-		
+
 	}
 
 }

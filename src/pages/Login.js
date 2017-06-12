@@ -16,6 +16,7 @@ import {
 	Button,
 	Card,
 	ListCard,
+	Navigataion,
 	Switch,
 	TextInput,
 
@@ -33,13 +34,9 @@ import {
 
 export default class Login extends Component {
 
-	static navigationOptions = {
-		title: 'Welcome',
-		headerTintColor: getColor('white-0'),
-		headerStyle: {
-			backgroundColor: getColor('ruby-7'),
-		},
-	};
+	static navigationOptions = Navigataion({
+		title: 'Welcome'
+	});
 
 	constructor(props) {
 		super(props);
@@ -54,7 +51,7 @@ export default class Login extends Component {
 
 	async componentDidMount() {
 		if (__DEV__) {
-			this.getCredentials();
+			await this.getCredentials();
 		}
 	}
 
