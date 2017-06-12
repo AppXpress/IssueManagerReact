@@ -93,8 +93,8 @@ export default class IssueDetails extends Component {
 				<Card>
 					<Field label='Description' entry={this.state.issue.description} />
 					<Field label='Status' entry={this.state.issue.status} />
-					<Field label='Issue type' entry={this.state.issue.issueType} />
-					<Field label='Severity' entry={this.state.issue.severity} />
+					<Field label='Issue type' entry={getType(this.state.issue.issueType)} />
+					<Field label='Severity' entry={getSeverity(this.state.issue.severity)} />
 				</Card>
 
 				<Card>

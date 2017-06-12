@@ -19,7 +19,8 @@ import {
 	Navigataion,
 	Page,
 	Switch,
-	TextInput
+	TextInput,
+	Picker,
 } from '../soho/All';
 
 import {
@@ -108,7 +109,9 @@ export default class Login extends Component {
 	render() {
 		return (
 			<Page>
+
 				<Card>
+
 					<TextInput
 						label='Username'
 						value={this.state.username}
@@ -131,7 +134,7 @@ export default class Login extends Component {
 						secureTextEntry={true}
 						placeholder='Leave Blank if Unnecesary'
 					/>
-					{__DEV__ &&
+										{__DEV__ &&
 						<View>
 							<Switch
 								label='(DEV) Remember username'
