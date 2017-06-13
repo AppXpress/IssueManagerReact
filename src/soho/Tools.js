@@ -9,7 +9,7 @@ export function getHandler(obj, name) {
 	}
 }
 
-export function getColor(name, defaultColor) {
+export function getColor(name, ...args) {
 	if (typeof name == 'string') {
 		var data = name.split('-');
 
@@ -24,8 +24,8 @@ export function getColor(name, defaultColor) {
 	}
 
 	// Return default color if name was invalid
-	if (defaultColor) {
-		return getColor(defaultColor);
+	if (args && args.length > 0) {
+		return getColor(...args);
 	}
 
 	// Return black if no default was provided

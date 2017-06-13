@@ -12,17 +12,26 @@ export default function Navigation(options) {
 		}
 
 		var nav = {};
+
 		if (typeof options == 'object') {
 			if (options.title) {
 				nav.title = runOrReturn(options.title);
 			}
 
 			nav.headerTintColor = getColor('white-0');
+
+			var hue;
 			if (options.hue) {
-				options.hue = runOrReturn(options.hue);
+				hue = runOrReturn(options.hue);
 			}
+
+			var color;
+			if (options.color) {
+				color = runOrReturn(options.color);
+			}
+
 			nav.headerStyle = {
-				backgroundColor: getColor(options.hue + '-7', 'azure-7')
+				backgroundColor: getColor(color, hue + '-7', 'azure-7')
 			};
 
 			if (options.right) {
