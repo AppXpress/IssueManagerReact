@@ -3,14 +3,13 @@ import React, { Component } from 'react';
 import {
 	Platform,
 	StyleSheet,
-	TouchableNativeFeedback,
-	TouchableHighlight,
 	View,
 	Text
 } from 'react-native';
 
+import Touchable from './Touchable';
+
 import {
-	getHandler,
 	getColor
 } from './Tools';
 
@@ -21,82 +20,51 @@ export default class Button extends Component {
 		this.props = props;
 	}
 
-	getViewStyle() {
-		var style = [styles.view];
+	getInnerViewStyle() {
+		var style = {};
 
 		if (this.props.primary) {
-			style.push({
-				backgroundColor: getColor(this.props.hue + '-6', 'azure-6')
-			});
+			style.backgroundColor = getColor(this.props.hue + '-6', 'azure-6');
 		} else if (this.props.secondary) {
-			style.push({
-				backgroundColor: getColor('graphite-3')
-			});
+			style.backgroundColor = getColor('graphite-3');
+		} else {
+			style.backgroundColor = 'transparent';
 		}
 
 		if (this.props.enabled == false) {
-			style.push({
-				opacity: 0.5
-			});
+			style.opacity = 0.5;
 		}
 
-		return style;
+		return [styles.view, style];
 	}
 
 	getTextStyle() {
-		var style = [styles.text];
+		var style = {};
 
-		if (this.props.primary) {
-			style.push({
-				color: getColor('white-0')
-			});
+		if (this.props.primary || this.props.icon) {
+			style.color = getColor('white-0');
 		} else if (this.props.secondary) {
-			style.push({
-				color: getColor(this.props.hue + '-7', 'graphite-7')
-			});
-		}
-
-		return style;
-	}
-
-	getView() {
-		return (
-			<View style={this.getViewStyle()}>
-				<Text style={this.getTextStyle()}>
-					{(this.props.title || '').toUpperCase()}
-				</Text>
-			</View>
-		);
-	}
-
-	getPlatform() {
-		if (Platform.OS == 'android') {
-			return (
-				<TouchableNativeFeedback
-					{...this.props}
-					onPress={getHandler(this, 'onPress')}
-					style={{}}
-				>
-					{this.getView()}
-				</TouchableNativeFeedback>
-			);
+			style.color = getColor(this.props.hue + '-7', 'graphite-7');
 		} else {
-			return (
-				<TouchableHighlight
-					{...this.props}
-					onPress={getHandler(this, 'onPress')}
-					style={{}}
-				>
-					{this.getView()}
-				</TouchableHighlight>
-			);
+			style.color = getColor(this.props.hue + '-6', 'graphite-6');
 		}
+
+		return [styles.text, style];
 	}
 
 	render() {
 		return (
 			<View style={styles.outerView}>
-				{this.getPlatform()}
+				<Touchable
+					style={this.getInnerViewStyle()}
+					onPress={this.props.onPress}
+					borderless={this.props.icon}
+				>
+					<Text style={this.getTextStyle()}>
+						{(this.props.title || 'Button').toUpperCase()}
+					</Text>
+					{this.props.children}
+				</Touchable>
 			</View>
 		);
 	}
@@ -108,13 +76,13 @@ const styles = StyleSheet.create({
 	},
 	view: {
 		height: 34,
+		minWidth: 34,
 		borderRadius: 2,
 		alignItems: 'center',
 		justifyContent: 'center'
 	},
 	text: {
 		fontSize: 12,
-		fontWeight: 'bold',
-		color: getColor('graphite-6')
+		fontWeight: 'bold'
 	}
 });
