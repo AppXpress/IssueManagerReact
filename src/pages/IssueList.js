@@ -92,21 +92,19 @@ export default class IssueList extends Component {
 	render() {
 		return (
 			<Page>
-				<Card>
-					<ListCard>
-						<TextInput
-							label='Search'
-							onChangeText={this.setSearchText.bind(this)}
-							autoCapitalize='none'
-						/>
-					</ListCard>
-
-					<ListView
-						dataSource={this.state.issueData}
-						renderRow={this.renderRow.bind(this)}
-						enableEmptySections={true}
+				<ListCard>
+					<TextInput
+						label='Search'
+						onChangeText={this.setSearchText.bind(this)}
+						autoCapitalize='none'
 					/>
-				</Card>
+				</ListCard>
+
+				<ListView
+					dataSource={this.state.issueData}
+					renderRow={this.renderRow.bind(this)}
+					enableEmptySections={true}
+				/>
 			</Page>
 		);
 	}
