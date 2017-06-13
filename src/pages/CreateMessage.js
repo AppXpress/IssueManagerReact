@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import { NavigationActions } from 'react-navigation';
+
 import {
 	Alert,
 	AppRegistry,
@@ -83,9 +85,10 @@ export default class CreateMessage extends Component {
 				}
 		}
 	post('$MessageT4', body);
-	console.log(this.state.issue);
-	this.props.navigation.navigate('IssueDetails', { issue: this.state.root });
 
+
+	console.log(this.props.navigation);
+	this.props.navigation.goBack();
 	}
 
 }		
