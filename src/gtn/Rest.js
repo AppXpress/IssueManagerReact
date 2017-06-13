@@ -13,27 +13,6 @@ import {
 	base64Encode
 } from './Utilities';
 
-export async function authorize(username, password, eid) {
-	var toEncode = username + ':' + password;
-
-	if (eid) {
-		toEncode += ':' + eid;
-	}
-
-	try {
-		var response = await new Rest()
-			.base()
-			.header('Authorization', base64Encode(toEncode))
-			.get();
-
-		token = response.headers.get('Authorization');
-		return true;
-	} catch (error) {
-		console.log(error);
-		return false;
-	}
-}
-
 var token;
 
 export default class Rest {
@@ -81,6 +60,27 @@ export default class Rest {
 			catch (error) {
 				return error;
 			}
+		}
+	}
+
+	async authorize(username, password, eid) {
+		var toEncode = username + ':' + password;
+
+		if (eid) {
+			toEncode += ':' + eid;
+		}
+
+		try {
+			var response = await this
+				.base()
+				.header('Authorization', base64Encode(toEncode))
+				.get();
+
+			token = response.headers.get('Authorization');
+			return true;
+		} catch (error) {
+			console.log(error);
+			return false;
 		}
 	}
 

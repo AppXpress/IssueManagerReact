@@ -16,8 +16,8 @@ import {
 } from 'react-native';
 
 import {
-	post
-} from '../RestMethods';
+	AppX
+} from '../gtn/All';
 
 import {
 	Button,
@@ -30,12 +30,10 @@ import {
 	TextInput
 } from '../soho/All';
 
-
 export default class CreateMessage extends Component {
 
 	static navigationOptions = Navigataion({
 		title: 'New Message',
-
 	});
 
 	constructor(props) {
@@ -44,7 +42,7 @@ export default class CreateMessage extends Component {
 		this.state = {
 			message: '',
 			root: this.props.navigation.state.params.issue,
-			
+
 		};
 	}
 
@@ -52,44 +50,50 @@ export default class CreateMessage extends Component {
 		return (
 			<Page>
 				<Card>
-				<TextInput
+					<TextInput
 						label='Message Text'
 						onChangeText={(text) => this.setState({ message: text })}
+						multiline
+						rows={5}
 					/>
 
-				<Button
-					title = 'send'
-					onPress={this.postMessage.bind(this)}
-					primary	
+					<Button
+						title='Save'
+						onPress={this.postMessage.bind(this)}
+						primary
 					/>
 				</Card>
 			</Page>
-			)
+		);
 	}
 
-	postMessage(event){
+	postMessage(event) {
 		let today = new Date();
 
 		var body = {
-				"type" : "$MessageT4",
-				"createdOn" : today,
-				"text" : this.state.message,
-				"issue" : {
-					"reference" : "Issue",
-					"rootType" : "$IssueT3",
-					"rootId" : this.state.root.uid,
-					"externalType" : "$IssueT3",
-				},
-				"licensee" :{
-					"memberId" : "5717989018004281",
-				}
+			"type": "$MessageT4",
+			"createdOn": today,
+			"text": this.state.message,
+			"issue": {
+				"reference": "Issue",
+				"rootType": "$IssueT3",
+				"rootId": this.state.root.uid,
+				"externalType": "$IssueT3",
+			},
+			"licensee": {
+				"memberId": "5717989018004281",
+			}
 		}
+<<<<<<< HEAD
 	post('$MessageT4', body);
 
 
 	console.log(this.props.navigation);
 	this.props.navigation.goBack();
+=======
+		AppX.create('$MessageT4', body);
+
+		this.props.navigation.navigate('IssueDetails', { issue: this.state.root });
+>>>>>>> 99d2565acb92d18c2527ec0bb8c01b2f6205ced4
 	}
-
-}		
-
+}

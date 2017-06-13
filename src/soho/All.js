@@ -23,6 +23,7 @@ const soho = {
 	get Switch() { return Switch },
 	get TextInput() { return TextInput; },
 
+	get getHandler() { return getHandler; },
 	get getColor() { return getColor; }
 }
 

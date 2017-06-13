@@ -71,6 +71,27 @@ export default class TextInput extends Component {
 			});
 		}
 
+		if (this.props.multiline) {
+			style.push({
+				padding: 10,
+				textAlignVertical: 'top'
+			});
+
+			if (this.props.rows) {
+				style.push({
+					height: (this.props.rows * 20 + 20)
+				});
+			} else if (this.props.style && this.props.style.height) {
+				style.push({
+					height: this.props.style.height
+				});
+			} else {
+				style.push({
+					height: 40
+				});
+			}
+		}
+
 		return style;
 	}
 
@@ -103,13 +124,14 @@ const styles = StyleSheet.create({
 	},
 	text: {
 		height: 34,
-		borderRadius: 2,
-		fontSize: 14,
 		padding: 0,
 		paddingLeft: 10,
-		color: getColor('graphite-10'),
+		paddingRight: 10,
+		borderRadius: 2,
 		borderWidth: 1,
-		borderColor: getColor('graphite-4')
+		borderColor: getColor('graphite-4'),
+		fontSize: 14,
+		color: getColor('graphite-10')
 	},
 	error: {
 		color: getColor('alert-1')

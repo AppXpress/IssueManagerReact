@@ -15,8 +15,8 @@ import {
 } from 'react-native';
 
 import {
-	query
-} from '../RestMethods';
+	AppX
+} from '../gtn/All';
 
 import {
 	Button,
@@ -60,7 +60,7 @@ export default class IssueList extends Component {
 
 
 	async getDataSource() {
-		return await query('$IssueT3');
+		return await AppX.query('$IssueT3');
 	}
 
 
@@ -91,73 +91,42 @@ export default class IssueList extends Component {
 
 	render() {
 		return (
-			<Page backgroundColor='#ffffff'>
-			<Card>
-			<ListCard>
-				<TextInput
-					label='Search'
-					onChangeText={this.setSearchText.bind(this)}
-					autoCapitalize='none'
-					color='#ffffff'
-				/>
-			</ListCard>	
-			
-				<ListView
-					dataSource={this.state.issueData}
-					renderRow={this.renderRow.bind(this)}
+			<Page>
+				<Card>
+					<ListCard>
+						<TextInput
+							label='Search'
+							onChangeText={this.setSearchText.bind(this)}
+							autoCapitalize='none'
+						/>
+					</ListCard>
 
-					enableEmptySections={true}
-				/>
-			</Card>	
+					<ListView
+						dataSource={this.state.issueData}
+						renderRow={this.renderRow.bind(this)}
+						enableEmptySections={true}
+					/>
+				</Card>
 			</Page>
 		);
-
 	}
-		setSearchText(event){
+
+	setSearchText(event) {
 		let searchText = event;
-		
-		this.setState({searchtext: searchText});
+		this.setState({ searchtext: searchText });
 
 		let filteredData = this.filterIssues(searchText, this.state.rawData);
-		this.setState({issueData :this.state.issueData.cloneWithRows(filteredData)});
-
-
+		this.setState({ issueData: this.state.issueData.cloneWithRows(filteredData) });
 	}
 
-	filterIssues(searchText, issueData){
+	filterIssues(searchText, issueData) {
 		let text = searchText.toLowerCase();
-		
-		
-		return issueData.result.filter( (n) =>{
-			
-			if(n.subject){
-			let iss  = n.subject.toLowerCase()
-			return iss.search(text) !== -1;
-		}
+
+		return issueData.result.filter((n) => {
+			if (n.subject) {
+				let iss = n.subject.toLowerCase()
+				return iss.search(text) !== -1;
+			}
 		});
-	
 	}
-	
-
 }
-
-
-const styles = StyleSheet.create({
-
-	scroll: {
-		backgroundColor: '#F0F0F0',
-		padding: 0,
-		flexDirection: 'column'
-	},
-	label: {
-		color: 'black',
-		fontSize: 28
-	},
-	inp: {
-		backgroundColor: '#FFFFFF',
-		height: 40,
-		borderColor: 'gray',
-		borderWidth: 1,
-		alignSelf: 'stretch'
-	}
-});

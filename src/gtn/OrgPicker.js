@@ -8,16 +8,13 @@ import {
 } from 'react-native';
 
 import {
-	Picker
+	Picker,
+	getHandler
 } from '../soho/All';
 
 import {
-	getHandler
-} from '../soho/Tools';
-
-import {
-	query
-} from '../RestMethods';
+	AppX
+} from './AppX';
 
 export default class OrgPicker extends Component {
 	constructor(props) {

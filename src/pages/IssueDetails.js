@@ -14,8 +14,8 @@ import {
 } from 'react-native';
 
 import {
-	query
-} from '../RestMethods';
+	AppX
+} from '../gtn/All';
 
 import {
 	Button,
@@ -46,9 +46,8 @@ export default class IssueDetails extends Component {
 			issue: this.props.navigation.state.params.issue,
 			loading: true,
 		};
-
-
 	}
+
 	renderRow(message) {
 		return (
 			<View>
@@ -56,7 +55,7 @@ export default class IssueDetails extends Component {
 
 				></ListCard>
 			</View>
-		)
+		);
 	}
 
 	async componentDidMount() {
@@ -67,10 +66,10 @@ export default class IssueDetails extends Component {
 				messageList: false,
 				loading: false,
 			});
-			console.log(data);
+
 			return;
 		}
-		console.log(data);
+
 		this.setState({
 			messageList: this.state.messageList.cloneWithRows(data.result.reverse()),
 			loading: false,
@@ -78,9 +77,8 @@ export default class IssueDetails extends Component {
 	}
 
 	async getComments() {
-		return await query('$MessageT4', 'issue.rootId = ' + this.state.issue.uid);
+		return await AppX.query('$MessageT4', 'issue.rootId = ' + this.state.issue.uid);
 	}
-
 
 	render() {
 		return (
@@ -107,12 +105,12 @@ export default class IssueDetails extends Component {
 
 				{this.state.messageList && !this.state.loading &&
 					<Card title='Messages'>
-					<ListCard>
-					<Button 
-						title='New Message'
-						onPress={() => this.props.navigation.navigate('CreateMessage', { issue: this.state.issue })}
-					/>
-					</ListCard>
+						<ListCard>
+							<Button
+								title='New Message'
+								onPress={() => this.props.navigation.navigate('CreateMessage', { issue: this.state.issue })}
+							/>
+						</ListCard>
 
 						<ListView
 							dataSource={this.state.messageList}
@@ -125,11 +123,11 @@ export default class IssueDetails extends Component {
 				{!this.state.messageList && !this.state.loading &&
 					<Card title='Messages'>
 						<ListCard>
-					<Button 
-						title='New Message'
-						onPress={() => this.props.navigation.navigate('CreateMessage', { issue: this.state.issue })}
-					/>
-					</ListCard>
+							<Button
+								title='New Message'
+								onPress={() => this.props.navigation.navigate('CreateMessage', { issue: this.state.issue })}
+							/>
+						</ListCard>
 
 						<Field entry='No messages' />
 					</Card>
@@ -150,40 +148,28 @@ export default class IssueDetails extends Component {
 
 
 function getType(level) {
-
 	if (level == 3) {
 		return 'Quality Control';
-
 	}
 
 	if (level == 2) {
 		return 'Factory Supply';
-
 	}
 
 	if (level == 1) {
 		return 'Shipping';
-
 	}
-
 }
 function getSeverity(level) {
-
 	if (level == 3) {
 		return 'High';
-
 	}
 
 	if (level == 2) {
 		return 'Medium';
-
 	}
 
 	if (level == 1) {
 		return 'Low';
-
 	}
-
 }
-
-const styles = {}
