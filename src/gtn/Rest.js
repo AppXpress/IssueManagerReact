@@ -77,7 +77,7 @@ export default class Rest {
 				.get();
 
 			token = response.headers.get('Authorization');
-			return true;
+			return new Boolean(token).valueOf();
 		} catch (error) {
 			console.log(error);
 			return false;
