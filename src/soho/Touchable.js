@@ -25,6 +25,7 @@ export default class Touchable extends Component {
 			return (
 				<TouchableNativeFeedback
 					{...this.props}
+					delayPressIn={0}
 					style={null}
 					background={TouchableNativeFeedback.Ripple(
 						'rgba(0, 0, 0, 0.32)',
@@ -40,6 +41,7 @@ export default class Touchable extends Component {
 			return (
 				<TouchableHighlight
 					{...this.props}
+					delayPressIn={0}
 					style={null}
 				>
 					<View style={this.props.style}>

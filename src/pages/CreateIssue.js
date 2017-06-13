@@ -93,7 +93,7 @@ export default class CreateIssue extends Component {
 					<Button
 						title='Create'
 						onPress={this.createIssue}
-						enabled={this.state.subject && this.state.desc}
+						disabled={!this.state.subject || !this.state.desc}
 					/>
 				</Card>
 				<ActivityIndicator animating={this.state.loading} size="large" />

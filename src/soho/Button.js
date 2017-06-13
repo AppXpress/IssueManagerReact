@@ -31,7 +31,7 @@ export default class Button extends Component {
 			style.backgroundColor = 'transparent';
 		}
 
-		if (this.props.enabled == false) {
+		if (this.props.disabled) {
 			style.opacity = 0.5;
 		}
 
@@ -56,6 +56,7 @@ export default class Button extends Component {
 		return (
 			<View style={styles.outerView}>
 				<Touchable
+					disabled={this.props.disabled}
 					style={this.getInnerViewStyle()}
 					onPress={this.props.onPress}
 					borderless={this.props.icon}

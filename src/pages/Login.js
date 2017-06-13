@@ -147,7 +147,7 @@ export default class Login extends Component {
 					<Button
 						title='Login'
 						onPress={this.login.bind(this)}
-						enabled={!this.state.loading && this.state.username && this.state.password}
+						disabled={this.state.loading || !this.state.username || !this.state.password}
 						primary
 					/>
 				</Card>
