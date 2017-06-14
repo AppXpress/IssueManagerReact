@@ -9,7 +9,10 @@ import Picker from './Picker';
 import Switch from './Switch';
 import TextInput from './TextInput';
 
-import { getColor } from './Tools.js';
+import {
+	getColor,
+	getHandler
+} from './Tools.js';
 
 const soho = {
 	get Button() { return Button; },

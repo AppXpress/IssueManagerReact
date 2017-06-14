@@ -52,6 +52,10 @@ export default class Modal extends Component {
 		};
 	}
 
+	onClose() {
+		this.setState({ visible: false });
+	}
+
 	render() {
 		return (
 			<ModalBase
@@ -68,12 +72,7 @@ export default class Modal extends Component {
 						<Button
 							title='Cancel'
 							hue={this.props.hue || 'ruby'}
-							onPress={() => {
-								this.setState({ visible: false });
-								if (this.props.onClose) {
-									this.props.onClose();
-								}
-							}}
+							onPress={() => getHandler(this, 'onClose')()}
 						/>
 					</Card>
 				</View>

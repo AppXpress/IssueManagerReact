@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 
 import {
-	DataSource,
 	Dimensions,
 	StyleSheet,
 	View,
@@ -24,6 +23,8 @@ import {
 
 export default class Picker extends Component {
 
+	source = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
+
 	static Item = (props) => {
 		this.props = props;
 	}
@@ -31,21 +32,22 @@ export default class Picker extends Component {
 	constructor(props) {
 		super(props);
 
-		const source = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
-
 		this.props = props;
 		this.state = {
-			data: source.cloneWithRows(props.children),
+			data: this.source.cloneWithRows(props.children || {}),
 			visible: false,
 			value: null
 		}
 	}
 
 	componentWillReceiveProps(next) {
-		this.setState({ value: next.selectedValue });
+		this.setState({
+			value: next.selectedValue,
+			data: this.source.cloneWithRows(next.children || {})
+		});
 	}
 
-	getLabel() {
+	getPickerLabel() {
 		if (this.props.label) {
 			return (
 				<Text style={styles.label}>
@@ -58,25 +60,32 @@ export default class Picker extends Component {
 		}
 	}
 
+	getLabel() {
+		if (this.state.value) {
+			var selected = this.props.children.find(item => {
+				return item.props.value == this.state.value;
+			});
+
+			if (selected) {
+				return selected.props.label;
+			}
+		}
+	}
+
 	onValueChange(value) {
-		this.setState({ value: value })
+		this.setState({
+			value: value,
+			visible: false
+		});
 	}
 
 	renderItem(item) {
 		return (
 			<ListCard
-				main={item.props.main}
+				main={item.props.label}
 				secondary={item.props.secondary}
 				tertiary={item.props.tertiary}
-				onPress={() => {
-					this.setState({
-						value: item.props.value,
-						visible: false
-					});
-					if (this.props.onValueChange) {
-						this.props.onValueChange(item.props.value);
-					}
-				}}
+				onPress={() => getHandler(this, 'onValueChange')(item.props.value)}
 			/>
 		);
 	}
@@ -84,24 +93,25 @@ export default class Picker extends Component {
 	render() {
 		return (
 			<View style={styles.view}>
-				{this.getLabel()}
+				{this.getPickerLabel()}
 				<View style={styles.innerView}>
 					<Touchable
 						style={styles.touchable}
 						onPress={() => this.setState({ visible: true })}
 					>
 						<Text style={styles.value}>
-							{this.state.value}
+							{this.getLabel()}
 						</Text>
 					</Touchable>
 				</View>
 				<Modal
-					title={this.props.label}
+					title={this.props.title}
 					visible={this.state.visible}
 					onClose={() => this.setState({ visible: false })}
 					onRequestClose={() => this.setState({ visible: false })}
 				>
 					<ListView
+						enableEmptySections={true}
 						dataSource={this.state.data}
 						renderRow={item => this.renderItem(item)}
 					/>
