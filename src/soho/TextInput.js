@@ -27,19 +27,6 @@ export default class TextInput extends Component {
 		this.setState({ text: next.value });
 	}
 
-	getLabel() {
-		if (this.props.label) {
-			return (
-				<Text style={styles.label}>
-					{this.props.label}
-					{this.props.required && (
-						<Text style={styles.error}>*</Text>
-					)}
-				</Text>
-			);
-		}
-	}
-
 	getError() {
 		if (this.props.required) {
 			if (this.state.blurred && !this.state.text) {
@@ -63,42 +50,40 @@ export default class TextInput extends Component {
 	}
 
 	getTextStyle() {
-		var style = [styles.text];
+		var style = {};
 
 		if (this.props.editable == false) {
-			style.push({
-				backgroundColor: getColor('graphite-2')
-			});
+			style.backgroundColor = getColor('graphite-2');
 		}
 
 		if (this.props.multiline) {
-			style.push({
-				padding: 10,
-				textAlignVertical: 'top'
-			});
+			style.padding = 10;
+			style.textAlignVertical = 'top';
 
 			if (this.props.rows) {
-				style.push({
-					height: (this.props.rows * 20 + 20)
-				});
+				style.height = (this.props.rows * 20 + 20);
 			} else if (this.props.style && this.props.style.height) {
-				style.push({
-					height: this.props.style.height
-				});
+				style.height = this.props.style.height;
 			} else {
-				style.push({
-					height: 40
-				});
+				style.height = 40;
 			}
 		}
 
-		return style;
+		return [styles.text, style];
 	}
 
 	render() {
 		return (
 			<View style={styles.view}>
-				{this.getLabel()}
+				{this.props.label &&
+					<Text style={styles.label}>
+						{this.props.label}
+						{this.props.required && (
+							<Text style={styles.error}>*</Text>
+						)}
+					</Text>
+				}
+
 				<TextInputBase
 					{...this.props}
 					style={this.getTextStyle()}
@@ -108,6 +93,7 @@ export default class TextInput extends Component {
 					onChangeText={getHandler(this, 'onChangeText')}
 					value={this.props.value}
 				/>
+
 				{this.getError()}
 			</View>
 		);

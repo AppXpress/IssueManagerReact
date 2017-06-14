@@ -17,22 +17,16 @@ export default class Card extends Component {
 		this.props = props;
 	}
 
-	getTitle() {
-		if (this.props.title) {
-			return (
-				<View style={styles.titleView}>
-					<Text style={styles.title}>
-						{this.props.title}
-					</Text>
-				</View>
-			);
-		}
-	}
-
 	render() {
 		return (
 			<View style={styles.view}>
-				{this.getTitle()}
+				{this.props.title &&
+					<View style={styles.titleView}>
+						<Text style={styles.title}>
+							{this.props.title}
+						</Text>
+					</View>
+				}
 				{this.props.children}
 			</View>
 		);

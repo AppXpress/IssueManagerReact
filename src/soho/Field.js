@@ -22,7 +22,7 @@ export default class Field extends Component {
 		this.props = props;
 	}
 
-	getEntry(entry) {
+	getItem(entry) {
 		return (
 			<Text style={styles.entry} key={entry}>
 				{entry}
@@ -30,19 +30,12 @@ export default class Field extends Component {
 		);
 	}
 
-	getEntries() {
+	getContent() {
 		if (this.props.entry) {
 			if (typeof this.props.entry == 'object') {
-				var entries = [];
-
-				this.props.entry.forEach(entry => {
-					entries.push(this.getEntry(entry));
-				});
-
-				return entries;
-			}
-			else {
-				return this.getEntry(this.props.entry);
+				return this.props.entry.map(this.getItem);
+			} else {
+				return this.getItem(this.props.entry);
 			}
 		}
 	}
@@ -53,7 +46,7 @@ export default class Field extends Component {
 				<Text style={styles.label}>
 					{this.props.label}
 				</Text>
-				{this.getEntries()}
+				{this.getContent()}
 			</View>
 		);
 	}

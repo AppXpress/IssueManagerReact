@@ -47,19 +47,6 @@ export default class Picker extends Component {
 		});
 	}
 
-	getPickerLabel() {
-		if (this.props.label) {
-			return (
-				<Text style={styles.label}>
-					{this.props.label}
-					{this.props.required && (
-						<Text style={styles.error}>*</Text>
-					)}
-				</Text>
-			);
-		}
-	}
-
 	getLabel() {
 		if (this.state.value) {
 			var selected = this.props.children.find(item => {
@@ -70,13 +57,6 @@ export default class Picker extends Component {
 				return selected.props.label;
 			}
 		}
-	}
-
-	onValueChange(value) {
-		this.setState({
-			value: value,
-			visible: false
-		});
 	}
 
 	renderItem(item) {
@@ -90,10 +70,25 @@ export default class Picker extends Component {
 		);
 	}
 
+	onValueChange(value) {
+		this.setState({
+			value: value,
+			visible: false
+		});
+	}
+
 	render() {
 		return (
 			<View style={styles.view}>
-				{this.getPickerLabel()}
+				{this.props.label &&
+					<Text style={styles.label}>
+						{this.props.label}
+						{this.props.required && (
+							<Text style={styles.error}>*</Text>
+						)}
+					</Text>
+				}
+
 				<View style={styles.innerView}>
 					<Touchable
 						style={styles.touchable}
@@ -104,6 +99,7 @@ export default class Picker extends Component {
 						</Text>
 					</Touchable>
 				</View>
+
 				<Modal
 					title={this.props.title}
 					visible={this.state.visible}

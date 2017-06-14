@@ -24,22 +24,22 @@ export default class Modal extends Component {
 		this.props = props;
 		this.state = {
 			visible: false,
-			width: 0,
 			height: 0
 		}
 	}
 
 	componentDidMount() {
 		var self = this;
-		function setSize(size) {
+		function setHeight(value) {
 			self.setState({
-				width: size.width,
-				height: size.height
+				height: value
 			});
 		}
 
-		setSize(Dimensions.get('window'));
-		Dimensions.addEventListener('change', ({ window }) => setSize(window));
+		setHeight(Dimensions.get('window').height);
+		Dimensions.addEventListener('change', dimensions => {
+			setHeight(dimensions.window.height);
+		});
 	}
 
 	componentWillReceiveProps(next) {
@@ -47,9 +47,7 @@ export default class Modal extends Component {
 	}
 
 	getScrollStyle() {
-		return {
-			maxHeight: this.state.height - 150
-		};
+		return { maxHeight: this.state.height - 150 };
 	}
 
 	onClose() {
@@ -60,9 +58,9 @@ export default class Modal extends Component {
 		return (
 			<ModalBase
 				{...this.props}
-				onRequestClose={getHandler(this, 'onRequestClose')}
 				transparent={true}
 				animationType='fade'
+				onRequestClose={getHandler(this, 'onRequestClose')}
 			>
 				<View style={styles.view}>
 					<Card title={this.props.title}>

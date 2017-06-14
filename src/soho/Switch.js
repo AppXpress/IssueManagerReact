@@ -27,7 +27,7 @@ export default class Switch extends Component {
 	}
 
 	onValueChange(value) {
-		this.setState({ value: value })
+		this.setState({ value: value });
 	}
 
 	getThumbTintColor() {

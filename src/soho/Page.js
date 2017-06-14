@@ -28,7 +28,7 @@ export default class Page extends Component {
 const styles = StyleSheet.create({
 	scroll: {
 		padding: 0,
-		backgroundColor: getColor('graphite-1'),
-		flexDirection: 'column'
+		flexDirection: 'column',
+		backgroundColor: getColor('graphite-1')
 	}
 });
