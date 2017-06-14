@@ -10,8 +10,7 @@ import {
 	StatusBar,
 	ActivityIndicator,
 	AsyncStorage,
-	ListView,
-	Picker,
+	ListView
 } from 'react-native';
 
 import {
@@ -20,6 +19,7 @@ import {
 	ListCard,
 	Navigataion,
 	Page,
+	Picker,
 	TextInput
 } from '../soho/All';
 
@@ -76,18 +76,20 @@ export default class CreateIssue extends Component {
 						required
 					/>
 					<Picker
+						label='Issue Type'
 						selectedValue={this.state.issueType}
 						onValueChange={(item, index) => this.setState({ issueType: item })}>
-						<Picker.Item label="Shipping" value="Shipping" />
-						<Picker.Item label="Factory" value="Factory" />
-						<Picker.Item label="Quality Control" value="Quality Control" />
+						<Picker.Item main="Shipping" value="Shipping" />
+						<Picker.Item main="Factory" value="Factory" />
+						<Picker.Item main="Quality Control" value="Quality Control" />
 					</Picker>
 					<Picker
+						label='Severity'
 						selectedValue={this.state.severity}
 						onValueChange={(item, index) => this.setState({ severity: item })}>
-						<Picker.Item label="Low" value="Low" />
-						<Picker.Item label="Medium" value="Medium" />
-						<Picker.Item label="High" value="High" />
+						<Picker.Item main="Low" value="Low" />
+						<Picker.Item main="Medium" value="Medium" />
+						<Picker.Item main="High" value="High" />
 					</Picker>
 
 					<Button

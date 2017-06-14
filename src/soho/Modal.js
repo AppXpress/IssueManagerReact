@@ -4,9 +4,13 @@ import {
 	Dimensions,
 	StyleSheet,
 	View,
+	ScrollView,
 	Text,
 	Modal as ModalBase
 } from 'react-native';
+
+import Button from './Button';
+import Card from './Card';
 
 import {
 	getHandler,
@@ -35,21 +39,17 @@ export default class Modal extends Component {
 		}
 
 		setSize(Dimensions.get('window'));
-
-		Dimensions.addEventListener('change', args => {
-			setSize(args.window);
-		});
+		Dimensions.addEventListener('change', ({ window }) => setSize(window));
 	}
 
 	componentWillReceiveProps(next) {
 		this.setState({ visible: next.visible });
 	}
 
-	getViewStyle() {
-		return [styles.view, {
-			width: this.state.width,
-			height: this.state.height
-		}];
+	getScrollStyle() {
+		return {
+			maxHeight: this.state.height - 150
+		};
 	}
 
 	render() {
@@ -60,8 +60,22 @@ export default class Modal extends Component {
 				transparent={true}
 				animationType='fade'
 			>
-				<View style={this.getViewStyle()}>
-					{this.props.children}
+				<View style={styles.view}>
+					<Card title={this.props.title}>
+						<ScrollView style={this.getScrollStyle()}>
+							{this.props.children}
+						</ScrollView>
+						<Button
+							title='Cancel'
+							hue={this.props.hue || 'ruby'}
+							onPress={() => {
+								this.setState({ visible: false });
+								if (this.props.onClose) {
+									this.props.onClose();
+								}
+							}}
+						/>
+					</Card>
 				</View>
 			</ModalBase>
 		);
@@ -71,6 +85,7 @@ export default class Modal extends Component {
 const styles = StyleSheet.create({
 	view: {
 		backgroundColor: 'rgba(0, 0, 0, 0.32)',
-		justifyContent: 'center'
+		justifyContent: 'center',
+		flex: 1
 	}
 });

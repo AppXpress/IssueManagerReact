@@ -47,12 +47,12 @@ export default class IssueList extends Component {
 		title: 'Issue List',
 		right: (context) => {
 			return (
-				<Text
+				<Button
+					title='+'
+					icon
 					style={{ fontSize: 25, color: '#ffffff', fontWeight: "300", paddingRight: 10 }}
 					onPress={() => context.navigation.navigate('CreateIssue')}
-				>
-					+
-				</Text>
+				/>
 			);
 		}
 	});

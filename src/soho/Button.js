@@ -20,31 +20,36 @@ export default class Button extends Component {
 		this.props = props;
 	}
 
-	getInnerViewStyle() {
+	getTouchableStyle() {
 		var style = {};
 
 		if (this.props.primary) {
 			style.backgroundColor = getColor(this.props.hue + '-6', 'azure-6');
 		} else if (this.props.secondary) {
 			style.backgroundColor = getColor('graphite-3');
-		} else {
-			style.backgroundColor = 'transparent';
+		} else if (this.props.icon) {
+			style.height = 64;
+			style.width = 34;
 		}
 
 		if (this.props.disabled) {
 			style.opacity = 0.5;
 		}
 
-		return [styles.view, style];
+		return [styles.touchable, style];
 	}
 
 	getTextStyle() {
 		var style = {};
 
-		if (this.props.primary || this.props.icon) {
+		if (this.props.primary) {
 			style.color = getColor('white-0');
 		} else if (this.props.secondary) {
 			style.color = getColor(this.props.hue + '-7', 'graphite-7');
+		} else if (this.props.icon) {
+			style.fontSize = 28;
+			style.fontWeight = 'normal';
+			style.color = getColor('white-0');
 		} else {
 			style.color = getColor(this.props.hue + '-6', 'graphite-6');
 		}
@@ -54,10 +59,10 @@ export default class Button extends Component {
 
 	render() {
 		return (
-			<View style={styles.outerView}>
+			<View style={styles.view}>
 				<Touchable
 					disabled={this.props.disabled}
-					style={this.getInnerViewStyle()}
+					style={this.getTouchableStyle()}
 					onPress={this.props.onPress}
 					borderless={this.props.icon}
 				>
@@ -72,12 +77,11 @@ export default class Button extends Component {
 };
 
 const styles = StyleSheet.create({
-	outerView: {
+	view: {
 		margin: 10
 	},
-	view: {
+	touchable: {
 		height: 34,
-		minWidth: 34,
 		borderRadius: 2,
 		alignItems: 'center',
 		justifyContent: 'center'
