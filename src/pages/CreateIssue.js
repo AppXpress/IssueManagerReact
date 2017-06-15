@@ -47,7 +47,6 @@ export default class CreateIssue extends Component {
 	}
 
 	async createIssue() {
-		Alert.alert('test');
 		var toMake =  {
 			type: '$IssueT3',
 			subject: '',
@@ -58,11 +57,14 @@ export default class CreateIssue extends Component {
 			severity: '',
 			description: '',
 		}
+		console.log(toMake);
+		console.log(this);
 		toMake.subject = this.state.subject;
 		toMake.issueType = this.state.issueType;
 		toMake.severity = this.state.severity;
 		toMake.description = this.state.desc;
-		await AppX.create('$IssueT3', this.toMake);
+		await AppX.create('$IssueT3', toMake);
+		Alert.alert('Issue posted');
 	}
 
 	render() {
@@ -98,14 +100,14 @@ export default class CreateIssue extends Component {
 						title='Select a severity'
 						selectedValue={this.state.severity}
 						onValueChange={(item, index) => this.setState({ severity: item })}>
-						<Picker.Item label="Low" value="3" />
+						<Picker.Item label="Low" value="1" />
 						<Picker.Item label="Medium" value="2" />
-						<Picker.Item label="High" value="1" />
+						<Picker.Item label="High" value="3" />
 					</Picker>
 
 					<Button
 						title='Create'
-						onPress={this.createIssue}
+						onPress={() => this.createIssue()}
 						disabled={!this.state.subject || !this.state.desc}
 					/>
 				</Card>
