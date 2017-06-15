@@ -29,17 +29,16 @@ import {
 
 export default class IssueList extends Component {
 
+	source = new ListView.DataSource({ rowHasChanged: (row1, row2) => row1 !== row2 });
+
 	constructor(props) {
 		super(props);
 
 		this.props = props;
 
 		this.state = {
-			issueData: new ListView.DataSource({
-				rowHasChanged: (row1, row2) => row1 !== row2,
-			}),
-			searchtext: '',
-			rawData: '',
+			data: this.source.cloneWithRows({}),
+			searchtext: ''
 		};
 	}
 
@@ -48,65 +47,30 @@ export default class IssueList extends Component {
 		right: (context) => {
 			return (
 				<Button
-					title='+'
 					icon
-					style={{ fontSize: 25, color: '#ffffff', fontWeight: "300", paddingRight: 10 }}
+					title='+'
 					onPress={() => context.navigation.navigate('CreateIssue')}
 				/>
 			);
 		}
 	});
 
-
-
-	async getDataSource() {
-		return await AppX.query('$IssueT3');
+	componentDidMount() {
+		this.reload();
 	}
 
+	async reload() {
+		this.setState({ loading: true });
 
-
-	async componentDidMount() {
-		var data = await this.getDataSource();
-		if (!data) {
-			return;
+		var data = await AppX.query('$IssueT3');
+		if (data && data.result) {
+			this.setState({
+				data: this.source.cloneWithRows(data.result),
+				loading: false
+			});
+		} else {
+			alert('We weren\'t able to load any issues. Please try again later!');
 		}
-		console.log(data);
-		this.setState({
-			rawData: data,
-			issueData: this.state.issueData.cloneWithRows(data.result),
-		});
-
-
-	}
-
-	renderRow(issue) {
-		return (
-			<View>
-				<ListCard main={issue.subject} secondary={issue.createdBy} tertiary={issue.description}
-					onPress={() => this.props.navigation.navigate('IssueDetails', { issue: issue })}
-				></ListCard>
-			</View>
-		)
-	}
-
-	render() {
-		return (
-			<Page>
-				<ListCard>
-					<TextInput
-						label='Search'
-						onChangeText={this.setSearchText.bind(this)}
-						autoCapitalize='none'
-					/>
-				</ListCard>
-
-				<ListView
-					dataSource={this.state.issueData}
-					renderRow={this.renderRow.bind(this)}
-					enableEmptySections={true}
-				/>
-			</Page>
-		);
 	}
 
 	setSearchText(event) {
@@ -122,9 +86,42 @@ export default class IssueList extends Component {
 
 		return issueData.result.filter((n) => {
 			if (n.subject) {
-				let iss = n.subject.toLowerCase()
+				let iss = n.subject.toLowerCase();
 				return iss.search(text) !== -1;
 			}
 		});
+	}
+
+	renderRow(issue) {
+		return (
+			<View>
+				<ListCard
+					main={issue.subject}
+					secondary={issue.createdBy}
+					tertiary={issue.description}
+					onPress={() => this.props.navigation.navigate('IssueDetails', { issue: issue })}
+				/>
+			</View>
+		);
+	}
+
+	render() {
+		return (
+			<Page>
+				<ListCard>
+					<TextInput
+						label='Search'
+						onChangeText={this.setSearchText.bind(this)}
+						autoCapitalize='none'
+					/>
+				</ListCard>
+
+				<ListView
+					enableEmptySections={true}
+					dataSource={this.state.data}
+					renderRow={issue => this.renderRow(issue)}
+				/>
+			</Page>
+		);
 	}
 }

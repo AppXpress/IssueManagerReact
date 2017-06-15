@@ -16,8 +16,6 @@ import {
 var token;
 
 export default class Rest {
-	static token;
-
 	constructor() {
 		this._url = '';
 		this._params = {};
@@ -41,25 +39,20 @@ export default class Rest {
 		}
 
 		this._run = async (method, body) => {
-			try {
-				var args = {
-					method: method,
-					headers: this._headers
-				}
-
-				if (body) {
-					if (typeof body == 'string') {
-						args.body = body;
-					} else {
-						args.body = JSON.stringify(body);
-					}
-				}
-
-				return await fetch(this._getUrl(), args);
+			var args = {
+				method: method,
+				headers: this._headers
 			}
-			catch (error) {
-				return error;
+
+			if (body) {
+				if (typeof body == 'string') {
+					args.body = body;
+				} else {
+					args.body = JSON.stringify(body);
+				}
 			}
+
+			return await fetch(this._getUrl(), args);
 		}
 	}
 
@@ -70,18 +63,13 @@ export default class Rest {
 			toEncode += ':' + eid;
 		}
 
-		try {
-			var response = await this
-				.base()
-				.header('Authorization', base64Encode(toEncode))
-				.get();
+		var response = await this
+			.base()
+			.header('Authorization', base64Encode(toEncode))
+			.get();
 
-			token = response.headers.get('Authorization');
-			return new Boolean(token).valueOf();
-		} catch (error) {
-			console.log(error);
-			return false;
-		}
+		token = response.headers.get('Authorization');
+		return token;
 	}
 
 	base() {

@@ -89,9 +89,9 @@ export default class CreateIssue extends Component {
 						title='Select a severity'
 						selectedValue={this.state.severity}
 						onValueChange={(item, index) => this.setState({ severity: item })}>
-						<Picker.Item label="Low" value="Low" />
-						<Picker.Item label="Medium" value="Medium" />
-						<Picker.Item label="High" value="High" />
+						<Picker.Item label="Low" value="3" />
+						<Picker.Item label="Medium" value="2" />
+						<Picker.Item label="High" value="1" />
 					</Picker>
 
 					<Button
