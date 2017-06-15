@@ -51,10 +51,9 @@ buck-out/
 fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots
-src/SoHo/Button.js
 
 
 
 
-src/dataKey.js
-src/Environment.js
+
+src/gtn/Environment.js
