@@ -1,5 +1,14 @@
 import Rest from './Rest';
 
+export async function login(user, pass, eid) {
+	try {
+		var token = await new Rest().authorize(user, pass, eid);
+		return new Boolean(token).valueOf();
+	} catch (error) {
+		return false, error;
+	}
+}
+
 export async function fetch(type, uid) {
 	try {
 		var query = await new Rest()
@@ -10,8 +19,8 @@ export async function fetch(type, uid) {
 
 		return await query.json();
 	} catch (error) {
-		alert('An error occurred. Please try again later.');
 		console.log(error);
+		return null, error;
 	}
 }
 
@@ -23,16 +32,14 @@ export async function query(type, oql) {
 			.path('query')
 
 		if (oql) {
-			query = query.param('oql', oql);
+			query.param('oql', oql);
 		}
 
-		query = await query.get();
-
-		return await query.json();
-	}
-	catch (error) {
-		alert('An error occurred. Please try again later.');
+		var result = await query.get();
+		return await result.json();
+	} catch (error) {
 		console.log(error);
+		return null, error;
 	}
 }
 
@@ -43,10 +50,8 @@ export async function create(type, data) {
 			.path(type)
 			.post(data);
 		return await post;
-	}
-
-	catch (error) {
-		alert('An error occured. Please try again later.');
+	} catch (error) {
 		console.log(error);
+		return null, error;
 	}
 }

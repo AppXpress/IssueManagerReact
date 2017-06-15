@@ -24,7 +24,7 @@ import {
 } from '../soho/All';
 
 import {
-	Rest,
+	AppX,
 	Utilities
 } from '../gtn/All';
 
@@ -53,32 +53,20 @@ export default class Login extends Component {
 
 	async getCredentials() {
 		var username = await Utilities.storageGet('username');
+		var password = await Utilities.storageGet('password');
 		if (username) {
 			this.setState({
-				saveUser: true,
-				username: username
+				save: true,
+				username: username,
+				password: password
 			});
-
-			var password = await Utilities.storageGet('password');
-			if (password) {
-				this.setState({
-					savePass: true,
-					password: password
-				});
-			}
 		}
 	}
 
 	async setCredentials() {
-		if (this.state.saveUser) {
+		if (this.state.save) {
 			await Utilities.storageSet('username', this.state.username);
-
-			if (this.state.savePass) {
-				await Utilities.storageSet('password', this.state.password);
-			}
-			else {
-				await Utilities.storageSet('password', '');
-			}
+			await Utilities.storageSet('password', this.state.password);
 		}
 		else {
 			await Utilities.storageSet('username', '');
@@ -88,7 +76,7 @@ export default class Login extends Component {
 
 	async login(event) {
 		this.setState({ loading: true });
-		var authenticated = await new Rest().authorize(this.state.username, this.state.password, this.state.eid);
+		var authenticated = await AppX.login(this.state.username, this.state.password, this.state.eid);
 		this.setState({ loading: false });
 
 		if (authenticated) {
@@ -133,14 +121,9 @@ export default class Login extends Component {
 					{__DEV__ &&
 						<View>
 							<Switch
-								label='(DEV) Remember username'
-								value={this.state.saveUser}
-								onValueChange={(value) => { this.setState({ saveUser: value }) }}
-							/>
-							<Switch
-								label='(DEV) Remember password'
-								value={this.state.savePass}
-								onValueChange={(value) => { this.setState({ savePass: value }) }}
+								label='(DEV) Remember user'
+								value={this.state.save}
+								onValueChange={(value) => { this.setState({ save: value }) }}
 							/>
 						</View>
 					}

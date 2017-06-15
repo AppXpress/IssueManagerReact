@@ -4,7 +4,7 @@ import {
 	Dimensions,
 	StyleSheet,
 	View,
-	ListView,
+	FlatList,
 	ScrollView,
 	Text,
 	Picker as PickerBase
@@ -23,8 +23,6 @@ import {
 
 export default class Picker extends Component {
 
-	source = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
-
 	static Item = (props) => {
 		this.props = props;
 	}
@@ -34,7 +32,7 @@ export default class Picker extends Component {
 
 		this.props = props;
 		this.state = {
-			data: this.source.cloneWithRows(props.children || {}),
+			data: props.children,
 			visible: false,
 			value: null
 		}
@@ -43,7 +41,7 @@ export default class Picker extends Component {
 	componentWillReceiveProps(next) {
 		this.setState({
 			value: next.selectedValue,
-			data: this.source.cloneWithRows(next.children || {})
+			data: next.children
 		});
 	}
 
@@ -59,7 +57,14 @@ export default class Picker extends Component {
 		}
 	}
 
-	renderItem(item) {
+	onValueChange(value) {
+		this.setState({
+			value: value,
+			visible: false
+		});
+	}
+
+	renderItem({ item }) {
 		return (
 			<ListCard
 				main={item.props.label}
@@ -68,13 +73,6 @@ export default class Picker extends Component {
 				onPress={() => getHandler(this, 'onValueChange')(item.props.value)}
 			/>
 		);
-	}
-
-	onValueChange(value) {
-		this.setState({
-			value: value,
-			visible: false
-		});
 	}
 
 	render() {
@@ -106,10 +104,13 @@ export default class Picker extends Component {
 					onClose={() => this.setState({ visible: false })}
 					onRequestClose={() => this.setState({ visible: false })}
 				>
-					<ListView
-						enableEmptySections={true}
-						dataSource={this.state.data}
-						renderRow={item => this.renderItem(item)}
+					<FlatList
+						data={this.state.data}
+						keyExtractor={item => item.props.value}
+						renderItem={this.renderItem.bind(this)}
+						ListEmptyComponent={(
+							<ListCard main='No options available' />
+						)}
 					/>
 				</Modal>
 			</View>
