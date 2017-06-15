@@ -20,7 +20,7 @@ import {
 	Page,
 	Switch,
 	TextInput,
-	Picker,
+	Picker
 } from '../soho/All';
 
 import {

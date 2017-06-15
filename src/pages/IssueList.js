@@ -131,6 +131,10 @@ export default class IssueList extends Component {
 					/>
 				</ListCard>*/}
 
+				{this.state.loading &&
+					<ActivityIndicator animating={true} size="large" />
+				}
+
 				<FlatList
 					data={this.state.issues}
 					keyExtractor={item => item.uid}
