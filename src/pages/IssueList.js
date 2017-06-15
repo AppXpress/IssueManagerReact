@@ -10,7 +10,7 @@ import {
 	StatusBar,
 	ActivityIndicator,
 	AsyncStorage,
-	ListView,
+	FlatList,
 	TouchableOpacity,
 } from 'react-native';
 
@@ -29,15 +29,12 @@ import {
 
 export default class IssueList extends Component {
 
-	source = new ListView.DataSource({ rowHasChanged: (row1, row2) => row1 !== row2 });
-
 	constructor(props) {
 		super(props);
 
 		this.props = props;
 
 		this.state = {
-			data: this.source.cloneWithRows({}),
 			searchtext: ''
 		};
 	}
@@ -65,7 +62,7 @@ export default class IssueList extends Component {
 		var data = await AppX.query('$IssueT3');
 		if (data && data.result) {
 			this.setState({
-				data: this.source.cloneWithRows(data.result),
+				issues: data.result,
 				loading: false
 			});
 		} else {
@@ -92,14 +89,14 @@ export default class IssueList extends Component {
 		});
 	}
 
-	renderRow(issue) {
+	renderItem({ item }) {
 		return (
 			<View>
 				<ListCard
-					main={issue.subject}
-					secondary={issue.createdBy}
-					tertiary={issue.description}
-					onPress={() => this.props.navigation.navigate('IssueDetails', { issue: issue })}
+					main={item.subject}
+					secondary={item.createdBy}
+					tertiary={item.description}
+					onPress={() => this.props.navigation.navigate('IssueDetails', { issue: item })}
 				/>
 			</View>
 		);
@@ -116,10 +113,11 @@ export default class IssueList extends Component {
 					/>
 				</ListCard>
 
-				<ListView
-					enableEmptySections={true}
-					dataSource={this.state.data}
-					renderRow={issue => this.renderRow(issue)}
+				<FlatList
+					data={this.state.issues}
+					keyExtractor={item => item.uid}
+					renderItem={this.renderItem.bind(this)}
+					refreshing={this.state.loading}
 				/>
 			</Page>
 		);
