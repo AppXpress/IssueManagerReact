@@ -43,21 +43,39 @@ export default class IssueList extends Component {
 		title: 'Issue List',
 		right: (context) => {
 			return (
-				<Button
-					icon
-					title='+'
-					onPress={() => context.navigation.navigate('CreateIssue')}
-				/>
+				<View style={{ flexDirection: 'row' }}>
+					<Button
+						icon
+						title='%'
+						onPress={() => {
+							var params = context.navigation.state.params;
+							if (params && params.page) {
+								params.page.reload.call(params.page);
+							}
+						}}
+					/>
+					<Button
+						icon
+						title='+'
+						onPress={() => context.navigation.navigate('CreateIssue')}
+					/>
+				</View>
 			);
 		}
 	});
 
 	componentDidMount() {
 		this.reload();
+		this.props.navigation.setParams({
+			page: this
+		});
 	}
 
 	async reload() {
-		this.setState({ loading: true });
+		this.setState({
+			issues: null,
+			loading: true
+		});
 
 		var data = await AppX.query('$IssueT3');
 		if (data && data.result) {
@@ -70,24 +88,24 @@ export default class IssueList extends Component {
 		}
 	}
 
-	setSearchText(event) {
-		let searchText = event;
-		this.setState({ searchtext: searchText });
+	// setSearchText(event) {
+	// 	let searchText = event;
+	// 	this.setState({ searchtext: searchText });
 
-		let filteredData = this.filterIssues(searchText, this.state.rawData);
-		this.setState({ issueData: this.state.issueData.cloneWithRows(filteredData) });
-	}
+	// 	let filteredData = this.filterIssues(searchText, this.state.rawData);
+	// 	this.setState({ issueData: this.state.issueData.cloneWithRows(filteredData) });
+	// }
 
-	filterIssues(searchText, issueData) {
-		let text = searchText.toLowerCase();
+	// filterIssues(searchText, issueData) {
+	// 	let text = searchText.toLowerCase();
 
-		return issueData.result.filter((n) => {
-			if (n.subject) {
-				let iss = n.subject.toLowerCase();
-				return iss.search(text) !== -1;
-			}
-		});
-	}
+	// 	return issueData.result.filter((n) => {
+	// 		if (n.subject) {
+	// 			let iss = n.subject.toLowerCase();
+	// 			return iss.search(text) !== -1;
+	// 		}
+	// 	});
+	// }
 
 	renderItem({ item }) {
 		return (
@@ -105,13 +123,13 @@ export default class IssueList extends Component {
 	render() {
 		return (
 			<Page>
-				<ListCard>
+				{/*<ListCard>
 					<TextInput
 						label='Search'
 						onChangeText={this.setSearchText.bind(this)}
 						autoCapitalize='none'
 					/>
-				</ListCard>
+				</ListCard>*/}
 
 				<FlatList
 					data={this.state.issues}

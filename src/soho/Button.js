@@ -28,8 +28,8 @@ export default class Button extends Component {
 		} else if (this.props.secondary) {
 			style.backgroundColor = getColor('graphite-3');
 		} else if (this.props.icon) {
-			style.height = 64;
-			style.width = 34;
+			style.height = 24;
+			style.width = 48;
 		}
 
 		if (this.props.disabled) {
@@ -47,7 +47,7 @@ export default class Button extends Component {
 		} else if (this.props.secondary) {
 			style.color = getColor(this.props.hue + '-7', 'graphite-7');
 		} else if (this.props.icon) {
-			style.fontSize = 28;
+			style.fontSize = 24;
 			style.fontWeight = 'normal';
 			style.color = getColor('white-0');
 		} else {

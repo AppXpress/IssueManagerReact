@@ -3,10 +3,10 @@ import {
 } from './Tools';
 
 export default function Navigation(options) {
-	return (context) => {
+	return (...args) => {
 		function runOrReturn(value) {
 			if (typeof value == 'function') {
-				return value(context);
+				return value(...args);
 			}
 			return value;
 		}
