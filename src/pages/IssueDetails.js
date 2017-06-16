@@ -77,23 +77,17 @@ export default class IssueDetails extends Component {
 	render() {
 		return (
 			<Page>
-				<Card>
-					<Field label='Created by' entry={this.state.issue.createdBy} />
-					<Field label='Created on' entry={this.state.issue.createdOn} />
-				</Card>
-
-				<Card>
+				<Card title='Information'>
 					<Field label='Description' entry={this.state.issue.description} />
 					<Field label='Status' entry={this.state.issue.status} />
 					<Field label='Issue type' entry={getType(this.state.issue.issueType)} />
 					<Field label='Severity' entry={getSeverity(this.state.issue.severity)} />
-				</Card>
 
-				<Card>
 					{this.state.issue.assignedTo &&
 						<Field label='Assigned to'>
 							<ListCard
-								plain
+								nopadding
+								noborder
 								main={this.state.issue.assignedTo.name}
 								secondary={this.state.issue.assignedTo.address.addressLine1}
 								tertiary={this.state.issue.assignedTo.address.city}
@@ -104,6 +98,13 @@ export default class IssueDetails extends Component {
 					{!this.state.issue.assignedTo &&
 						<Field label='Assigned to' entry='Unassigned' />
 					}
+				</Card>
+
+				<Card title='Timestamps'>
+					<Field label='Created by' entry={this.state.issue.createdBy} />
+					<Field label='Created on' entry={this.state.issue.createdOn} />
+					<Field label='Modified by' entry={this.state.issue.modifiedBy} />
+					<Field label='Modified on' entry={this.state.issue.modifiedOn} />
 				</Card>
 
 				<Card title='Participants'>

@@ -3,10 +3,11 @@ import Rest from './Rest';
 export async function login(user, pass, eid) {
 	try {
 		var token = await new Rest().authorize(user, pass, eid);
-		return new Boolean(token).valueOf();
+		console.log(token);
+		return true;
 	} catch (error) {
 		console.log(error);
-		return false, error;
+		return null;
 	}
 }
 
@@ -21,7 +22,7 @@ export async function fetch(type, uid) {
 		return await query.json();
 	} catch (error) {
 		console.log(error);
-		return null, error;
+		return null;
 	}
 }
 
@@ -40,7 +41,7 @@ export async function query(type, oql) {
 		return await result.json();
 	} catch (error) {
 		console.log(error);
-		return null, error;
+		return null;
 	}
 }
 
@@ -53,7 +54,7 @@ export async function create(data) {
 		return await post;
 	} catch (error) {
 		console.log(error);
-		return null, error;
+		return null;
 	}
 }
 
@@ -68,6 +69,6 @@ export async function persist(data) {
 		return await post;
 	} catch (error) {
 		console.log(error);
-		return null, error;
+		return null;
 	}
 }
