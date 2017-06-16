@@ -42,8 +42,32 @@ export default class CreateMessage extends Component {
 		this.state = {
 			message: '',
 			root: this.props.navigation.state.params.issue,
-
 		};
+	}
+
+	postMessage(event) {
+		let today = new Date();
+
+		var body = {
+			"type": "$MessageT4",
+			"createdOn": today,
+			"text": this.state.message,
+			"issue": {
+				"reference": "Issue",
+				"rootType": "$IssueT3",
+				"rootId": this.state.root.uid,
+				"externalType": "$IssueT3",
+			},
+			"licensee": {
+				"memberId": "5717989018004281",
+			}
+		};
+
+		AppX.create(body);
+
+		this.props.navigation.goBack();
+		var page = this.props.navigation.state.params.page;
+		page.reload.call(page);
 	}
 
 	render() {
@@ -65,27 +89,5 @@ export default class CreateMessage extends Component {
 				</Card>
 			</Page>
 		);
-	}
-
-	postMessage(event) {
-		let today = new Date();
-
-		var body = {
-			"type": "$MessageT4",
-			"createdOn": today,
-			"text": this.state.message,
-			"issue": {
-				"reference": "Issue",
-				"rootType": "$IssueT3",
-				"rootId": this.state.root.uid,
-				"externalType": "$IssueT3",
-			},
-			"licensee": {
-				"memberId": "5717989018004281",
-			}
-		}
-		AppX.create(body);
-
-		this.props.navigation.navigate('IssueDetails', { issue: this.state.root });
 	}
 }

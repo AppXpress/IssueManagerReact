@@ -20,6 +20,17 @@ export default class Card extends Component {
 		this.props = props;
 	}
 
+	getViewStyle() {
+		if (this.props.plain) {
+			return [styles.view, {
+				padding: 0,
+				borderBottomWidth: 0
+			}, this.props.styles];
+		} else {
+			return [styles.view, this.props.styles];
+		}
+	}
+
 	getText(type) {
 		if (this.props[type]) {
 			return (
@@ -33,7 +44,7 @@ export default class Card extends Component {
 	getContent() {
 		if (this.props.main || this.props.secondary || this.props.tertiary) {
 			return (
-				<View style={styles.innerView}>
+				<View>
 					{this.getText('main')}
 					{this.getText('secondary')}
 					{this.getText('tertiary')}
@@ -47,7 +58,7 @@ export default class Card extends Component {
 			return (
 				<Touchable
 					onPress={this.props.onPress}
-					style={[styles.view, this.props.style]}
+					style={this.getViewStyle()}
 				>
 					{this.getContent()}
 					{this.props.children}
@@ -57,7 +68,7 @@ export default class Card extends Component {
 			return (
 				<View
 					{...this.props}
-					style={[styles.view, this.props.style]}
+					style={this.getViewStyle()}
 				>
 					{this.getContent()}
 					{this.props.children}
@@ -69,12 +80,10 @@ export default class Card extends Component {
 
 const styles = StyleSheet.create({
 	view: {
+		padding: 20,
 		backgroundColor: getColor('white-0'),
 		borderBottomWidth: 1,
 		borderBottomColor: getColor('graphite-3')
-	},
-	innerView: {
-		padding: 20
 	},
 	main: {
 		fontSize: 14,

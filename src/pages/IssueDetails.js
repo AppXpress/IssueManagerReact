@@ -10,7 +10,7 @@ import {
 	StatusBar,
 	ActivityIndicator,
 	AsyncStorage,
-	ListView,
+	FlatList,
 } from 'react-native';
 
 import {
@@ -40,44 +40,38 @@ export default class IssueDetails extends Component {
 		super(props);
 
 		this.state = {
-			messageList: new ListView.DataSource({
-				rowHasChanged: (row1, row2) => row1 !== row2,
-			}),
 			issue: this.props.navigation.state.params.issue,
 			loading: true,
 		};
 	}
 
-	renderRow(message) {
-		return (
-			<View>
-				<ListCard main={message.createdBy} secondary={message.text}
-
-				></ListCard>
-			</View>
-		);
-	}
-
 	async componentDidMount() {
-		var data = await this.getComments();
-
-		if (!data.result) {
-			this.setState({
-				messageList: false,
-				loading: false,
-			});
-
-			return;
-		}
-
-		this.setState({
-			messageList: this.state.messageList.cloneWithRows(data.result.reverse()),
-			loading: false,
-		});
+		this.reload();
 	}
 
-	async getComments() {
-		return await AppX.query('$MessageT4', 'issue.rootId = ' + this.state.issue.uid);
+	async reload() {
+		this.setState({
+			messages: null,
+			loading: true
+		});
+		var data = await AppX.query('$MessageT4', 'issue.rootId = ' + this.state.issue.uid + ' ORDER BY createTimestamp DESC');
+		if (data) {
+			this.setState({
+				messages: data.result,
+				loading: false
+			});
+		} else {
+			alert('We weren\'t able to load any messages. Please try again later!');
+		}
+	}
+
+	renderItem({ item }) {
+		return (
+			<ListCard
+				main={item.createdBy}
+				secondary={item.text}
+			/>
+		);
 	}
 
 	render() {
@@ -96,52 +90,60 @@ export default class IssueDetails extends Component {
 				</Card>
 
 				<Card>
-					<Field label='Assigned to' entry={this.getAssignedTo()} />
+					{this.state.issue.assignedTo &&
+						<Field label='Assigned to'>
+							<ListCard
+								plain
+								main={this.state.issue.assignedTo.name}
+								secondary={this.state.issue.assignedTo.address.addressLine1}
+								tertiary={this.state.issue.assignedTo.address.city}
+							/>
+						</Field>
+					}
+
+					{!this.state.issue.assignedTo &&
+						<Field label='Assigned to' entry='Unassigned' />
+					}
 				</Card>
 
-				{this.state.loading &&
-					<ActivityIndicator animating={true} size="large" />
-				}
-
-				{this.state.messageList && !this.state.loading &&
-					<Card title='Messages'>
-						<ListCard>
-							<Button
-								title='New Message'
-								onPress={() => this.props.navigation.navigate('CreateMessage', { issue: this.state.issue })}
+				<Card title='Participants'>
+					<FlatList
+						data={this.state.issue.participants}
+						keyExtractor={item => item.uid}
+						renderItem={({ item }) => (
+							<ListCard
+								main={item.party.name}
+								secondary={item.party.address.addressLine1}
+								tertiary={item.party.address.city}
 							/>
-						</ListCard>
+						)}
+					/>
+				</Card>
 
-						<ListView
-							dataSource={this.state.messageList}
-							renderRow={this.renderRow.bind(this)}
-							enableEmptySections={true}
+				<Card title="Messages">
+					<ListCard>
+						<Button
+							title='New Message'
+							onPress={() => this.props.navigation.navigate('CreateMessage', { issue: this.state.issue, page: this })}
 						/>
-					</Card>
-				}
+					</ListCard>
 
-				{!this.state.messageList && !this.state.loading &&
-					<Card title='Messages'>
-						<ListCard>
-							<Button
-								title='New Message'
-								onPress={() => this.props.navigation.navigate('CreateMessage', { issue: this.state.issue })}
-							/>
-						</ListCard>
+					{this.state.loading &&
+						<ActivityIndicator animating={true} size="large" />
+					}
 
-						<Field entry='No messages' />
-					</Card>
-				}
+					<FlatList
+						data={this.state.messages}
+						keyExtractor={item => item.uid}
+						renderItem={message => this.renderItem(message)}
+					/>
+
+					{(!this.state.loading && (!this.state.messages || this.state.messages.length == 0)) &&
+						<ListCard main='No messages' />
+					}
+				</Card>
 			</Page>
 		);
-	}
-
-	getAssignedTo() {
-		if (this.state.issue.participants[1]) {
-			return this.state.issue.participants[1].party.name;
-		} else {
-			return 'Unassigned';
-		}
 	}
 }
 

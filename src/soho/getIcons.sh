@@ -11,7 +11,7 @@ else
 	do
 		if [ $file != "*.svg" ]
 		then
-			echo -n "    '${file::-4}': '"
+			echo -n -e "\t'${file::-4}': '"
 			cat $file
 			echo "',"
 		fi

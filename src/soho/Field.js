@@ -22,31 +22,20 @@ export default class Field extends Component {
 		this.props = props;
 	}
 
-	getItem(entry) {
-		return (
-			<Text style={styles.entry} key={entry}>
-				{entry}
-			</Text>
-		);
-	}
-
-	getContent() {
-		if (this.props.entry) {
-			if (typeof this.props.entry == 'object') {
-				return this.props.entry.map(this.getItem);
-			} else {
-				return this.getItem(this.props.entry);
-			}
-		}
-	}
-
 	render() {
 		return (
 			<View style={styles.view}>
 				<Text style={styles.label}>
 					{this.props.label}
 				</Text>
-				{this.getContent()}
+
+				{this.props.entry &&
+					<Text style={styles.entry}>
+						{this.props.entry}
+					</Text>
+				}
+
+				{this.props.children}
 			</View>
 		);
 	}

@@ -5,6 +5,7 @@ export async function login(user, pass, eid) {
 		var token = await new Rest().authorize(user, pass, eid);
 		return new Boolean(token).valueOf();
 	} catch (error) {
+		console.log(error);
 		return false, error;
 	}
 }
@@ -48,6 +49,21 @@ export async function create(data) {
 		var post = new Rest()
 			.base()
 			.path(data.type)
+			.post(data);
+		return await post;
+	} catch (error) {
+		console.log(error);
+		return null, error;
+	}
+}
+
+export async function persist(data) {
+	try {
+		var post = new Rest()
+			.base()
+			.header('If-Match', data.__metadata.fingerprint)
+			.path(data.type)
+			.path(data.uid)
 			.post(data);
 		return await post;
 	} catch (error) {
