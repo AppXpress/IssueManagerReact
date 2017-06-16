@@ -27,6 +27,10 @@ import {
 	AppX
 } from '../gtn/All';
 
+import {
+	IssueList
+} from './IssueList.js';
+
 export default class CreateIssue extends Component {
 
 	static navigationOptions = Navigataion({
@@ -43,6 +47,7 @@ export default class CreateIssue extends Component {
 			severity: '0',
 			desc: '',
 			loading: false,
+			root: this.props.navigation.state,
 		};
 	}
 
@@ -57,14 +62,13 @@ export default class CreateIssue extends Component {
 			severity: '',
 			description: '',
 		}
-		console.log(toMake);
-		console.log(this);
 		toMake.subject = this.state.subject;
 		toMake.issueType = this.state.issueType;
 		toMake.severity = this.state.severity;
 		toMake.description = this.state.desc;
 		await AppX.create('$IssueT3', toMake);
-		Alert.alert('Issue posted');
+		Alert.alert('Issue posted, please refresh list');
+		this.props.navigation.goBack();
 	}
 
 	render() {
