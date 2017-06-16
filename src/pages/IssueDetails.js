@@ -125,6 +125,13 @@ export default class IssueDetails extends Component {
 					/>
 				</Card>
 
+				<Card>
+					<Button
+						title='Edit'
+						onPress={() => this.props.navigation.navigate('CreateIssue', { issue: this.state.issue, page: this })}
+					/>
+				</Card>
+
 				<Card title="Messages">
 					<ListItem fill>
 						<Button

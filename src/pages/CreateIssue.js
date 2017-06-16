@@ -41,26 +41,29 @@ export default class CreateIssue extends Component {
 	constructor(props) {
 		super(props);
 
-		console.log(this.props.issue)
-
-		this.test()
-
 		this.state = {
 			subject: '',
 			description: '',
 			issueType: '0',
 			severity: '0',
 		};
-	}
 
-	async test() {
-		console.log(await AppX.fetch('$IssueT3', '95920847'));
+		this.state.issue = this.props.navigation.state.params.issue;
+		if (this.state.issue) {
+			this.state.subject = this.state.issue.subject;
+			this.state.issueType = this.state.issue.issueType;
+			this.state.severity = this.state.issue.severity;
+			this.state.description = this.state.issue.description;
+			if (this.state.issue.assignedTo) {
+				this.state.assignedTo = this.state.issue.assignedTo.memberId;
+			}
+		}
 	}
 
 	async persist() {
 		var issue = {};
-		if (this.props.issue) {
-			issue = this.props.issue;
+		if (this.state.issue) {
+			issue = this.state.issue;
 		} else {
 			issue.type = '$IssueT3';
 			issue.licensee = {
@@ -79,7 +82,7 @@ export default class CreateIssue extends Component {
 		}
 
 		var response;
-		if (this.props.issue) {
+		if (this.state.issue) {
 			response = await AppX.persist(issue);
 		} else {
 			response = await AppX.create(issue);
@@ -163,7 +166,7 @@ export default class CreateIssue extends Component {
 					<Button
 						primary
 						hue='ruby'
-						title={this.props.issue ? 'Update' : 'Create'}
+						title={this.state.issue ? 'Update' : 'Create'}
 						onPress={() => this.persist()}
 					/>
 				</Card>

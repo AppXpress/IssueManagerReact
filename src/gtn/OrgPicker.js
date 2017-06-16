@@ -21,8 +21,8 @@ export default class OrgPicker extends Component {
 
 		this.props = props;
 		this.state = {
-			orgs: [],
-			value: null
+			value: this.props.selectedValue,
+			orgs: []
 		}
 
 		AppX.query('Community').then(result => this.setState({ orgs: result.result[0].member }));

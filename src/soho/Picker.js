@@ -33,9 +33,9 @@ export default class Picker extends Component {
 
 		this.props = props;
 		this.state = {
+			value: this.props.selectedValue,
 			data: props.children,
-			visible: false,
-			value: null
+			visible: false
 		}
 	}
 
