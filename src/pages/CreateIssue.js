@@ -41,6 +41,10 @@ export default class CreateIssue extends Component {
 	constructor(props) {
 		super(props);
 
+		console.log(this.props.issue)
+
+		this.test()
+
 		this.state = {
 			subject: '',
 			description: '',
@@ -49,7 +53,48 @@ export default class CreateIssue extends Component {
 		};
 	}
 
-	async createIssue() {
+	async test() {
+		console.log(await AppX.fetch('$IssueT3', '95920847'));
+	}
+
+	async persist() {
+		var issue = {};
+		if (this.props.issue) {
+			issue = this.props.issue;
+		} else {
+			issue.type = '$IssueT3';
+			issue.licensee = {
+				memberId: '5717989018004281'
+			};
+		}
+
+		issue.subject = this.state.subject;
+		issue.issueType = this.state.issueType;
+		issue.severity = this.state.severity;
+		issue.description = this.state.description;
+		issue.assignedTo = { memberId: this.state.assignedTo };
+
+		if (!this.state.assignedTo) {
+			delete issue.assignedTo;
+		}
+
+		var response;
+		if (this.props.issue) {
+			response = await AppX.persist(issue);
+		} else {
+			response = await AppX.create(issue);
+		}
+
+		if (response) {
+			this.props.navigation.goBack();
+			var params = this.props.navigation.state.params;
+			params.page.reload.call(params.page);
+		} else {
+			alert('Something went wrong!');
+		}
+	}
+
+	async create() {
 		var data = {
 			type: '$IssueT3',
 			subject: this.state.subject,
@@ -118,8 +163,8 @@ export default class CreateIssue extends Component {
 					<Button
 						primary
 						hue='ruby'
-						title='Create'
-						onPress={() => this.createIssue()}
+						title={this.props.issue ? 'Update' : 'Create'}
+						onPress={() => this.persist()}
 					/>
 				</Card>
 			</Page>

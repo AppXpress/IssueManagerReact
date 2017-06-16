@@ -13,9 +13,14 @@ import {
 	base64Encode
 } from './Utilities';
 
-var token;
-
 export default class Rest {
+
+	static _token;
+
+	static token(value) {
+		Rest._token = value;
+	}
+
 	constructor() {
 		this._url = '';
 		this._params = {};
@@ -56,26 +61,10 @@ export default class Rest {
 		}
 	}
 
-	async authorize(username, password, eid) {
-		var toEncode = username + ':' + password;
-
-		if (eid) {
-			toEncode += ':' + eid;
-		}
-
-		var response = await this
-			.base()
-			.header('Authorization', base64Encode(toEncode))
-			.get();
-
-		token = response.headers.get('Authorization');
-		return token;
-	}
-
 	base() {
 		this._url = restUrl;
 		this._params['dataKey'] = dataKey;
-		this._headers['Authorization'] = token;
+		this._headers['Authorization'] = Rest._token;
 		this._headers['Content-Type'] = 'application/json';
 		return this;
 	}

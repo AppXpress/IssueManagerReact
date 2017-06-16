@@ -1,28 +1,44 @@
 import Rest from './Rest';
+import { base64Encode } from './Utilities';
 
 export async function login(user, pass, eid) {
+	var auth = user + ':' + pass;
+	if (eid) {
+		auth += ':' + eid;
+	}
+
 	try {
-		var token = await new Rest().authorize(user, pass, eid);
-		console.log(token);
+		var response = await new Rest()
+			.base()
+			.header('Authorization', base64Encode(auth))
+			.get();
+
+		if (!response.ok) {
+			throw response;
+		}
+
+		Rest.token(response.headers.get('Authorization'));
 		return true;
 	} catch (error) {
 		console.log(error);
-		return null;
 	}
 }
 
 export async function fetch(type, uid) {
 	try {
-		var query = await new Rest()
+		var response = await new Rest()
 			.base()
 			.path(type)
 			.path(uid)
 			.get();
 
-		return await query.json();
+		if (!response.ok) {
+			throw response;
+		}
+
+		return await response.json();
 	} catch (error) {
 		console.log(error);
-		return null;
 	}
 }
 
@@ -37,38 +53,67 @@ export async function query(type, oql) {
 			query.param('oql', oql);
 		}
 
-		var result = await query.get();
-		return await result.json();
+		var response = await query.get();
+
+		if (!response.ok) {
+			throw response;
+		}
+
+		return await response.json();
 	} catch (error) {
 		console.log(error);
-		return null;
 	}
 }
 
 export async function create(data) {
 	try {
-		var post = new Rest()
+		var response = await new Rest()
 			.base()
 			.path(data.type)
 			.post(data);
-		return await post;
+
+		if (!response.ok) {
+			throw response;
+		}
+
+		return await response.json();
 	} catch (error) {
 		console.log(error);
-		return null;
 	}
 }
 
 export async function persist(data) {
 	try {
-		var post = new Rest()
+		var response = await new Rest()
 			.base()
 			.header('If-Match', data.__metadata.fingerprint)
 			.path(data.type)
 			.path(data.uid)
 			.post(data);
-		return await post;
+
+		if (!response.ok) {
+			throw response;
+		}
+
+		return await response.json();
 	} catch (error) {
 		console.log(error);
-		return null;
+	}
+}
+
+export async function design(type) {
+	try {
+		var response = await new Rest()
+			.base()
+			.path(type)
+			.get();
+
+		if (!response.ok) {
+			throw response;
+		}
+
+		return await response.json();
+	} catch (error) {
+		console.log(error);
 	}
 }
