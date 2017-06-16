@@ -2,7 +2,6 @@ import Button from './Button';
 import Card from './Card';
 import ComplexText from './ComplexText';
 import Field from './Field';
-import Icon from './Icon';
 import ListItem from './ListItem';
 import Modal from './Modal';
 import Navigataion from './Navigation';
@@ -21,7 +20,6 @@ const soho = {
 	get Card() { return Card; },
 	get ComplexText() { return ComplexText; },
 	get Field() { return Field; },
-	get Icon() { return Icon; },
 	get ListItem() { return ListItem; },
 	get Modal() { return Modal; },
 	get Navigataion() { return Navigataion; },
