@@ -52,7 +52,7 @@ export default class CreateIssue extends Component {
 	}
 
 	async createIssue() {
-		var toMake =  {
+		var toMake = {
 			type: '$IssueT3',
 			subject: '',
 			licensee: {
@@ -66,7 +66,7 @@ export default class CreateIssue extends Component {
 		toMake.issueType = this.state.issueType;
 		toMake.severity = this.state.severity;
 		toMake.description = this.state.desc;
-		await AppX.create('$IssueT3', toMake);
+		await AppX.create(toMake);
 		Alert.alert('Issue posted, please refresh list');
 		this.props.navigation.goBack();
 	}

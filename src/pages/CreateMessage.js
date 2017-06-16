@@ -84,7 +84,7 @@ export default class CreateMessage extends Component {
 				"memberId": "5717989018004281",
 			}
 		}
-		AppX.create('$MessageT4', body);
+		AppX.create(body);
 
 		this.props.navigation.navigate('IssueDetails', { issue: this.state.root });
 	}

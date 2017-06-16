@@ -43,11 +43,11 @@ export async function query(type, oql) {
 	}
 }
 
-export async function create(type, data) {
+export async function create(data) {
 	try {
 		var post = new Rest()
 			.base()
-			.path(type)
+			.path(data.type)
 			.post(data);
 		return await post;
 	} catch (error) {
