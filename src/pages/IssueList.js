@@ -42,23 +42,18 @@ export default class IssueList extends Component {
 
 	static navigationOptions = Navigataion({
 		title: 'Issue List',
-		right: (context) => {
+		right: ({ navigation }) => {
 			return (
 				<View style={{ flexDirection: 'row' }}>
 					<Button
 						icon
 						title='%'
-						onPress={() => {
-							var params = context.navigation.state.params;
-							if (params && params.page) {
-								params.page.reload.call(params.page);
-							}
-						}}
+						onPress={() => navigation.state.params.page.reload.call(navigation.state.params.page)}
 					/>
 					<Button
 						icon
 						title='+'
-						onPress={() => context.navigation.navigate('CreateIssue')}
+						onPress={() => navigation.navigate('CreateIssue', { page: navigation.state.params.page })}
 					/>
 				</View>
 			);

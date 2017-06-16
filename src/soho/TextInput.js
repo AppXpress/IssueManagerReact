@@ -85,6 +85,7 @@ export default class TextInput extends Component {
 				}
 
 				<TextInputBase
+					autoCapitalize='sentences'
 					{...this.props}
 					style={this.getTextStyle()}
 					underlineColorAndroid='transparent'
