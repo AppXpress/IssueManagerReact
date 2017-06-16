@@ -10,6 +10,8 @@ import {
     getColor
 } from './Tools';
 
+import Resources from './IconResources';
+
 export default class Card extends Component {
     constructor(props) {
         super(props);
@@ -17,14 +19,9 @@ export default class Card extends Component {
         this.props = props;
     }
 
-    getSvg() {
-        return '<svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><title>add</title><desc>Created with Sketch.</desc><path d="M16 8h-6v-6c0-.552-.448-1-1-1s-1 .448-1 1v6h-6c-.552 0-1 .448-1 1s.448 1 1 1h6v6c0 .552.448 1 1 1s1-.448 1-1v-6h6c.552 0 1-.448 1-1s-.448-1-1-1" fill="#5C5C5C"/></svg>';
-    }
-
     html() {
-        var svg = '';
-        if (this.props.source) {
-            svg = this.getSvg(this.props.source);
+        if (!Images[this.props.source]) {
+            return null;
         }
 
         return `
@@ -49,7 +46,7 @@ export default class Card extends Component {
             </style>
         </head>
         <body>
-            ${svg}
+            ${Images[this.props.source]}
         </body>
         `;
     }
@@ -68,6 +65,7 @@ export default class Card extends Component {
 const styles = StyleSheet.create({
     image: {
         width: 24,
-        height: 24
+        height: 24,
+        backgroundColor: 'transparent'
     }
 });
