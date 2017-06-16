@@ -12,7 +12,8 @@ import {
 
 import Button from './Button';
 import Card from './Card';
-import ListCard from './ListCard';
+import ComplexText from './ComplexText';
+import ListItem from './ListItem';
 import Modal from './Modal';
 import Touchable from './Touchable';
 
@@ -66,12 +67,13 @@ export default class Picker extends Component {
 
 	renderItem({ item }) {
 		return (
-			<ListCard
-				main={item.props.label}
-				secondary={item.props.secondary}
-				tertiary={item.props.tertiary}
-				onPress={() => getHandler(this, 'onValueChange')(item.props.value)}
-			/>
+			<ListItem onPress={() => getHandler(this, 'onValueChange')(item.props.value)}>
+				<ComplexText
+					main={item.props.label}
+					secondary={item.props.secondary}
+					tertiary={item.props.tertiary}
+				/>
+			</ListItem>
 		);
 	}
 
@@ -108,9 +110,6 @@ export default class Picker extends Component {
 						data={this.state.data}
 						keyExtractor={item => item.props.value}
 						renderItem={this.renderItem.bind(this)}
-						ListEmptyComponent={(
-							<ListCard main='No options available' />
-						)}
 					/>
 				</Modal>
 			</View>

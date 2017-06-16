@@ -21,7 +21,8 @@ import {
 import {
 	Button,
 	Card,
-	ListCard,
+	ComplexText,
+	ListItem,
 	Navigataion,
 	Page,
 	TextInput
@@ -109,14 +110,13 @@ export default class IssueList extends Component {
 
 	renderItem({ item }) {
 		return (
-			<View>
-				<ListCard
+			<ListItem onPress={() => this.props.navigation.navigate('IssueDetails', { issue: item })}>
+				<ComplexText
 					main={item.subject}
 					secondary={item.createdBy}
 					tertiary={item.description}
-					onPress={() => this.props.navigation.navigate('IssueDetails', { issue: item })}
 				/>
-			</View>
+			</ListItem>
 		);
 	}
 

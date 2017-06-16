@@ -20,9 +20,9 @@ import {
 import {
 	Button,
 	Card,
+	ComplexText,
 	Field,
-	List,
-	ListCard,
+	ListItem,
 	Navigataion,
 	Page,
 	TextInput
@@ -67,10 +67,12 @@ export default class IssueDetails extends Component {
 
 	renderItem({ item }) {
 		return (
-			<ListCard
-				main={item.createdBy}
-				secondary={item.text}
-			/>
+			<ListItem>
+				<ComplexText
+					main={item.createdBy}
+					secondary={item.text}
+				/>
+			</ListItem>
 		);
 	}
 
@@ -85,7 +87,7 @@ export default class IssueDetails extends Component {
 
 					{this.state.issue.assignedTo &&
 						<Field label='Assigned to'>
-							<ListCard
+							<ComplexText
 								nopadding
 								noborder
 								main={this.state.issue.assignedTo.name}
@@ -112,22 +114,24 @@ export default class IssueDetails extends Component {
 						data={this.state.issue.participants}
 						keyExtractor={item => item.uid}
 						renderItem={({ item }) => (
-							<ListCard
-								main={item.party.name}
-								secondary={item.party.address.addressLine1}
-								tertiary={item.party.address.city}
-							/>
+							<ListItem>
+								<ComplexText
+									main={item.party.name}
+									secondary={item.party.address.addressLine1}
+									tertiary={item.party.address.city}
+								/>
+							</ListItem>
 						)}
 					/>
 				</Card>
 
 				<Card title="Messages">
-					<ListCard>
+					<ListItem fill>
 						<Button
 							title='New Message'
 							onPress={() => this.props.navigation.navigate('CreateMessage', { issue: this.state.issue, page: this })}
 						/>
-					</ListCard>
+					</ListItem>
 
 					{this.state.loading &&
 						<ActivityIndicator animating={true} size="large" />
@@ -140,7 +144,9 @@ export default class IssueDetails extends Component {
 					/>
 
 					{(!this.state.loading && (!this.state.messages || this.state.messages.length == 0)) &&
-						<ListCard main='No messages' />
+						<ListItem>
+							<ComplexText main='No messages' />
+						</ListItem>
 					}
 				</Card>
 			</Page>

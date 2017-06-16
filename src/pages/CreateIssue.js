@@ -16,7 +16,6 @@ import {
 import {
 	Button,
 	Card,
-	ListCard,
 	Navigataion,
 	Page,
 	Picker,
@@ -24,7 +23,8 @@ import {
 } from '../soho/All';
 
 import {
-	AppX
+	AppX,
+	OrgPicker
 } from '../gtn/All';
 
 import {
@@ -81,14 +81,12 @@ export default class CreateIssue extends Component {
 						onChangeText={(text) => this.setState({ subject: text })}
 						autoCapitalize='none'
 						autoFocus={true}
-
 					/>
 					<TextInput
 						label='Description'
 						value={this.state.desc}
 						onChangeText={(text) => this.setState({ desc: text })}
 						autoCapitalize='none'
-
 					/>
 					<Picker
 						label='Issue Type'
@@ -108,6 +106,10 @@ export default class CreateIssue extends Component {
 						<Picker.Item label="Medium" value="2" />
 						<Picker.Item label="High" value="3" />
 					</Picker>
+
+					<OrgPicker
+						label='Assigned to'
+					/>
 
 					<Button
 						title='Create'
