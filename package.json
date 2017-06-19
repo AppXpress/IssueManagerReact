@@ -17,6 +17,11 @@
 		"jest": "20.0.4",
 		"react-test-renderer": "16.0.0-alpha.6"
 	},
+	"rnpm": {
+		"assets": [
+			"resources/fonts"
+		]
+	},
 	"jest": {
 		"preset": "react-native"
 	}
