@@ -152,14 +152,14 @@ export default class IssueDetails extends Component {
 						data={this.state.attachments}
 						keyExtractor={item => item.uid}
 						renderItem={({ item }) => (
-							<ListItem>
-								<ComplexText
+							<ListItem onPress={() => Alert.alert(item.mimeType)} >
+									<ComplexText
 									main={item.name}
 									secondary={item.createUserId}
-								/>
-							</ListItem>
-						)}
-					/>
+									/>
+								</ListItem>
+							)}
+						/>
 				</Card>
 
 				<Card title="Messages">
