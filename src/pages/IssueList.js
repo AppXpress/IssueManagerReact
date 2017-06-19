@@ -232,7 +232,7 @@ export default class IssueList extends Component {
 						autoCapitalize='none'
 					/> 
 				</ListItem> */}
-				<ListItem>
+				<ListItem fill>
 					<Button
 						title='filter'
 						onPress={() => this.setState({ modalVisible: true, searchtext: '', daysFilter: null })}

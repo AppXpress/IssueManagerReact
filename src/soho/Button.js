@@ -68,9 +68,11 @@ export default class Button extends Component {
 					borderless={this.props.icon && !this.props.title}
 				>
 					<Text style={this.getTextStyle()}>
-						{this.props.icon &&
-							<Icon name={this.props.icon} />
-						}
+						<Text>
+							{this.props.icon &&
+								<Icon name={this.props.icon} />
+							}
+						</Text>
 						{(this.props.title || '').toUpperCase()}
 					</Text>
 					{this.props.children}

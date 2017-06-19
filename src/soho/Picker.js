@@ -47,14 +47,12 @@ export default class Picker extends Component {
 	}
 
 	getLabel() {
-		if (this.state.value) {
-			var selected = this.props.children.find(item => {
-				return item.props.value == this.state.value;
-			});
+		var selected = this.props.children.find(item => {
+			return item.props.value == this.state.value;
+		});
 
-			if (selected) {
-				return selected.props.label;
-			}
+		if (selected) {
+			return selected.props.label;
 		}
 	}
 
