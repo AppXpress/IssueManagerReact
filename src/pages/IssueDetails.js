@@ -62,6 +62,11 @@ export default class IssueDetails extends Component {
 	}
 
 	async reload() {
+		var issue = await AppX.fetch('$IssueT3', this.state.issue.uid);
+		for (var prop in issue) {
+			this.state.issue[prop] = issue[prop];
+		}
+
 		this.setState({
 			messages: null,
 			loading: true,
@@ -69,7 +74,7 @@ export default class IssueDetails extends Component {
 		});
 		var data = await AppX.query('$MessageT4', 'issue.rootId = ' + this.state.issue.uid + ' ORDER BY createTimestamp DESC');
 
-		var attachments = await AppX.fetchAttachList('$IssueT3',this.state.issue.uid);
+		var attachments = await AppX.fetchAttachList('$IssueT3', this.state.issue.uid);
 
 		if (data && attachments) {
 			this.setState({
@@ -86,12 +91,12 @@ export default class IssueDetails extends Component {
 	}
 
 
-	async showAttachment( item ){
-		
+	async showAttachment(item) {
+
 		console.log(item);
 		response = await AppX.fetchAttachment(item.attachmentUid);
 		console.log(response);
-	}	
+	}
 
 
 	edit() {
@@ -109,16 +114,16 @@ export default class IssueDetails extends Component {
 			</ListItem>
 		);
 	}
-	renderAttach({ item }){
+	renderAttach({ item }) {
 
 		return (
-			<ListItem onPress={()=>this.showAttachment(item)} >
+			<ListItem onPress={() => this.showAttachment(item)} >
 				<ComplexText
 					main={item.name}
 					secondary={item.description}
 				/>
-			</ListItem>		
-			);
+			</ListItem>
+		);
 	}
 
 	render() {
@@ -136,8 +141,8 @@ export default class IssueDetails extends Component {
 								nopadding
 								noborder
 								main={this.state.issue.assignedTo.name}
-								secondary={this.state.issue.assignedTo.address.addressLine1}
-								tertiary={this.state.issue.assignedTo.address.city}
+								secondary={(this.state.issue.assignedTo.address || {}).addressLine1}
+								tertiary={(this.state.issue.assignedTo.address || {}).city}
 							/>
 						</Field>
 					}
@@ -172,11 +177,11 @@ export default class IssueDetails extends Component {
 
 				<Card title='Attachments'>
 
-				<FlatList
-					data={this.state.attachments}
-					keyExtractor={item => item.attachmentUid}
-					renderItem={attachment => this.renderAttach(attachment)}
-				/>
+					<FlatList
+						data={this.state.attachments}
+						keyExtractor={item => item.attachmentUid}
+						renderItem={attachment => this.renderAttach(attachment)}
+					/>
 
 				</Card>
 
