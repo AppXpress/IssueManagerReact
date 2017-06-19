@@ -84,24 +84,24 @@ export default class IssueList extends Component {
 		}
 	}
 
-	// setSearchText(event) {
-	// 	let searchText = event;
-	// 	this.setState({ searchtext: searchText });
+	setSearchText(event) {
+		let searchText = event;
+		this.setState({ searchtext: searchText });
 
-	// 	let filteredData = this.filterIssues(searchText, this.state.rawData);
-	// 	this.setState({ issueData: this.state.issueData.cloneWithRows(filteredData) });
-	// }
+		let filteredData = this.filterIssues(searchText, this.state.issues);
+		this.setState({ issues: filteredData });
+	}
 
-	// filterIssues(searchText, issueData) {
-	// 	let text = searchText.toLowerCase();
+	filterIssues(searchText, issueData) {
+		let text = searchText.toLowerCase();
 
-	// 	return issueData.result.filter((n) => {
-	// 		if (n.subject) {
-	// 			let iss = n.subject.toLowerCase();
-	// 			return iss.search(text) !== -1;
-	// 		}
-	// 	});
-	// }
+		return issueData.filter((n) => {
+			if (n.subject) {
+				let iss = n.subject.toLowerCase();
+				return iss.search(text) !== -1;
+			}
+		});
+	}
 
 	renderItem({ item }) {
 		return (
@@ -118,13 +118,13 @@ export default class IssueList extends Component {
 	render() {
 		return (
 			<Page>
-				{/*<ListCard>
+				<ListItem>
 					<TextInput
 						label='Search'
 						onChangeText={this.setSearchText.bind(this)}
 						autoCapitalize='none'
 					/>
-				</ListCard>*/}
+				</ListItem>
 
 				{this.state.loading &&
 					<ActivityIndicator animating={true} size="large" />
