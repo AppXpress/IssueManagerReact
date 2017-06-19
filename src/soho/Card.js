@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
 		height: 50,
 		justifyContent: 'center',
 		borderBottomWidth: 1,
-		borderBottomColor: getColor('graphite-3')
+		borderColor: getColor('graphite-3')
 	},
 	title: {
 		paddingLeft: 20,
