@@ -43,6 +43,7 @@ export default class Touchable extends Component {
 					{...this.props}
 					delayPressIn={0}
 					style={null}
+					underlayColor={'transparent'}
 				>
 					<View style={this.props.style}>
 						{this.props.children}
