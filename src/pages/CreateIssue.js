@@ -46,6 +46,7 @@ export default class CreateIssue extends Component {
 			description: '',
 			issueType: '0',
 			severity: '0',
+			loading: false,
 		};
 
 		this.state.issue = this.props.navigation.state.params.issue;
@@ -61,6 +62,8 @@ export default class CreateIssue extends Component {
 	}
 
 	async persist() {
+		this.setState({loading: true});
+
 		var issue = {};
 		if (this.state.issue) {
 			issue = this.state.issue;
@@ -98,6 +101,7 @@ export default class CreateIssue extends Component {
 	}
 
 	async create() {
+		this.setState({loading: true});
 		var data = {
 			type: '$IssueT3',
 			subject: this.state.subject,
@@ -163,12 +167,18 @@ export default class CreateIssue extends Component {
 						onValueChange={(item, index) => this.setState({ assignedTo: item })}
 					/>
 
+					{this.state.loading &&
+						<ActivityIndicator animating={true} size="large" />
+					}
+
+					{!this.state.loading &&
 					<Button
 						primary
 						hue='ruby'
 						title={this.state.issue ? 'Update' : 'Create'}
 						onPress={() => this.persist()}
 					/>
+					}
 				</Card>
 			</Page>
 		);
