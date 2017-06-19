@@ -140,18 +140,18 @@ export default class IssueDetails extends Component {
 				</Card>
 
 				<Card title='Attachments'>
-				<FlatList
-					data={this.state.attachments}
-					keyExtractor={item => item.uid}
-					renderItem={({ item }) => (
-						<ListItem>
-							<ComplexText
-								main={item.name}
-								secondary={item.createUserId}
-							/>
-						</ListItem>
-					)}
-				/>
+					<FlatList
+						data={this.state.attachments}
+						keyExtractor={item => item.uid}
+						renderItem={({ item }) => (
+							<ListItem onPress={() => Alert.alert(item.mimeType)} >
+									<ComplexText
+									main={item.name}
+									secondary={item.createUserId}
+									/>
+								</ListItem>
+							)}
+						/>
 				</Card>
 
 				<Card title="Messages">

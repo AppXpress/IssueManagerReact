@@ -61,6 +61,24 @@ export async function fetchAttach(type, uid) {
 	}
 }
 
+export async function fetchAnAttach(uid) {
+	try {
+		var response = await new Rest()
+			.base()
+			.path(media)
+			.path(uid)
+			.get();
+
+		if (!response.ok) {
+			throw response;
+		}
+
+		return await response.json();
+	} catch (error) {
+		console.log(error);
+	}
+}
+
 export async function query(type, oql) {
 	try {
 		var query = new Rest()
