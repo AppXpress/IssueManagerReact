@@ -53,13 +53,11 @@ export default class IssueList extends Component {
 			return (
 				<View style={{ flexDirection: 'row' }}>
 					<Button
-						icon
-						title='%'
+						icon='refresh'
 						onPress={() => navigation.state.params.page.reload.call(navigation.state.params.page)}
 					/>
 					<Button
-						icon
-						title='+'
+						icon='add'
 						onPress={() => navigation.navigate('CreateIssue', { page: navigation.state.params.page })}
 					/>
 				</View>
@@ -92,30 +90,30 @@ export default class IssueList extends Component {
 		}
 	}
 
-	async requery(){
+	async requery() {
 		this.setState({
 			issues: null,
 			loading: true
 		});
 
-		if(this.state.severityFilter){
+		if (this.state.severityFilter) {
 
 		}
 
-		var oqlStmnt = this.state.filterBy + ' contains ' +'\'' + this.state.searchtext+ '\'';
+		var oqlStmnt = this.state.filterBy + ' contains ' + '\'' + this.state.searchtext + '\'';
 
-		if(this.state.severityFilter){
+		if (this.state.severityFilter) {
 			oqlStmnt += " AND severity = \'" + this.state.severityFilter + "\'";
 		}
 
-		if(this.state.typeFilter){
+		if (this.state.typeFilter) {
 			oqlStmnt += " AND type = \'" + this.state.typeFilter + "\'";
 		}
-		if(this.state.daysFilter){
-			oqlStmnt += " AND createdOn In @(Last "+this.state.daysFilter+" Days)"
+		if (this.state.daysFilter) {
+			oqlStmnt += " AND createdOn In @(Last " + this.state.daysFilter + " Days)"
 		}
-        
-        oqlStmnt+= " ORDER BY modifyTimestamp DESC";
+
+		oqlStmnt += " ORDER BY modifyTimestamp DESC";
 
 		var data = await AppX.query('$IssueT3', oqlStmnt);
 		if (data) {
@@ -168,13 +166,13 @@ export default class IssueList extends Component {
 	render() {
 		return (
 			<Page>
-			<Modal
-				visible={this.state.modalVisible}
-				onClose={() => this.setState({ modalVisible: false })}
-				onRequestClose={() => this.setState({ modalVisible: false })}
+				<Modal
+					visible={this.state.modalVisible}
+					onClose={() => this.setState({ modalVisible: false })}
+					onRequestClose={() => this.setState({ modalVisible: false })}
 				>
 
-				<Picker
+					<Picker
 						label='Filter By'
 						title='Select a field to filter by'
 						selectedValue={this.state.filterBy}
@@ -184,13 +182,13 @@ export default class IssueList extends Component {
 						<Picker.Item label="Creator" value="createdBy" />
 						<Picker.Item label="Description" value="description" />
 					</Picker>
-				<TextInput
+					<TextInput
 						label='Search'
-						onChangeText={(text) => this.setState({searchtext: text})}
+						onChangeText={(text) => this.setState({ searchtext: text })}
 						autoCapitalize='none'
-					/> 
+					/>
 
-				<Picker
+					<Picker
 						label='Severity'
 						title='Select a severity to filter by'
 						selectedValue={this.state.severityFilter}
@@ -201,7 +199,7 @@ export default class IssueList extends Component {
 						<Picker.Item label="Low" value="1" />
 						<Picker.Item label="None" value={null} />
 					</Picker>
-				<Picker
+					<Picker
 						label='Issue Type'
 						title='Select an issue type to filter by'
 						selectedValue={this.state.typeFilter}
@@ -212,22 +210,22 @@ export default class IssueList extends Component {
 						<Picker.Item label="Quality Control" value='3' />
 						<Picker.Item label="None" value={null} />
 					</Picker>
-				<TextInput
+					<TextInput
 						label="Created in last X days"
-						onChangeText={(text) => this.setState({daysFilter: text})}
+						onChangeText={(text) => this.setState({ daysFilter: text })}
 						keyboardType={'numeric'}
 						returnKeyType={'done'}
-					
+
 					/>
-				<Button
-					title='search'
-					onPress={()=> {this.setState({modalVisible:false}); this.requery()}}
-					/>	
+					<Button
+						title='search'
+						onPress={() => { this.setState({ modalVisible: false }); this.requery() }}
+					/>
 
-			</Modal>			
+				</Modal>
 
-				
-			{/*	<ListItem>
+
+				{/*	<ListItem>
 					<TextInput
 						label='Search'
 						onChangeText={this.setSearchText.bind(this)}
@@ -237,9 +235,9 @@ export default class IssueList extends Component {
 				<ListItem>
 					<Button
 						title='filter'
-						onPress={()=> this.setState({modalVisible: true, searchtext: '', daysFilter: null})}
-						>
-					</Button>	
+						onPress={() => this.setState({ modalVisible: true, searchtext: '', daysFilter: null })}
+					>
+					</Button>
 
 				</ListItem>
 

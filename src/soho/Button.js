@@ -7,6 +7,7 @@ import {
 	Text
 } from 'react-native';
 
+import Icon from './Icon';
 import Touchable from './Touchable';
 
 import {
@@ -27,7 +28,7 @@ export default class Button extends Component {
 			style.backgroundColor = getColor(this.props.hue + '-6', 'azure-6');
 		} else if (this.props.secondary) {
 			style.backgroundColor = getColor('graphite-3');
-		} else if (this.props.icon) {
+		} else if (this.props.icon && !this.props.title) {
 			style.height = 24;
 			style.width = 48;
 		}
@@ -46,7 +47,7 @@ export default class Button extends Component {
 			style.color = getColor('white-0');
 		} else if (this.props.secondary) {
 			style.color = getColor(this.props.hue + '-7', 'graphite-7');
-		} else if (this.props.icon) {
+		} else if (this.props.icon && !this.props.title) {
 			style.fontSize = 24;
 			style.fontWeight = 'normal';
 			style.color = getColor('white-0');
@@ -64,10 +65,13 @@ export default class Button extends Component {
 					disabled={this.props.disabled}
 					style={this.getTouchableStyle()}
 					onPress={this.props.onPress}
-					borderless={this.props.icon}
+					borderless={this.props.icon && !this.props.title}
 				>
 					<Text style={this.getTextStyle()}>
-						{(this.props.title || 'Button').toUpperCase()}
+						{this.props.icon &&
+							<Icon name={this.props.icon} />
+						}
+						{(this.props.title || '').toUpperCase()}
 					</Text>
 					{this.props.children}
 				</Touchable>
