@@ -57,7 +57,7 @@ export default class IssueDetails extends Component {
 			attachments: null,
 		});
 		var data = await AppX.query('$MessageT4', 'issue.rootId = ' + this.state.issue.uid + ' ORDER BY createTimestamp DESC');
-		var attachments = AppX.fetchAttach('$IssueT3',this.state.issue.uid);
+		var attachments = await AppX.fetchAttachList('$IssueT3',this.state.issue.uid);
 		if (data && attachments) {
 			this.setState({
 				messages: data.result,
@@ -72,6 +72,14 @@ export default class IssueDetails extends Component {
 		console.log(attachments);
 	}
 
+	async showAttachment( item ){
+		
+		console.log(item);
+		response = await AppX.fetchAttachment(item.attachmentUid);
+		console.log(response);
+
+	}
+
 	renderItem({ item }) {
 		return (
 			<ListItem>
@@ -81,6 +89,17 @@ export default class IssueDetails extends Component {
 				/>
 			</ListItem>
 		);
+	}
+	renderAttach({ item }){
+
+		return (
+			<ListItem onPress={()=>this.showAttachment(item)} >
+				<ComplexText
+					main={item.name}
+					secondary={item.description}
+				/>
+			</ListItem>		
+			);
 	}
 
 	render() {
@@ -142,15 +161,8 @@ export default class IssueDetails extends Component {
 				<Card title='Attachments'>
 				<FlatList
 					data={this.state.attachments}
-					keyExtractor={item => item.uid}
-					renderItem={({ item }) => (
-						<ListItem>
-							<ComplexText
-								main={item.name}
-								secondary={item.createUserId}
-							/>
-						</ListItem>
-					)}
+					keyExtractor={item => item.attachmentUid}
+					renderItem={attachment => this.renderAttach(attachment)}
 				/>
 				</Card>
 
