@@ -42,6 +42,7 @@ export default class IssueDetails extends Component {
 		this.state = {
 			issue: this.props.navigation.state.params.issue,
 			loading: true,
+			attachments: null,
 		};
 	}
 
@@ -52,17 +53,23 @@ export default class IssueDetails extends Component {
 	async reload() {
 		this.setState({
 			messages: null,
-			loading: true
+			loading: true,
+			attachments: null,
 		});
 		var data = await AppX.query('$MessageT4', 'issue.rootId = ' + this.state.issue.uid + ' ORDER BY createTimestamp DESC');
-		if (data) {
+		var attachments = AppX.fetchAttach('$IssueT3',this.state.issue.uid);
+		if (data && attachments) {
 			this.setState({
 				messages: data.result,
-				loading: false
+				loading: false,
+				attachments: attachments.result
 			});
-		} else {
+		} else if(!data) {
 			alert('We weren\'t able to load any messages. Please try again later!');
+		} else{
+			alert('We weren\'t able to load any attachments. Please try again later!');
 		}
+		console.log(attachments);
 	}
 
 	renderItem({ item }) {
@@ -130,6 +137,21 @@ export default class IssueDetails extends Component {
 						title='Edit'
 						onPress={() => this.props.navigation.navigate('CreateIssue', { issue: this.state.issue, page: this })}
 					/>
+				</Card>
+
+				<Card title='Attachments'>
+				<FlatList
+					data={this.state.attachments}
+					keyExtractor={item => item.uid}
+					renderItem={({ item }) => (
+						<ListItem>
+							<ComplexText
+								main={item.name}
+								secondary={item.createUserId}
+							/>
+						</ListItem>
+					)}
+				/>
 				</Card>
 
 				<Card title="Messages">
