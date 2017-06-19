@@ -61,6 +61,7 @@ export async function fetchAttachList(type, uid) {
 	}
 }
 
+
 export async function fetchAttachment(attachUid){
 	try {
 		var response = await new Rest()
@@ -76,6 +77,7 @@ export async function fetchAttachment(attachUid){
 	} catch (error) {
 		console.log(error);
 	}	
+
 }
 
 export async function query(type, oql) {

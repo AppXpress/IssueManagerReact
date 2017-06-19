@@ -31,11 +31,11 @@ export default class Icon extends Component {
 
     getChar(name) {
         if (this.props.name) {
-            var items = config.glyphs.filter(item => {
+            var char = config.glyphs.find(item => {
                 return item.css == name;
             });
-            if (items.length == 1) {
-                return String.fromCharCode(items[0].code);
+            if (char) {
+                return String.fromCharCode(char.code);
             }
         }
         return '';
@@ -52,6 +52,8 @@ export default class Icon extends Component {
 
 const styles = StyleSheet.create({
     text: {
+        fontSize: 18,
+        fontWeight: 'normal',
         fontFamily: 'soho'
     }
 });

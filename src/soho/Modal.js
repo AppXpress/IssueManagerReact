@@ -67,11 +67,23 @@ export default class Modal extends Component {
 						<ScrollView style={this.getScrollStyle()}>
 							{this.props.children}
 						</ScrollView>
-						<Button
-							title='Cancel'
-							hue={this.props.hue || 'ruby'}
-							onPress={() => getHandler(this, 'onClose')()}
-						/>
+						<View style={styles.footer}>
+							<View style={styles.footerItem}>
+								<Button
+									title='Cancel'
+									onPress={() => getHandler(this, 'onClose')()}
+								/>
+							</View>
+							{this.props.onSubmit &&
+								<View style={styles.footerItem}>
+									<Button
+										title='Submit'
+										hue={this.props.hue || 'azure'}
+										onPress={() => getHandler(this, 'onSubmit')()}
+									/>
+								</View>
+							}
+						</View>
 					</Card>
 				</View>
 			</ModalBase>
@@ -84,5 +96,14 @@ const styles = StyleSheet.create({
 		backgroundColor: 'rgba(0, 0, 0, 0.32)',
 		justifyContent: 'center',
 		flex: 1
+	},
+	footer: {
+		borderTopWidth: 1,
+		borderColor: getColor('graphite-3'),
+		flexDirection: 'row'
+	},
+	footerItem: {
+		flex: 1,
+		flexDirection: 'column'
 	}
 });

@@ -33,6 +33,14 @@ export default class IssueDetails extends Component {
 	static navigationOptions = Navigataion({
 		title: (context) => {
 			return context.navigation.state.params.issue.subject
+		},
+		right: ({ navigation }) => {
+			return (
+				<Button
+					icon='edit'
+					onPress={() => navigation.state.params.page.edit.call(navigation.state.params.page)}
+				/>
+			);
 		}
 	});
 
@@ -48,6 +56,9 @@ export default class IssueDetails extends Component {
 
 	async componentDidMount() {
 		this.reload();
+		this.props.navigation.setParams({
+			page: this
+		});
 	}
 
 	async reload() {
@@ -57,26 +68,34 @@ export default class IssueDetails extends Component {
 			attachments: null,
 		});
 		var data = await AppX.query('$MessageT4', 'issue.rootId = ' + this.state.issue.uid + ' ORDER BY createTimestamp DESC');
+
 		var attachments = await AppX.fetchAttachList('$IssueT3',this.state.issue.uid);
+
 		if (data && attachments) {
 			this.setState({
 				messages: data.result,
 				loading: false,
 				attachments: attachments.result
 			});
-		} else if(!data) {
+		} else if (!data) {
 			alert('We weren\'t able to load any messages. Please try again later!');
-		} else{
+		} else {
 			alert('We weren\'t able to load any attachments. Please try again later!');
 		}
 		console.log(attachments);
 	}
+
 
 	async showAttachment( item ){
 		
 		console.log(item);
 		response = await AppX.fetchAttachment(item.attachmentUid);
 		console.log(response);
+	}	
+
+
+	edit() {
+		this.props.navigation.navigate('CreateIssue', { issue: this.state.issue, page: this })
 
 	}
 
@@ -151,19 +170,14 @@ export default class IssueDetails extends Component {
 					/>
 				</Card>
 
-				<Card>
-					<Button
-						title='Edit'
-						onPress={() => this.props.navigation.navigate('CreateIssue', { issue: this.state.issue, page: this })}
-					/>
-				</Card>
-
 				<Card title='Attachments'>
+
 				<FlatList
 					data={this.state.attachments}
 					keyExtractor={item => item.attachmentUid}
 					renderItem={attachment => this.renderAttach(attachment)}
 				/>
+
 				</Card>
 
 				<Card title="Messages">

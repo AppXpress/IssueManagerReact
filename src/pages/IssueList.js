@@ -167,11 +167,12 @@ export default class IssueList extends Component {
 		return (
 			<Page>
 				<Modal
+					title='Filter Issues'
 					visible={this.state.modalVisible}
 					onClose={() => this.setState({ modalVisible: false })}
 					onRequestClose={() => this.setState({ modalVisible: false })}
+					onSubmit={() => { this.setState({ modalVisible: false }); this.requery() }}
 				>
-
 					<Picker
 						label='Filter By'
 						title='Select a field to filter by'
@@ -187,7 +188,6 @@ export default class IssueList extends Component {
 						onChangeText={(text) => this.setState({ searchtext: text })}
 						autoCapitalize='none'
 					/>
-
 					<Picker
 						label='Severity'
 						title='Select a severity to filter by'
@@ -217,30 +217,15 @@ export default class IssueList extends Component {
 						returnKeyType={'done'}
 
 					/>
-					<Button
-						title='search'
-						onPress={() => { this.setState({ modalVisible: false }); this.requery() }}
-					/>
-
 				</Modal>
 
-
-				{/*	<ListItem>
-					<TextInput
-						label='Search'
-						onChangeText={this.setSearchText.bind(this)}
-						autoCapitalize='none'
-					/> 
-				</ListItem> */}
-				<ListItem>
+				<ListItem fill>
 					<Button
-						title='filter'
+						icon='filter'
+						title='Filter'
 						onPress={() => this.setState({ modalVisible: true, searchtext: '', daysFilter: null })}
-					>
-					</Button>
-
+					/>
 				</ListItem>
-
 
 				{this.state.loading &&
 					<ActivityIndicator animating={true} size="large" />
