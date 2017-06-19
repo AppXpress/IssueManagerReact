@@ -42,7 +42,9 @@ export default class IssueDetails extends Component {
 		this.state = {
 			issue: this.props.navigation.state.params.issue,
 			loading: true,
+			attachments: null,
 		};
+		attachments = AppX.
 	}
 
 	async componentDidMount() {
@@ -130,6 +132,14 @@ export default class IssueDetails extends Component {
 						title='Edit'
 						onPress={() => this.props.navigation.navigate('CreateIssue', { issue: this.state.issue, page: this })}
 					/>
+				</Card>
+
+				<Card title='Attachments'>
+					<FlatList
+						data={this.state.attachments}
+						keyExtractor={item => item.uid}
+						renderItem={attachment => this.renderItem(attachment)}
+						/>
 				</Card>
 
 				<Card title="Messages">
