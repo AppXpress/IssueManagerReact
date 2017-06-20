@@ -62,8 +62,6 @@ const styles = StyleSheet.create({
 		margin: 10,
 		flexDirection: 'row'
 	},
-	switch: {
-	},
 	title: {
 		paddingTop: 3,
 		paddingLeft: 10,

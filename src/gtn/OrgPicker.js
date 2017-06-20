@@ -9,9 +9,12 @@ import {
 } from 'react-native';
 
 import {
-	Picker,
-	getHandler
+	Picker
 } from '../soho/All';
+
+import {
+	getHandler
+} from '../soho/Tools';
 
 import * as AppX from './AppX';
 

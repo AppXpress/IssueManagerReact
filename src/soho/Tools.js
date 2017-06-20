@@ -28,8 +28,7 @@ export function getColor(name, ...args) {
 		return getColor(...args);
 	}
 
-	// Return black if no default was provided
-	return colors.Black[0];
+	throw 'SoHo getColor: color could not be found';
 }
 
 const colors = {

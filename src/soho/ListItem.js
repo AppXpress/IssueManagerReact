@@ -55,6 +55,6 @@ const styles = StyleSheet.create({
         padding: 20,
         backgroundColor: getColor('white-0'),
         borderColor: getColor('graphite-3'),
-        borderBottomWidth: 1
+        borderTopWidth: 1
     }
 });
