@@ -23,7 +23,6 @@ export default class Modal extends Component {
 
 		this.props = props;
 		this.state = {
-			visible: false,
 			height: 0
 		}
 	}
@@ -42,22 +41,15 @@ export default class Modal extends Component {
 		});
 	}
 
-	componentWillReceiveProps(next) {
-		this.setState({ visible: next.visible });
-	}
-
 	getScrollStyle() {
 		return { maxHeight: this.state.height - 150 };
-	}
-
-	onClose() {
-		this.setState({ visible: false });
 	}
 
 	render() {
 		return (
 			<ModalBase
 				{...this.props}
+				visible={new Boolean(this.props.visible).valueOf()}
 				transparent={true}
 				animationType='fade'
 				onRequestClose={getHandler(this, 'onRequestClose')}

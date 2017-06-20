@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 
 import {
-	FlatList
+	FlatList,
+	View
 } from 'react-native';
 
 import {
@@ -15,6 +16,7 @@ import {
 	Field,
 	ListItem,
 	Loading,
+	Modal,
 	Navigataion,
 	Page,
 	TextInput
@@ -28,7 +30,8 @@ export default class IssueDetails extends Component {
 		},
 		buttons: [
 			{ icon: 'refresh', call: 'reload' },
-			{ icon: 'edit', call: 'edit' }
+			{ icon: 'edit', call: 'edit' },
+			{ icon: 'duplicate', call: 'pickAction' }
 		]
 	});
 
@@ -47,8 +50,33 @@ export default class IssueDetails extends Component {
 		});
 	}
 
+	pickAction() {
+		this.setState({ pickAction: true });
+	}
+
+	action(action) {
+		this.setState({
+			pickAction: false,
+			acting: true
+		});
+
+		AppX.action(this.state.issue, action).then(data => {
+			this.setState({ acting: false });
+
+			if (!data) {
+				alert('We were unable to perform the select action. Please try again later.');
+			}
+
+			this.reload();
+		});
+	}
+
 	edit() {
-		this.props.navigation.navigate('CreateIssue', { issue: this.state.issue, page: this });
+		if (this.state.editable) {
+			this.props.navigation.navigate('CreateIssue', { issue: this.state.issue, page: this });
+		} else {
+			alert('You do not have edit permissions for this issue, try again later.');
+		}
 	}
 
 	reload() {
@@ -56,13 +84,17 @@ export default class IssueDetails extends Component {
 			issue: null,
 			actions: null,
 			messages: null,
-			attachments: null
+			attachments: null,
+			editable: false
 		});
 
 		AppX.fetch('$IssueT3', this.state.id, true).then(data => {
 			this.setState({
 				issue: data.data,
-				actions: data.actionSet
+				actions: data.actionSet.action.filter(action => {
+					return action.startsWith('wf_');
+				}),
+				editable: data.actionSet.action.indexOf('modify') > -1
 			});
 		});
 
@@ -91,25 +123,172 @@ export default class IssueDetails extends Component {
 		console.log(response);
 	}
 
-	renderItem({ item }) {
+	renderDetails() {
 		return (
-			<ListItem>
-				<ComplexText
-					main={item.createdBy}
-					secondary={item.text}
-				/>
-			</ListItem>
+			<Card title='Details'>
+				<Field.Row>
+					<Field label='Subject' entry={this.state.issue.subject} />
+					<Field label='Severity' entry={getSeverity(this.state.issue.severity)} />
+				</Field.Row>
+				<Field.Row>
+					<Field label='Status' entry={this.state.issue.status.charAt(0).toUpperCase() + this.state.issue.status.substring(1)} />
+					<Field label='Issue type' entry={getType(this.state.issue.issueType)} />
+				</Field.Row>
+
+				<Field label='Assigned to'>
+					{this.state.issue.assignedTo &&
+						<ComplexText
+							nopadding
+							noborder
+							main={this.state.issue.assignedTo.name}
+							secondary={(this.state.issue.assignedTo.address || {}).addressLine1}
+							tertiary={(this.state.issue.assignedTo.address || {}).city}
+						/>
+					}
+
+					{!this.state.issue.assignedTo &&
+						<ComplexText main='Unassigned' />
+					}
+				</Field>
+
+				<Field label='Description' entry={this.state.issue.description} />
+			</Card>
 		);
 	}
-	renderAttach({ item }) {
 
+	renderTimestamps() {
 		return (
-			<ListItem onPress={() => this.showAttachment(item)} >
-				<ComplexText
-					main={item.name}
-					secondary={item.description}
+			<Card title='Timestamps'>
+				<Field.Row>
+					<Field label='Created by' entry={this.state.issue.createdBy} />
+					<Field label='Created on' entry={this.state.issue.createdOn} />
+				</Field.Row>
+				<Field.Row>
+					<Field label='Modified by' entry={this.state.issue.modifiedBy} />
+					<Field label='Modified on' entry={this.state.issue.modifiedOn} />
+				</Field.Row>
+			</Card>
+		);
+	}
+
+	renderParticipants() {
+		return (
+			<Card title='Participants'>
+				<FlatList
+					data={this.state.issue.participants}
+					keyExtractor={item => item.uid}
+					renderItem={({ item }) => (
+						<ListItem>
+							<ComplexText
+								main={item.party.name}
+								secondary={item.party.address.addressLine1}
+								tertiary={item.party.address.city}
+							/>
+						</ListItem>
+					)}
 				/>
-			</ListItem>
+			</Card>
+		);
+	}
+
+	renderAttachments() {
+		return (
+			<Card title='Attachments'>
+				<FlatList
+					data={this.state.attachments}
+					keyExtractor={item => item.attachmentUid}
+					renderItem={({ item }) => (
+						<ListItem onPress={() => this.showAttachment(item)} >
+							<ComplexText
+								main={item.name}
+								secondary={item.description}
+							/>
+						</ListItem>
+					)}
+				/>
+
+				{this.state.attachments && this.state.attachments.length == 0 &&
+					<ListItem>
+						<ComplexText main='No attachments' />
+					</ListItem>
+				}
+
+				{!this.state.attachments &&
+					<Loading />
+				}
+			</Card>
+		);
+	}
+
+	renderMessages() {
+		return (
+			<Card title="Messages">
+				{this.state.messages &&
+					<ListItem fill>
+						<Button
+							icon='mingle-share'
+							title='New Message'
+							onPress={() => this.props.navigation.navigate('CreateMessage', { issue: this.state.issue, page: this })}
+						/>
+					</ListItem>
+				}
+
+				<FlatList
+					data={this.state.messages}
+					keyExtractor={item => item.uid}
+					renderItem={({ item }) => (
+						<ListItem>
+							<ComplexText
+								main={item.createdBy}
+								secondary={item.text}
+							/>
+						</ListItem>
+					)}
+				/>
+
+				{this.state.messages && this.state.messages.length == 0 &&
+					<ListItem>
+						<ComplexText main='No messages' />
+					</ListItem>
+				}
+
+				{!this.state.messages &&
+					<Loading />
+				}
+			</Card>
+		);
+	}
+
+	renderActions() {
+		return (
+			<View>
+				<Modal
+					title='Actions'
+					visible={this.state.pickAction}
+					onClose={() => this.setState({ pickAction: false })}
+					onRequestClose={() => this.setState({ pickAction: false })}
+				>
+					<FlatList
+						data={this.state.actions}
+						keyExtractor={item => item}
+						renderItem={({ item }) => (
+							<ListItem onPress={() => this.action(item)}>
+								<ComplexText main={item.charAt(3).toUpperCase() + item.substring(4)} />
+							</ListItem>
+						)}
+					/>
+
+					{this.state.actions && this.state.actions.length == 0 &&
+						<ListItem>
+							<ComplexText main='No actions' />
+						</ListItem>
+					}
+				</Modal>
+
+				{this.state.acting &&
+					<Loading block />
+				}
+			</View>
 		);
 	}
 
@@ -124,136 +303,36 @@ export default class IssueDetails extends Component {
 
 		return (
 			<Page>
-				<Card title='Details'>
-					<Field.Row>
-						<Field label='Subject' entry={this.state.issue.subject} />
-						<Field label='Severity' entry={getSeverity(this.state.issue.severity)} />
-					</Field.Row>
-					<Field.Row>
-						<Field label='Status' entry={this.state.issue.status} />
-						<Field label='Issue type' entry={getType(this.state.issue.issueType)} />
-					</Field.Row>
-
-					<Field label='Assigned to'>
-						{this.state.issue.assignedTo &&
-							<ComplexText
-								nopadding
-								noborder
-								main={this.state.issue.assignedTo.name}
-								secondary={(this.state.issue.assignedTo.address || {}).addressLine1}
-								tertiary={(this.state.issue.assignedTo.address || {}).city}
-							/>
-						}
-
-						{!this.state.issue.assignedTo &&
-							<ComplexText main='Unassigned' />
-						}
-					</Field>
-
-					<Field label='Description' entry={this.state.issue.description} />
-				</Card>
-
-				<Card title='Timestamps'>
-					<Field.Row>
-						<Field label='Created by' entry={this.state.issue.createdBy} />
-						<Field label='Created on' entry={this.state.issue.createdOn} />
-					</Field.Row>
-					<Field.Row>
-						<Field label='Modified by' entry={this.state.issue.modifiedBy} />
-						<Field label='Modified on' entry={this.state.issue.modifiedOn} />
-					</Field.Row>
-				</Card>
-
-				<Card title='Participants'>
-					<FlatList
-						data={this.state.issue.participants}
-						keyExtractor={item => item.uid}
-						renderItem={({ item }) => (
-							<ListItem>
-								<ComplexText
-									main={item.party.name}
-									secondary={item.party.address.addressLine1}
-									tertiary={item.party.address.city}
-								/>
-							</ListItem>
-						)}
-					/>
-				</Card>
-
-				<Card title='Attachments'>
-					<FlatList
-						data={this.state.attachments}
-						keyExtractor={item => item.attachmentUid}
-						renderItem={attachment => this.renderAttach(attachment)}
-					/>
-
-					{this.state.attachments && this.state.attachments.length == 0 &&
-						<ListItem>
-							<ComplexText main='No attachments' />
-						</ListItem>
-					}
-
-					{!this.state.attachments &&
-						<Loading />
-					}
-				</Card>
-
-				<Card title="Messages">
-					{this.state.messages &&
-						<ListItem fill>
-							<Button
-								icon='mingle-share'
-								title='New Message'
-								onPress={() => this.props.navigation.navigate('CreateMessage', { issue: this.state.issue, page: this })}
-							/>
-						</ListItem>
-					}
-
-					<FlatList
-						data={this.state.messages}
-						keyExtractor={item => item.uid}
-						renderItem={message => this.renderItem(message)}
-					/>
-
-					{this.state.messages && this.state.messages.length == 0 &&
-						<ListItem>
-							<ComplexText main='No messages' />
-						</ListItem>
-					}
-
-					{!this.state.messages &&
-						<Loading />
-					}
-				</Card>
+				{this.renderDetails()}
+				{this.renderTimestamps()}
+				{this.renderParticipants()}
+				{this.renderAttachments()}
+				{this.renderMessages()}
+				{this.renderActions()}
 			</Page>
 		);
 	}
 }
 
-
-
 function getType(level) {
 	if (level == 3) {
 		return 'Quality Control';
 	}
-
 	if (level == 2) {
 		return 'Factory Supply';
 	}
-
 	if (level == 1) {
 		return 'Shipping';
 	}
 }
+
 function getSeverity(level) {
 	if (level == 3) {
 		return 'High';
 	}
-
 	if (level == 2) {
 		return 'Medium';
 	}
-
 	if (level == 1) {
 		return 'Low';
 	}

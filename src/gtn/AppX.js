@@ -201,3 +201,30 @@ export async function design(type) {
 		console.log(error);
 	}
 }
+
+/**
+ * Runs the given workflow action on a GT Nexus object
+ * 
+ * @param {*} data the object to run the action on
+ * @param {*} action the workflow action to perform
+ */
+export async function action(data, action) {
+	try {
+		var response = await new Rest()
+			.base()
+			.header('If-Match', data.__metadata.fingerprint)
+			.path(data.type)
+			.path(data.uid)
+			.path('actionSet')
+			.path(action)
+			.post(data);
+
+		if (!response.ok) {
+			throw response;
+		}
+
+		return await response.json();
+	} catch (error) {
+		console.log(error);
+	}
+}
