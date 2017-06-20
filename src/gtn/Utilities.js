@@ -50,6 +50,6 @@ export function base64Encode(toEncode) {
 
 	//to create final token add "Basic "
 
-	return "Basic " + encodedString;
+	return encodedString;
 
 }

@@ -54,40 +54,35 @@ export default class IssueDetails extends Component {
 		};
 	}
 
-	async componentDidMount() {
+	componentDidMount() {
 		this.reload();
 		this.props.navigation.setParams({
 			page: this
 		});
 	}
 
-	async reload() {
-		var issue = await AppX.fetch('$IssueT3', this.state.issue.uid);
-		for (var prop in issue) {
-			this.state.issue[prop] = issue[prop];
-		}
-
-		this.setState({
-			messages: null,
-			loading: true,
-			attachments: null,
+	reload() {
+		AppX.fetch('$IssueT3', this.state.issue.uid).then(data => {
+			for (var prop in data) {
+				this.state.issue[prop] = data[prop];
+			}
 		});
-		var data = await AppX.query('$MessageT4', 'issue.rootId = ' + this.state.issue.uid + ' ORDER BY createTimestamp DESC');
 
-		var attachments = await AppX.fetchAttachList('$IssueT3', this.state.issue.uid);
+		AppX.query('$MessageT4', 'issue.rootId = ' + this.state.issue.uid + ' ORDER BY createTimestamp DESC').then(data => {
+			if (data) {
+				this.setState({ message: data.result });
+			} else {
+				alert('We weren\'t able to load any messages. Please try again later!');
+			}
+		});
 
-		if (data && attachments) {
-			this.setState({
-				messages: data.result,
-				loading: false,
-				attachments: attachments.result
-			});
-		} else if (!data) {
-			alert('We weren\'t able to load any messages. Please try again later!');
-		} else {
-			alert('We weren\'t able to load any attachments. Please try again later!');
-		}
-		console.log(attachments);
+		AppX.fetchAttachList('$IssueT3', this.state.issue.uid).then(data => {
+			if (data) {
+				this.setState({ attachments: data.result });
+			} else {
+				alert('We weren\'t able to load any attachments. Please try again later!');
+			}
+		});
 	}
 
 
