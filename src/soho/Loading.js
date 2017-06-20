@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 
 import {
+    Platform,
     StyleSheet,
     Modal,
     View,
+    Text,
     ActivityIndicator
 } from 'react-native';
 
@@ -22,6 +24,32 @@ export default class Loading extends Component {
         this.props = props;
     }
 
+    indicator(modal) {
+        if (Platform.OS == 'android' && modal) {
+            return (
+                <ActivityIndicator
+                    color={getColor(this.props.hue + '-6', 'azure-6')}
+                    animating={true}
+                    size={60}
+                />
+            );
+        } else {
+            return (
+                <ActivityIndicator
+                    color={getColor(this.props.hue + '-6', 'azure-6')}
+                    animating={true}
+                    size="large"
+                />
+            );
+        }
+    }
+
+    textStyle() {
+        return [styles.text, {
+            color: getColor(this.props.hue + '-6', 'azure-6')
+        }];
+    }
+
     render() {
         if (this.props.block) {
             return (
@@ -31,14 +59,20 @@ export default class Loading extends Component {
                     onRequestClose={getHandler(this, 'onRequestClose')}
                 >
                     <View style={styles.view}>
-                        <ActivityIndicator animating={true} size="large" />
+                        {this.indicator(true)}
+                        <Text style={this.textStyle()}>
+                            Loading
+                        </Text>
                     </View>
                 </Modal>
             );
         } else {
             return (
                 <ListItem>
-                    <ActivityIndicator animating={true} size="large" />
+                    {this.indicator()}
+                    <Text style={this.textStyle()}>
+                        Loading
+                    </Text>
                 </ListItem>
             );
         }
@@ -47,8 +81,12 @@ export default class Loading extends Component {
 
 const styles = StyleSheet.create({
     view: {
-        backgroundColor: 'rgba(0, 0, 0, 0.32)',
+        backgroundColor: 'rgba(240, 240, 240, 0.75)',
         justifyContent: 'center',
         flex: 1
+    },
+    text: {
+        textAlign: 'center',
+        fontSize: 16
     }
 });

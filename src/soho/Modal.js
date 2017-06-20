@@ -93,7 +93,7 @@ export default class Modal extends Component {
 
 const styles = StyleSheet.create({
 	view: {
-		backgroundColor: 'rgba(0, 0, 0, 0.32)',
+		backgroundColor: 'rgba(0, 0, 0, 0.7)',
 		justifyContent: 'center',
 		flex: 1
 	},
