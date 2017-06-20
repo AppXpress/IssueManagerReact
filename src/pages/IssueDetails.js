@@ -202,6 +202,7 @@ export default class IssueDetails extends Component {
 					{this.state.messages &&
 						<ListItem fill>
 							<Button
+								icon='mingle-share'
 								title='New Message'
 								onPress={() => this.props.navigation.navigate('CreateMessage', { issue: this.state.issue, page: this })}
 							/>

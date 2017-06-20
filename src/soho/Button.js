@@ -69,14 +69,19 @@ export default class Button extends Component {
 					onPress={this.props.onPress}
 					borderless={this.props.icon && !this.props.title}
 				>
-					<Text style={this.getTextStyle()}>
-						<Text>
-							{this.props.icon &&
-								<Icon name={this.props.icon} />
-							}
+					{this.props.icon &&
+						<Text style={this.getTextStyle()}>
+							<Icon name={this.props.icon} />
 						</Text>
-						{(this.props.title || '').toUpperCase()}
-					</Text>
+					}
+					{this.props.icon && this.props.title &&
+						<View style={{ width: 10 }}></View>
+					}
+					{this.props.title &&
+						<Text style={this.getTextStyle()}>
+							{this.props.title.toUpperCase()}
+						</Text>
+					}
 					{this.props.children}
 				</Touchable>
 			</View>
@@ -92,7 +97,8 @@ const styles = StyleSheet.create({
 		height: 34,
 		borderRadius: 2,
 		alignItems: 'center',
-		justifyContent: 'center'
+		justifyContent: 'center',
+		flexDirection: 'row'
 	},
 	text: {
 		fontSize: 12,
