@@ -1,17 +1,7 @@
 import React, { Component } from 'react';
 
 import {
-	Alert,
-	AppRegistry,
-	StyleSheet,
-	Text,
-	View,
-	ScrollView,
-	StatusBar,
-	ActivityIndicator,
-	AsyncStorage,
-	FlatList,
-	TouchableOpacity,
+	FlatList
 } from 'react-native';
 
 import {
@@ -23,6 +13,7 @@ import {
 	Card,
 	ComplexText,
 	ListItem,
+	Loading,
 	Navigataion,
 	Page,
 	TextInput,
@@ -49,20 +40,10 @@ export default class IssueList extends Component {
 
 	static navigationOptions = Navigataion({
 		title: 'Issue List',
-		right: ({ navigation }) => {
-			return (
-				<View style={{ flexDirection: 'row' }}>
-					<Button
-						icon='refresh'
-						onPress={() => navigation.state.params.page.reload.call(navigation.state.params.page)}
-					/>
-					<Button
-						icon='add'
-						onPress={() => navigation.navigate('CreateIssue', { page: navigation.state.params.page })}
-					/>
-				</View>
-			);
-		}
+		buttons: [
+			{ icon: 'refresh', call: 'reload' },
+			{ icon: 'add', call: 'create' }
+		]
 	});
 
 	componentDidMount() {
@@ -70,6 +51,10 @@ export default class IssueList extends Component {
 		this.props.navigation.setParams({
 			page: this
 		});
+	}
+
+	create() {
+		this.props.navigation.navigate('CreateIssue', { page: this });
 	}
 
 	async reload() {
@@ -227,16 +212,16 @@ export default class IssueList extends Component {
 					/>
 				</ListItem>
 
-				{this.state.loading &&
-					<ActivityIndicator animating={true} size="large" />
-				}
-
 				<FlatList
 					data={this.state.issues}
 					keyExtractor={item => item.uid}
 					renderItem={this.renderItem.bind(this)}
 					refreshing={this.state.loading}
 				/>
+
+				{this.state.loading &&
+					<Loading />
+				}
 			</Page>
 		);
 	}

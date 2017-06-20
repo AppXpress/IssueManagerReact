@@ -1,25 +1,20 @@
 import React, { Component } from 'react';
 
 import {
-	Alert,
-	AppRegistry,
-	StyleSheet,
-	Text,
-	View,
-	ScrollView,
-	StatusBar,
-	ActivityIndicator,
-	AsyncStorage,
+	View
 } from 'react-native';
 
 import {
 	Button,
 	Card,
+	ListItem,
+	Modal,
 	Navigataion,
 	Page,
 	Switch,
 	TextInput,
-	Picker
+	Picker,
+	Loading
 } from '../soho/All';
 
 import {
@@ -132,12 +127,11 @@ export default class Login extends Component {
 						disabled={this.state.loading || !this.state.username || !this.state.password}
 						primary
 					/>
+					{this.state.loading &&
+						<Loading block />
+					}
 				</Card>
-				{this.state.loading &&
-					<ActivityIndicator animating={true} size="large" />
-				}
 			</Page>
 		);
 	}
 }
-

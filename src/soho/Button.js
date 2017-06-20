@@ -30,7 +30,9 @@ export default class Button extends Component {
 			style.backgroundColor = getColor('graphite-3');
 		} else if (this.props.icon && !this.props.title) {
 			style.height = 24;
-			style.width = 48;
+			style.width = 72;
+			style.marginLeft = -24;
+			style.marginRight = -18;
 		}
 
 		if (this.props.disabled) {

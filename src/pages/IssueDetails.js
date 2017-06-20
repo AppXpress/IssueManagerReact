@@ -1,16 +1,7 @@
 import React, { Component } from 'react';
 
 import {
-	Alert,
-	AppRegistry,
-	StyleSheet,
-	Text,
-	View,
-	ScrollView,
-	StatusBar,
-	ActivityIndicator,
-	AsyncStorage,
-	FlatList,
+	FlatList
 } from 'react-native';
 
 import {
@@ -23,6 +14,7 @@ import {
 	ComplexText,
 	Field,
 	ListItem,
+	Loading,
 	Navigataion,
 	Page,
 	TextInput
@@ -34,23 +26,17 @@ export default class IssueDetails extends Component {
 		title: (context) => {
 			return context.navigation.state.params.issue.subject
 		},
-		right: ({ navigation }) => {
-			return (
-				<Button
-					icon='edit'
-					onPress={() => navigation.state.params.page.edit.call(navigation.state.params.page)}
-				/>
-			);
-		}
+		buttons: [
+			{ icon: 'refresh', call: 'reload' },
+			{ icon: 'edit', call: 'edit' }
+		]
 	});
 
 	constructor(props) {
 		super(props);
 
 		this.state = {
-			issue: this.props.navigation.state.params.issue,
-			loading: true,
-			attachments: null,
+			id: this.props.navigation.state.params.issue.uid
 		};
 	}
 
@@ -61,24 +47,36 @@ export default class IssueDetails extends Component {
 		});
 	}
 
+	edit() {
+		this.props.navigation.navigate('CreateIssue', { issue: this.state.issue, page: this });
+	}
+
 	reload() {
-		AppX.fetch('$IssueT3', this.state.issue.uid).then(data => {
-			for (var prop in data) {
-				this.state.issue[prop] = data[prop];
-			}
+		this.setState({
+			issue: null,
+			actions: null,
+			messages: null,
+			attachments: null
 		});
 
-		AppX.query('$MessageT4', 'issue.rootId = ' + this.state.issue.uid + ' ORDER BY createTimestamp DESC').then(data => {
+		AppX.fetch('$IssueT3', this.state.id, true).then(data => {
+			this.setState({
+				issue: data.data,
+				actions: data.actionSet
+			});
+		});
+
+		AppX.query('$MessageT4', 'issue.rootId = ' + this.state.id + ' ORDER BY createTimestamp DESC').then(data => {
 			if (data) {
-				this.setState({ message: data.result });
+				this.setState({ messages: data.result || [] });
 			} else {
 				alert('We weren\'t able to load any messages. Please try again later!');
 			}
 		});
 
-		AppX.fetchAttachList('$IssueT3', this.state.issue.uid).then(data => {
+		AppX.fetchAttachList('$IssueT3', this.state.id).then(data => {
 			if (data) {
-				this.setState({ attachments: data.result });
+				this.setState({ attachments: data.result || [] });
 			} else {
 				alert('We weren\'t able to load any attachments. Please try again later!');
 			}
@@ -91,12 +89,6 @@ export default class IssueDetails extends Component {
 		console.log(item);
 		response = await AppX.fetchAttachment(item.attachmentUid);
 		console.log(response);
-	}
-
-
-	edit() {
-		this.props.navigation.navigate('CreateIssue', { issue: this.state.issue, page: this })
-
 	}
 
 	renderItem({ item }) {
@@ -122,16 +114,28 @@ export default class IssueDetails extends Component {
 	}
 
 	render() {
+		if (!this.state.issue) {
+			return (
+				<Page>
+					<Loading />
+				</Page>
+			);
+		}
+
 		return (
 			<Page>
-				<Card title='Information'>
-					<Field label='Description' entry={this.state.issue.description} />
-					<Field label='Status' entry={this.state.issue.status} />
-					<Field label='Issue type' entry={getType(this.state.issue.issueType)} />
-					<Field label='Severity' entry={getSeverity(this.state.issue.severity)} />
+				<Card title='Details'>
+					<Field.Row>
+						<Field label='Subject' entry={this.state.issue.subject} />
+						<Field label='Severity' entry={getSeverity(this.state.issue.severity)} />
+					</Field.Row>
+					<Field.Row>
+						<Field label='Status' entry={this.state.issue.status} />
+						<Field label='Issue type' entry={getType(this.state.issue.issueType)} />
+					</Field.Row>
 
-					{this.state.issue.assignedTo &&
-						<Field label='Assigned to'>
+					<Field label='Assigned to'>
+						{this.state.issue.assignedTo &&
 							<ComplexText
 								nopadding
 								noborder
@@ -139,19 +143,25 @@ export default class IssueDetails extends Component {
 								secondary={(this.state.issue.assignedTo.address || {}).addressLine1}
 								tertiary={(this.state.issue.assignedTo.address || {}).city}
 							/>
-						</Field>
-					}
+						}
 
-					{!this.state.issue.assignedTo &&
-						<Field label='Assigned to' entry='Unassigned' />
-					}
+						{!this.state.issue.assignedTo &&
+							<ComplexText main='Unassigned' />
+						}
+					</Field>
+
+					<Field label='Description' entry={this.state.issue.description} />
 				</Card>
 
 				<Card title='Timestamps'>
-					<Field label='Created by' entry={this.state.issue.createdBy} />
-					<Field label='Created on' entry={this.state.issue.createdOn} />
-					<Field label='Modified by' entry={this.state.issue.modifiedBy} />
-					<Field label='Modified on' entry={this.state.issue.modifiedOn} />
+					<Field.Row>
+						<Field label='Created by' entry={this.state.issue.createdBy} />
+						<Field label='Created on' entry={this.state.issue.createdOn} />
+					</Field.Row>
+					<Field.Row>
+						<Field label='Modified by' entry={this.state.issue.modifiedBy} />
+						<Field label='Modified on' entry={this.state.issue.modifiedOn} />
+					</Field.Row>
 				</Card>
 
 				<Card title='Participants'>
@@ -171,25 +181,31 @@ export default class IssueDetails extends Component {
 				</Card>
 
 				<Card title='Attachments'>
-
 					<FlatList
 						data={this.state.attachments}
 						keyExtractor={item => item.attachmentUid}
 						renderItem={attachment => this.renderAttach(attachment)}
 					/>
 
+					{this.state.attachments && this.state.attachments.length == 0 &&
+						<ListItem>
+							<ComplexText main='No attachments' />
+						</ListItem>
+					}
+
+					{!this.state.attachments &&
+						<Loading />
+					}
 				</Card>
 
 				<Card title="Messages">
-					<ListItem fill>
-						<Button
-							title='New Message'
-							onPress={() => this.props.navigation.navigate('CreateMessage', { issue: this.state.issue, page: this })}
-						/>
-					</ListItem>
-
-					{this.state.loading &&
-						<ActivityIndicator animating={true} size="large" />
+					{this.state.messages &&
+						<ListItem fill>
+							<Button
+								title='New Message'
+								onPress={() => this.props.navigation.navigate('CreateMessage', { issue: this.state.issue, page: this })}
+							/>
+						</ListItem>
 					}
 
 					<FlatList
@@ -198,10 +214,14 @@ export default class IssueDetails extends Component {
 						renderItem={message => this.renderItem(message)}
 					/>
 
-					{(!this.state.loading && (!this.state.messages || this.state.messages.length == 0)) &&
+					{this.state.messages && this.state.messages.length == 0 &&
 						<ListItem>
 							<ComplexText main='No messages' />
 						</ListItem>
+					}
+
+					{!this.state.messages &&
+						<Loading />
 					}
 				</Card>
 			</Page>

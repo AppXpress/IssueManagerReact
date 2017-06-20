@@ -1,3 +1,11 @@
+import React, { Component } from 'react';
+
+import {
+	View
+} from 'react-native';
+
+import Button from './Button';
+
 import {
 	getColor
 } from './Tools';
@@ -34,8 +42,21 @@ export default function Navigation(options) {
 				backgroundColor: getColor(color, hue + '-7', 'azure-7')
 			};
 
-			if (options.right) {
-				nav.headerRight = runOrReturn(options.right);
+			if (options.buttons && options.buttons.length > 0) {
+				var i = 0;
+				var navigation = args[0].navigation
+
+				nav.headerRight = (
+					<View style={{ flexDirection: 'row' }}>
+						{options.buttons.map(button =>
+							<Button
+								key={i++}
+								icon={button.icon}
+								onPress={() => navigation.state.params.page[button.call].call(navigation.state.params.page)}
+							/>
+						)}
+					</View>
+				);
 			}
 		}
 		return nav;

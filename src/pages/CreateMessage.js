@@ -2,18 +2,7 @@ import React, { Component } from 'react';
 
 import { NavigationActions } from 'react-navigation';
 
-import {
-	Alert,
-	AppRegistry,
-	StyleSheet,
-	Text,
-	View,
-	ScrollView,
-	StatusBar,
-	ActivityIndicator,
-	AsyncStorage,
-	ListView,
-} from 'react-native';
+import { } from 'react-native';
 
 import {
 	AppX
@@ -23,7 +12,7 @@ import {
 	Button,
 	Card,
 	Field,
-	List,
+	Loading,
 	Navigataion,
 	Page,
 	TextInput
@@ -39,12 +28,13 @@ export default class CreateMessage extends Component {
 		super(props);
 
 		this.state = {
-			message: '',
-			root: this.props.navigation.state.params.issue,
+			id: this.props.navigation.state.params.issue.uid,
 		};
 	}
 
-	postMessage(event) {
+	async postMessage(event) {
+		this.setState({ loading: true });
+
 		let today = new Date();
 
 		var body = {
@@ -54,7 +44,7 @@ export default class CreateMessage extends Component {
 			"issue": {
 				"reference": "Issue",
 				"rootType": "$IssueT3",
-				"rootId": this.state.root.uid,
+				"rootId": this.state.id,
 				"externalType": "$IssueT3",
 			},
 			"licensee": {
@@ -62,11 +52,16 @@ export default class CreateMessage extends Component {
 			}
 		};
 
-		AppX.create(body);
+		var result = await AppX.create(body);
 
-		this.props.navigation.goBack();
-		var page = this.props.navigation.state.params.page;
-		page.reload.call(page);
+		if (result) {
+			this.props.navigation.goBack();
+			var page = this.props.navigation.state.params.page;
+			page.reload.call(page);
+		} else {
+			this.setState({ loading: false });
+			alert('We were\'nt able to create your message. Please try again later.');
+		}
 	}
 
 	render() {
@@ -81,10 +76,14 @@ export default class CreateMessage extends Component {
 					/>
 
 					<Button
-						title='Save'
-						onPress={this.postMessage.bind(this)}
 						primary
+						title='Submit'
+						onPress={this.postMessage.bind(this)}
 					/>
+
+					{this.state.loading &&
+						<Loading block />
+					}
 				</Card>
 			</Page>
 		);

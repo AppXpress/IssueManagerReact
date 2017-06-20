@@ -16,6 +16,20 @@ import {
 } from './Tools';
 
 export default class Field extends Component {
+
+	static Row = (props) => {
+		var i = 0;
+		return (
+			<View style={styles.row}>
+				{props.children && props.children.map(child =>
+					<View style={styles.column} key={i++}>
+						{child}
+					</View>
+				)}
+			</View>
+		);
+	}
+
 	constructor(props) {
 		super(props);
 
@@ -42,6 +56,17 @@ export default class Field extends Component {
 };
 
 const styles = StyleSheet.create({
+	header: {
+		fontSize: 16,
+		color: getColor('graphite-10')
+	},
+	row: {
+		flexDirection: 'row'
+	},
+	column: {
+		flex: 1,
+		flexDirection: 'column'
+	},
 	view: {
 		padding: 10
 	},

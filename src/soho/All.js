@@ -5,6 +5,7 @@ module.exports = {
 	get Field() { return require('./Field').default },
 	get Icon() { return require('./Icon').default },
 	get ListItem() { return require('./ListItem').default },
+	get Loading() { return require('./Loading').default },
 	get Modal() { return require('./Modal').default },
 	get Navigataion() { return require('./Navigation').default },
 	get Page() { return require('./Page').default },

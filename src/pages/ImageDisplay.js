@@ -9,10 +9,9 @@ import {
 	View,
 	ScrollView,
 	StatusBar,
-	ActivityIndicator,
 	AsyncStorage,
 	ListView,
-  Image
+	Image
 } from 'react-native';
 
 import {
@@ -32,23 +31,23 @@ import {
 
 export default class ImageDisplay extends Component {
 
-  constructor(props) {
+	constructor(props) {
 		super(props);
-    this.state = {
-		    root: this.props.image,
-      }
-    console.log(this.state.root);
+		this.state = {
+			root: this.props.image,
+		}
+		console.log(this.state.root);
 
 	}
 
-  render() {
-    return (
-      <View>
-        <Image
-          style={{width: 50, height: 50}}
-          source={this.state.root}
-        />
-      </View>
-    );
-  }
+	render() {
+		return (
+			<View>
+				<Image
+					style={{ width: 50, height: 50 }}
+					source={this.state.root}
+				/>
+			</View>
+		);
+	}
 }

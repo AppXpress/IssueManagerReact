@@ -1,21 +1,11 @@
 import React, { Component } from 'react';
 
-import {
-	Alert,
-	AppRegistry,
-	StyleSheet,
-	Text,
-	View,
-	ScrollView,
-	StatusBar,
-	ActivityIndicator,
-	AsyncStorage,
-	ListView
-} from 'react-native';
+import { } from 'react-native';
 
 import {
 	Button,
 	Card,
+	Loading,
 	Navigataion,
 	Page,
 	Picker,
@@ -62,7 +52,7 @@ export default class CreateIssue extends Component {
 	}
 
 	async persist() {
-		this.setState({loading: true});
+		this.setState({ loading: true });
 
 		var issue = {};
 		if (this.state.issue) {
@@ -101,7 +91,7 @@ export default class CreateIssue extends Component {
 	}
 
 	async create() {
-		this.setState({loading: true});
+		this.setState({ loading: true });
 		var data = {
 			type: '$IssueT3',
 			subject: this.state.subject,
@@ -167,17 +157,15 @@ export default class CreateIssue extends Component {
 						onValueChange={(item, index) => this.setState({ assignedTo: item })}
 					/>
 
-					{this.state.loading &&
-						<ActivityIndicator animating={true} size="large" />
-					}
-
-					{!this.state.loading &&
 					<Button
 						primary
 						hue='ruby'
 						title={this.state.issue ? 'Update' : 'Create'}
 						onPress={() => this.persist()}
 					/>
+
+					{this.state.loading &&
+						<Loading block />
 					}
 				</Card>
 			</Page>
