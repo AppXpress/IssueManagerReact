@@ -1,16 +1,4 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
-
-import {
-	AppRegistry
-} from 'react-native';
-
-import {
-	StackNavigator,
-} from 'react-navigation';
+import { Navigation } from 'react-native-navigation';
 
 import Login from './src/pages/Login';
 import IssueList from './src/pages/IssueList';
@@ -18,12 +6,12 @@ import IssueDetails from './src/pages/IssueDetails';
 import CreateIssue from './src/pages/CreateIssue';
 import CreateMessage from './src/pages/CreateMessage';
 
-const IssueManager = StackNavigator({
-	Main: { screen: Login },
-	IssueList: { screen: IssueList },
-	IssueDetails: { screen: IssueDetails },
-	CreateIssue: { screen: CreateIssue },
-	CreateMessage: { screen: CreateMessage },
-});
+Navigation.registerComponent('Login', () => Login);
+Navigation.registerComponent('IssueList', () => IssueList);
+Navigation.registerComponent('IssueDetails', () => IssueDetails);
+Navigation.registerComponent('CreateIssue', () => CreateIssue);
+Navigation.registerComponent('CreateMessage', () => CreateMessage);
 
-AppRegistry.registerComponent('IssueManager', () => IssueManager);
+Navigation.startSingleScreenApp({
+	screen: { screen: 'Login' }
+});
