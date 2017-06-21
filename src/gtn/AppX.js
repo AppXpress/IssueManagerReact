@@ -231,7 +231,13 @@ export async function action(data, action) {
 			throw response;
 		}
 
-		return { data: await response.json() };
+		var data = await response.json();
+
+		if (data.transition.message) {
+			throw { message: data.transition.message[0].text };
+		}
+
+		return { data: data };
 	} catch (error) {
 		console.warn(error);
 		return { error: error };

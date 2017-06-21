@@ -59,11 +59,15 @@ export default class IssueDetails extends Component {
 			acting: true
 		});
 
-		AppX.action(this.state.issue, action).then(({ data }) => {
+		AppX.action(this.state.issue, action).then(appx => {
 			this.setState({ acting: false });
 
-			if (!data) {
-				alert('We were unable to perform the select action. Please try again later.');
+			if (!appx.data) {
+				if (appx.error.message) {
+					alert(appx.error.message);
+				} else {
+					alert('We were unable to perform the select action. Please try again later.');
+				}
 			}
 
 			this.reload();
