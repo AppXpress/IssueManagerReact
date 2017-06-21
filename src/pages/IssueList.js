@@ -66,11 +66,11 @@ export default class IssueList extends Component {
 			loading: true
 		});
 
-		var data = await AppX.query('$IssueT3', 'ORDER BY modifyTimestamp DESC');
-		if (data) {
+		var appx = await AppX.query('$IssueT3', 'ORDER BY modifyTimestamp DESC');
+		if (appx.data) {
 			this.setState({
-				fullIssues: data.result,
-				issues: data.result,
+				fullIssues: appx.data.result,
+				issues: appx.data.result,
 				loading: false
 			});
 		} else {
@@ -106,11 +106,11 @@ export default class IssueList extends Component {
 
 		oqlStmnt += " ORDER BY modifyTimestamp DESC";
 
-		var data = await AppX.query('$IssueT3', oqlStmnt);
-		if (data) {
+		var appx = await AppX.query('$IssueT3', oqlStmnt);
+		if (appx.data) {
 			this.setState({
-				fullIssues: data.result,
-				issues: data.result,
+				fullIssues: appx.data.result,
+				issues: appx.data.result,
 				loading: false
 			});
 		} else {

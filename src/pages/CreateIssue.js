@@ -74,14 +74,14 @@ export default class CreateIssue extends Component {
 			delete issue.assignedTo;
 		}
 
-		var response;
+		var appx;
 		if (this.state.issue) {
-			response = await AppX.persist(issue);
+			appx = await AppX.persist(issue);
 		} else {
-			response = await AppX.create(issue);
+			appx = await AppX.create(issue);
 		}
 
-		if (response) {
+		if (appx.data) {
 			this.props.navigation.goBack();
 			var params = this.props.navigation.state.params;
 			params.page.reload.call(params.page);
@@ -109,11 +109,15 @@ export default class CreateIssue extends Component {
 			};
 		}
 
-		await AppX.create(data);
+		var appx = await AppX.create(data);
 
-		this.props.navigation.goBack();
-		var params = this.props.navigation.state.params;
-		params.page.reload.call(params.page);
+		if (appx.data) {
+			this.props.navigation.goBack();
+			var params = this.props.navigation.state.params;
+			params.page.reload.call(params.page);
+		} else {
+			alert('Something went wrong!');
+		}
 	}
 
 	render() {
