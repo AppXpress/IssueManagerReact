@@ -101,11 +101,11 @@ export default class IssueList extends Component {
 			oqlStmnt += " AND createdOn In @(Last " + this.state.daysFilter + " Days)"
 		}
 		if (this.state.statusFilter) {
-			oqlStmnt += "AND status = \'" + this.state.statusFilter + "\'";
+			oqlStmnt += " AND status = \'" + this.state.statusFilter + "\'";
 		}
 
 		oqlStmnt += " ORDER BY modifyTimestamp DESC";
-
+		console.log(oqlStmnt);
 		var data = await AppX.query('$IssueT3', oqlStmnt);
 		if (data) {
 			this.setState({

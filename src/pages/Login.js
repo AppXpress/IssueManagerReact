@@ -7,8 +7,6 @@ import {
 import {
 	Button,
 	Card,
-	ListItem,
-	Modal,
 	Navigataion,
 	Page,
 	Switch,
