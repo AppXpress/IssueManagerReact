@@ -17,32 +17,20 @@ import {
 	ListItem,
 	Loading,
 	Modal,
-	Navigataion,
+	NavStyle,
 	Page,
 	TextInput
 } from '../soho/All';
 
 export default class IssueDetails extends Component {
 
-	static navigationOptions = Navigataion({
-		title: function () {
-			return this.state.issue ? this.state.issue.subject : ''
-		},
-		buttons: function () {
-			return [
-				<Button icon='refresh' onPress={() => this.reload()} key={1} />,
-				this.state && this.state.editable ? <Button icon='edit' onPress={() => this.edit()} key={2} /> : null,
-				<Button icon='duplicate' onPress={() => this.pickAction()} key={3} />
-			];
-		}
-	});
-
 	constructor(props) {
 		super(props);
 
-		this.state = {
-			id: this.props.navigation.state.params.id
-		};
+		this.state = {};
+
+		props.navigator.setTitle({ title: 'Details' });
+		props.navigator.setStyle(new NavStyle());
 	}
 
 	componentDidMount() {
@@ -87,7 +75,7 @@ export default class IssueDetails extends Component {
 			editable: false
 		});
 
-		AppX.fetch('$IssueT3', this.state.id, true).then(({ data }) => {
+		AppX.fetch('$IssueT3', this.props.id, true).then(({ data }) => {
 			this.setState({
 				issue: data.data,
 				actions: data.actionSet.action.filter(action => {
@@ -95,13 +83,9 @@ export default class IssueDetails extends Component {
 				}),
 				editable: data.actionSet.action.indexOf('modify') > -1
 			});
-
-			this.props.navigation.setParams({
-				page: this
-			});
 		});
 
-		AppX.query('$MessageT4', 'issue.rootId = ' + this.state.id + ' ORDER BY createTimestamp DESC').then(({ data }) => {
+		AppX.query('$MessageT4', 'issue.rootId = ' + this.props.id + ' ORDER BY createTimestamp DESC').then(({ data }) => {
 			if (data) {
 				this.setState({ messages: data.result || [] });
 			} else {
@@ -109,7 +93,7 @@ export default class IssueDetails extends Component {
 			}
 		});
 
-		AppX.fetchAttachList('$IssueT3', this.state.id).then(({ data }) => {
+		AppX.fetchAttachList('$IssueT3', this.props.id).then(({ data }) => {
 			if (data) {
 				this.setState({ attachments: data.result || [] });
 			} else {
@@ -231,7 +215,7 @@ export default class IssueDetails extends Component {
 						<Button
 							icon='mingle-share'
 							title='New Message'
-							onPress={() => this.props.navigation.navigate('CreateMessage', { issue: this.state.issue, page: this })}
+							onPress={() => this.props.navigator.push({ screen: 'CreateMessage', passProps: { issue: this.id } })}
 						/>
 					</ListItem>
 				}

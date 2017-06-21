@@ -23,11 +23,6 @@ import {
 
 export default class CreateIssue extends Component {
 
-	static navigationOptions = Navigataion({
-		title: 'New Issue',
-		hue: 'ruby'
-	});
-
 	constructor(props) {
 		super(props);
 
@@ -38,6 +33,9 @@ export default class CreateIssue extends Component {
 			severity: '0',
 			loading: false,
 		};
+
+		props.navigator.setTitle({ title: 'Issue Editor' });
+		props.navigator.setStyle(new NavStyle({ hue: 'ruby' }));
 
 		this.state.issue = this.props.navigation.state.params.issue;
 		if (this.state.issue) {

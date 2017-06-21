@@ -7,7 +7,7 @@ import {
 import {
 	Button,
 	Card,
-	Navigataion,
+	NavStyle,
 	Page,
 	Switch,
 	TextInput,
@@ -22,10 +22,6 @@ import {
 
 export default class Login extends Component {
 
-	static navigationOptions = Navigataion({
-		title: 'Welcome'
-	});
-
 	constructor(props) {
 		super(props);
 
@@ -35,6 +31,9 @@ export default class Login extends Component {
 			eid: '',
 			loading: false
 		};
+
+		props.navigator.setTitle({ title: 'Welcome' });
+		props.navigator.setStyle(new NavStyle());
 	}
 
 	async componentDidMount() {
@@ -76,18 +75,18 @@ export default class Login extends Component {
 				this.setCredentials()
 			}
 
-			this.props.navigation.navigate('IssueList');
+			this.props.navigator.resetTo({
+				screen: 'IssueList'
+			});
 		} else {
-			Alert.alert('Login failed. Please try again.');
+			alert('Login failed. Please try again.');
 		}
 	}
 
 	render() {
 		return (
 			<Page>
-
 				<Card>
-
 					<TextInput
 						label='Username'
 						value={this.state.username}

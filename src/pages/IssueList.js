@@ -14,7 +14,7 @@ import {
 	ComplexText,
 	ListItem,
 	Loading,
-	Navigataion,
+	NavStyle,
 	Page,
 	TextInput,
 	Modal,
@@ -37,27 +37,19 @@ export default class IssueList extends Component {
 			daysFilter: null,
 			statusFilter: null,
 		};
-	}
 
-	static navigationOptions = Navigataion({
-		title: 'Issue List',
-		buttons: function () {
-			return [
-				<Button icon='refresh' onPress={() => this.reload()} key={1} />,
-				<Button icon='add' onPress={() => this.create()} key={2} />
-			];
-		}
-	});
+		props.navigator.setTitle({ title: 'Issue List' });
+		props.navigator.setStyle(new NavStyle());
+	}
 
 	componentDidMount() {
 		this.reload();
-		this.props.navigation.setParams({
-			page: this
-		});
 	}
 
 	create() {
-		this.props.navigation.navigate('CreateIssue', { page: this });
+		this.props.navigator.push({
+			screen: 'CreateIssue'
+		});
 	}
 
 	async reload() {
@@ -143,7 +135,7 @@ export default class IssueList extends Component {
 
 	renderItem({ item }) {
 		return (
-			<ListItem onPress={() => this.props.navigation.navigate('IssueDetails', { id: item.uid })}>
+			<ListItem onPress={() => this.props.navigator.push({ screen: 'IssueDetails', passProps: { id: item.uid } })}>
 				<ComplexText
 					main={item.subject}
 					secondary={item.createdBy}

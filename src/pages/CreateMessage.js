@@ -13,23 +13,20 @@ import {
 	Card,
 	Field,
 	Loading,
-	Navigataion,
+	NavStyle,
 	Page,
 	TextInput
 } from '../soho/All';
 
 export default class CreateMessage extends Component {
 
-	static navigationOptions = Navigataion({
-		title: 'New Message',
-	});
-
 	constructor(props) {
 		super(props);
 
-		this.state = {
-			id: this.props.navigation.state.params.issue.uid,
-		};
+		this.state = {};
+
+		props.navigator.setTitle({ title: 'Message Editor' });
+		props.navigator.setStyle(new NavStyle({ hue: 'amethyst' }));
 	}
 
 	async postMessage(event) {
@@ -44,7 +41,7 @@ export default class CreateMessage extends Component {
 			"issue": {
 				"reference": "Issue",
 				"rootType": "$IssueT3",
-				"rootId": this.state.id,
+				"rootId": this.props.id,
 				"externalType": "$IssueT3",
 			},
 			"licensee": {
