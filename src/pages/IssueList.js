@@ -35,6 +35,7 @@ export default class IssueList extends Component {
 			severityFilter: null,
 			typeFilter: null,
 			daysFilter: null,
+			statusFilter: null,
 		};
 	}
 
@@ -96,6 +97,9 @@ export default class IssueList extends Component {
 		}
 		if (this.state.daysFilter) {
 			oqlStmnt += " AND createdOn In @(Last " + this.state.daysFilter + " Days)"
+		}
+		if(this.state.statusFilter) {
+			oqlStmnt += "AND status = \'" +this.state.statusFilter +"\'";
 		}
 
 		oqlStmnt += " ORDER BY modifyTimestamp DESC";
@@ -195,6 +199,19 @@ export default class IssueList extends Component {
 						<Picker.Item label="Quality Control" value='3' />
 						<Picker.Item label="None" value={null} />
 					</Picker>
+					<Picker
+						label='Status'
+						title='Select a status type to filter by'
+						selectedValue={this.state.statusFilter}
+						onValueChange={(item, index) => this.setState({ statusFilter: item })}
+					>
+						<Picker.Item label="Opened" value='opened' />
+						<Picker.Item label="Assigned" value='assigned' />
+						<Picker.Item label="Resolved" value='resolved' />
+						<Picker.Item label="Closed" value='closed' />
+						<Picker.Item label="None" value={null} />
+					</Picker>
+
 					<TextInput
 						label="Created in last X days"
 						onChangeText={(text) => this.setState({ daysFilter: text })}
