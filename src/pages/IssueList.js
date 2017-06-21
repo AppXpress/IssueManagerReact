@@ -100,8 +100,8 @@ export default class IssueList extends Component {
 		if (this.state.daysFilter) {
 			oqlStmnt += " AND createdOn In @(Last " + this.state.daysFilter + " Days)"
 		}
-		if(this.state.statusFilter) {
-			oqlStmnt += "AND status = \'" +this.state.statusFilter +"\'";
+		if (this.state.statusFilter) {
+			oqlStmnt += "AND status = \'" + this.state.statusFilter + "\'";
 		}
 
 		oqlStmnt += " ORDER BY modifyTimestamp DESC";
@@ -116,9 +116,6 @@ export default class IssueList extends Component {
 		} else {
 			alert('We weren\'t able to load any issues. Please try again later!');
 		}
-
-
-
 	}
 
 	setSearchText(event) {
@@ -144,7 +141,7 @@ export default class IssueList extends Component {
 
 	renderItem({ item }) {
 		return (
-			<ListItem onPress={() => this.props.navigation.navigate('IssueDetails', { issue: item })}>
+			<ListItem onPress={() => this.props.navigation.navigate('IssueDetails', { id: item.uid })}>
 				<ComplexText
 					main={item.subject}
 					secondary={item.createdBy}

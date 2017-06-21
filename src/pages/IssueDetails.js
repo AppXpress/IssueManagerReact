@@ -28,18 +28,20 @@ export default class IssueDetails extends Component {
 		title: function () {
 			return this.state.issue ? this.state.issue.subject : ''
 		},
-		buttons: [
-			<Button icon='refresh' onPress={() => this.reload()} key={1} />,
-			this.state && this.state.editable ? <Button icon='edit' onPress={() => this.reload()} key={2} /> : null,
-			<Button icon='duplicate' onPress={() => this.pickAction()} key={3} />
-		]
+		buttons: function () {
+			return [
+				<Button icon='refresh' onPress={() => this.reload()} key={1} />,
+				this.state && this.state.editable ? <Button icon='edit' onPress={() => this.edit()} key={2} /> : null,
+				<Button icon='duplicate' onPress={() => this.pickAction()} key={3} />
+			];
+		}
 	});
 
 	constructor(props) {
 		super(props);
 
 		this.state = {
-			id: this.props.navigation.state.params.issue.uid
+			id: this.props.navigation.state.params.id
 		};
 	}
 
@@ -69,11 +71,7 @@ export default class IssueDetails extends Component {
 	}
 
 	edit() {
-		if (this.state.editable) {
-			this.props.navigation.navigate('CreateIssue', { issue: this.state.issue, page: this });
-		} else {
-			alert('You do not have edit permissions for this issue, try again later.');
-		}
+		this.props.navigation.navigate('CreateIssue', { issue: this.state.issue, page: this });
 	}
 
 	reload() {
