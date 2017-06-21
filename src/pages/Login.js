@@ -68,10 +68,10 @@ export default class Login extends Component {
 
 	async login(event) {
 		this.setState({ loading: true });
-		var auth = await AppX.login(this.state.username, this.state.password, this.state.eid);
+		var appx = await AppX.login(this.state.username, this.state.password, this.state.eid);
 		this.setState({ loading: false });
 
-		if (auth) {
+		if (appx.data) {
 			if (__DEV__) {
 				this.setCredentials()
 			}

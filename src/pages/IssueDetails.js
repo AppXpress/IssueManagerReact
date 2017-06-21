@@ -59,7 +59,7 @@ export default class IssueDetails extends Component {
 			acting: true
 		});
 
-		AppX.action(this.state.issue, action).then(data => {
+		AppX.action(this.state.issue, action).then(({ data }) => {
 			this.setState({ acting: false });
 
 			if (!data) {
@@ -83,7 +83,7 @@ export default class IssueDetails extends Component {
 			editable: false
 		});
 
-		AppX.fetch('$IssueT3', this.state.id, true).then(data => {
+		AppX.fetch('$IssueT3', this.state.id, true).then(({ data }) => {
 			this.setState({
 				issue: data.data,
 				actions: data.actionSet.action.filter(action => {
@@ -97,7 +97,7 @@ export default class IssueDetails extends Component {
 			});
 		});
 
-		AppX.query('$MessageT4', 'issue.rootId = ' + this.state.id + ' ORDER BY createTimestamp DESC').then(data => {
+		AppX.query('$MessageT4', 'issue.rootId = ' + this.state.id + ' ORDER BY createTimestamp DESC').then(({ data }) => {
 			if (data) {
 				this.setState({ messages: data.result || [] });
 			} else {
@@ -105,7 +105,7 @@ export default class IssueDetails extends Component {
 			}
 		});
 
-		AppX.fetchAttachList('$IssueT3', this.state.id).then(data => {
+		AppX.fetchAttachList('$IssueT3', this.state.id).then(({ data }) => {
 			if (data) {
 				this.setState({ attachments: data.result || [] });
 			} else {
@@ -118,8 +118,8 @@ export default class IssueDetails extends Component {
 	async showAttachment(item) {
 
 		console.log(item);
-		response = await AppX.fetchAttachment(item.attachmentUid);
-		console.log(response);
+		var appx = await AppX.fetchAttachment(item.attachmentUid);
+		console.log(appx);
 	}
 
 	renderDetails() {

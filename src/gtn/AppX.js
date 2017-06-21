@@ -26,9 +26,10 @@ export async function login(user, pass, eid) {
 		}
 
 		Rest.token(response.headers.get('Authorization'));
-		return true;
+		return { data: true };
 	} catch (error) {
-		console.log(error);
+		console.warn(error);
+		return { error: error }
 	}
 }
 
@@ -57,9 +58,10 @@ export async function fetch(type, uid, meta) {
 			throw response;
 		}
 
-		return await response.json();
+		return { data: await response.json() };
 	} catch (error) {
-		console.log(error);
+		console.warn(error);
+		return { error: error };
 	}
 }
 
@@ -76,9 +78,10 @@ export async function fetchAttachList(type, uid) {
 			throw response;
 		}
 
-		return await response.json();
+		return { data: await response.json() };
 	} catch (error) {
-		console.log(error);
+		console.warn(error);
+		return { error: error };
 	}
 }
 
@@ -94,9 +97,10 @@ export async function fetchAttachment(attachUid) {
 			throw response;
 		}
 
-		return await response;
+		return { data: await response };
 	} catch (error) {
-		console.log(error);
+		console.warn(error);
+		return { error: error };
 	}
 
 }
@@ -125,9 +129,10 @@ export async function query(type, oql) {
 			throw response;
 		}
 
-		return await response.json();
+		return { data: await response.json() };
 	} catch (error) {
-		console.log(error);
+		console.warn(error);
+		return { error: error };
 	}
 }
 
@@ -148,9 +153,10 @@ export async function create(data) {
 			throw response;
 		}
 
-		return await response.json();
+		return { data: await response.json() };
 	} catch (error) {
-		console.log(error);
+		console.warn(error);
+		return { error: error };
 	}
 }
 
@@ -173,9 +179,10 @@ export async function persist(data) {
 			throw response;
 		}
 
-		return await response.json();
+		return { data: await response.json() };
 	} catch (error) {
-		console.log(error);
+		console.warn(error);
+		return { error: error };
 	}
 }
 
@@ -196,9 +203,10 @@ export async function design(type) {
 			throw response;
 		}
 
-		return await response.json();
+		return { data: await response.json() };
 	} catch (error) {
-		console.log(error);
+		console.warn(error);
+		return { error: error };
 	}
 }
 
@@ -223,8 +231,9 @@ export async function action(data, action) {
 			throw response;
 		}
 
-		return await response.json();
+		return { data: await response.json() };
 	} catch (error) {
-		console.log(error);
+		console.warn(error);
+		return { error: error };
 	}
 }

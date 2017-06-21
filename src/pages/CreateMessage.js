@@ -52,9 +52,9 @@ export default class CreateMessage extends Component {
 			}
 		};
 
-		var result = await AppX.create(body);
+		var appx = await AppX.create(body);
 
-		if (result) {
+		if (appx.data) {
 			this.props.navigation.goBack();
 			var page = this.props.navigation.state.params.page;
 			page.reload.call(page);
