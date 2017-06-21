@@ -41,10 +41,12 @@ export default class IssueList extends Component {
 
 	static navigationOptions = Navigataion({
 		title: 'Issue List',
-		buttons: [
-			{ icon: 'refresh', call: 'reload' },
-			{ icon: 'add', call: 'create' }
-		]
+		buttons: function () {
+			return [
+				<Button icon='refresh' onPress={() => this.reload()} key={1} />,
+				<Button icon='add' onPress={() => this.create()} key={2} />
+			];
+		}
 	});
 
 	componentDidMount() {

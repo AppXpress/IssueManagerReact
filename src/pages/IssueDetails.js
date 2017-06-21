@@ -25,13 +25,13 @@ import {
 export default class IssueDetails extends Component {
 
 	static navigationOptions = Navigataion({
-		title: (context) => {
-			return context.navigation.state.params.issue.subject
+		title: function () {
+			return this.state.issue ? this.state.issue.subject : ''
 		},
 		buttons: [
-			{ icon: 'refresh', call: 'reload' },
-			{ icon: 'edit', call: 'edit' },
-			{ icon: 'duplicate', call: 'pickAction' }
+			<Button icon='refresh' onPress={() => this.reload()} key={1} />,
+			this.state && this.state.editable ? <Button icon='edit' onPress={() => this.reload()} key={2} /> : null,
+			<Button icon='duplicate' onPress={() => this.pickAction()} key={3} />
 		]
 	});
 
@@ -45,9 +45,6 @@ export default class IssueDetails extends Component {
 
 	componentDidMount() {
 		this.reload();
-		this.props.navigation.setParams({
-			page: this
-		});
 	}
 
 	pickAction() {
@@ -95,6 +92,10 @@ export default class IssueDetails extends Component {
 					return action.startsWith('wf_');
 				}),
 				editable: data.actionSet.action.indexOf('modify') > -1
+			});
+
+			this.props.navigation.setParams({
+				page: this
 			});
 		});
 
