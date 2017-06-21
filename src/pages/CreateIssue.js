@@ -129,6 +129,8 @@ export default class CreateIssue extends Component {
 						label='Description'
 						value={this.state.description}
 						onChangeText={(text) => this.setState({ description: text })}
+						multiline
+						rows={5}
 					/>
 					<Picker
 						label='Issue Type'
