@@ -110,12 +110,11 @@ export default class IssueList extends Component {
 
 		oqlStmnt += " ORDER BY modifyTimestamp DESC";
 		console.log(oqlStmnt);
-		var data = await AppX.query('$IssueT3', oqlStmnt);
-		if (data) {
+
 		var appx = await AppX.query('$IssueT3', oqlStmnt);
 		if (appx.data) {
+
 			this.setState({
-				fullIssues: data.result,
 				issues: data.result,
 				fullIssues: appx.data.result,
 				issues: appx.data.result,
