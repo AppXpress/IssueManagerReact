@@ -31,6 +31,7 @@ export default class IssueDetails extends Component {
 
 		Navigation.set(this, {
 			title: 'Details',
+			hue: 'slate'
 		});
 	}
 
@@ -86,6 +87,24 @@ export default class IssueDetails extends Component {
 				}),
 				editable: data.actionSet.action.indexOf('modify') > -1
 			});
+
+			var hue = 'slate';
+			switch (data.data.severity) {
+				case '1':
+					hue = 'emerald';
+					break;
+				case '2':
+					hue = 'amber';
+					break;
+				case 3:
+					hue = 'ruby';
+					break;
+			}
+
+			Navigation.set(this, {
+				title: 'Details',
+				hue: hue
+			});
 		});
 
 		AppX.query('$MessageT4', 'issue.rootId = ' + this.props.id + ' ORDER BY createTimestamp DESC').then(({ data }) => {
@@ -113,11 +132,11 @@ export default class IssueDetails extends Component {
 		console.log(appx);
 	}
 
-	switchHistory(){
-		if(this.state.historyShown==false){
-			this.setState({historyShown:true, historyButton: 'Hide'});
-		}else{
-			this.setState({historyShown:false, historyButton: 'Show'});
+	switchHistory() {
+		if (this.state.historyShown == false) {
+			this.setState({ historyShown: true, historyButton: 'Hide' });
+		} else {
+			this.setState({ historyShown: false, historyButton: 'Show' });
 		}
 	}
 
@@ -220,29 +239,29 @@ export default class IssueDetails extends Component {
 	renderHistory() {
 		return (
 			<Card title="History" >
-				<Button title={this.state.historyButton} onPress={()=> this.switchHistory()} />
-					{this.state.historyShown &&
+				<Button title={this.state.historyButton} onPress={() => this.switchHistory()} />
+				{this.state.historyShown &&
 					<FlatList
-					data={this.state.issue.history}
-					keyExtractor={item => item.uid}
-					renderItem={({ item }) => (
-						<ListItem>
-							<ComplexText
-								main={item.newState}
-								secondary={item.modifiedByOrg.name}
-								tertiary={item.modifiedDate}
-							/>
-						</ListItem>
-					)}
-				/>	
-			}
+						data={this.state.issue.history}
+						keyExtractor={item => item.uid}
+						renderItem={({ item }) => (
+							<ListItem>
+								<ComplexText
+									main={item.newState}
+									secondary={item.modifiedByOrg.name}
+									tertiary={item.modifiedDate}
+								/>
+							</ListItem>
+						)}
+					/>
+				}
 			</Card>
 
-			);
+		);
 	}
 
 	renderMessages() {
-	
+
 		return (
 			<Card title="Messages">
 				{this.state.messages &&
