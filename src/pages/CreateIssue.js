@@ -54,8 +54,10 @@ export default class CreateIssue extends Component {
 		this.setState({ loading: true });
 
 		var issue = {};
-		if (this.state.issue) {
-			issue = this.state.issue;
+		if (this.props.issue) {
+			for (var key in this.props.issue) {
+				issue[key] = this.props.issue[key];
+			}
 		} else {
 			issue.type = '$IssueT3';
 			issue.licensee = {
@@ -74,46 +76,15 @@ export default class CreateIssue extends Component {
 		}
 
 		var appx;
-		if (this.state.issue) {
+		if (this.props.issue) {
 			appx = await AppX.persist(issue);
 		} else {
 			appx = await AppX.create(issue);
 		}
 
 		if (appx.data) {
-			this.props.navigation.goBack();
-			var params = this.props.navigation.state.params;
-			params.page.reload.call(params.page);
-		} else {
-			alert('Something went wrong!');
-		}
-	}
-
-	async create() {
-		this.setState({ loading: true });
-		var data = {
-			type: '$IssueT3',
-			subject: this.state.subject,
-			licensee: {
-				memberId: '5717989018004281'
-			},
-			issueType: this.state.issueType,
-			severity: this.state.severity,
-			description: this.state.description,
-		};
-
-		if (this.state.assignedTo) {
-			data.assignedTo = {
-				memberId: this.state.assignedTo
-			};
-		}
-
-		var appx = await AppX.create(data);
-
-		if (appx.data) {
-			this.props.navigation.goBack();
-			var params = this.props.navigation.state.params;
-			params.page.reload.call(params.page);
+			this.props.navigator.pop();
+			this.props.reload();
 		} else {
 			alert('Something went wrong!');
 		}
@@ -165,7 +136,7 @@ export default class CreateIssue extends Component {
 					<Button
 						primary
 						hue='ruby'
-						title={this.state.issue ? 'Update' : 'Create'}
+						title={this.props.issue ? 'Update' : 'Create'}
 						onPress={() => this.persist()}
 					/>
 

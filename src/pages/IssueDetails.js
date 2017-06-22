@@ -29,13 +29,16 @@ export default class IssueDetails extends Component {
 
 		this.state = {};
 
+		Navigation.bind(this);
+
 		Navigation.set(this, {
 			title: 'Details',
-			hue: 'slate'
+			hue: 'slate',
+			buttons: [
+				{ icon: 'refresh', id: 'reload' }
+			]
 		});
-	}
 
-	componentDidMount() {
 		this.reload();
 	}
 
@@ -65,7 +68,7 @@ export default class IssueDetails extends Component {
 	}
 
 	edit() {
-		this.props.navigation.navigate('CreateIssue', { issue: this.state.issue, page: this });
+		this.props.navigator.push({ screen: 'CreateIssue', passProps: { issue: this.state.issue, reload: () => this.reload() } });
 	}
 
 	reload() {
@@ -88,23 +91,31 @@ export default class IssueDetails extends Component {
 				editable: data.actionSet.action.indexOf('modify') > -1
 			});
 
-			var hue = 'slate';
+			var nav = {
+				title: 'Details',
+				buttons: [
+					{ icon: 'refresh', id: 'reload' },
+					{ icon: 'launch', id: 'pickAction' }
+				]
+			};
 			switch (data.data.severity) {
 				case '1':
-					hue = 'emerald';
+					nav.hue = 'emerald';
 					break;
 				case '2':
-					hue = 'amber';
+					nav.hue = 'amber';
 					break;
-				case 3:
-					hue = 'ruby';
+				case '3':
+					nav.hue = 'ruby';
 					break;
+				default:
+					nav.hue = 'slate';
+			}
+			if (this.state.editable) {
+				nav.buttons.push({ icon: 'edit', id: 'edit' });
 			}
 
-			Navigation.set(this, {
-				title: 'Details',
-				hue: hue
-			});
+			Navigation.set(this, nav);
 		});
 
 		AppX.query('$MessageT4', 'issue.rootId = ' + this.props.id + ' ORDER BY createTimestamp DESC').then(({ data }) => {

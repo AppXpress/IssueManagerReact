@@ -39,6 +39,8 @@ export default class IssueList extends Component {
 		};
 
 		Navigation.bind(this);
+
+		this.reload();
 	}
 
 	willAppear() {
@@ -52,18 +54,12 @@ export default class IssueList extends Component {
 		});
 	}
 
-	componentDidMount() {
-		this.reload();
-	}
-
 	logout() {
 		this.props.navigator.resetTo({ screen: 'Login' });
 	}
 
 	create() {
-		this.props.navigator.push({
-			screen: 'CreateIssue'
-		});
+		this.props.navigator.push({ screen: 'CreateIssue', passProps: { reload: () => this.reload() } });
 	}
 
 	async reload() {
