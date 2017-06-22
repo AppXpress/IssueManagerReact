@@ -12,6 +12,9 @@ import {
 	getColor
 } from './Tools';
 
+/**
+ * A SoHo text input component
+ */
 export default class TextInput extends Component {
 	constructor(props) {
 		super(props);
@@ -27,6 +30,9 @@ export default class TextInput extends Component {
 		this.setState({ text: next.value });
 	}
 
+	/**
+	 * Gets the error text for the field
+	 */
 	getError() {
 		if (this.props.required) {
 			if (this.state.blurred && !this.state.text) {
@@ -49,6 +55,9 @@ export default class TextInput extends Component {
 		this.setState({ blurred: true });
 	}
 
+	/**
+	 * Gets the text input style based on the properties it has
+	 */
 	getTextStyle() {
 		var style = {};
 
@@ -72,6 +81,9 @@ export default class TextInput extends Component {
 		return [styles.text, style];
 	}
 
+	/**
+	 * Renders a text label and a styled base text input
+	 */
 	render() {
 		return (
 			<View style={styles.view}>

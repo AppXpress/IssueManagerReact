@@ -10,6 +10,9 @@ import {
     getColor
 } from './Tools';
 
+/**
+ * Component for displaying up to 3 pieces of text in SoHo style
+ */
 export default class ComplexText extends Component {
     constructor(props) {
         super(props);
@@ -17,6 +20,9 @@ export default class ComplexText extends Component {
         this.props = props;
     }
 
+    /**
+     * Renders the 3 text items if they were passed in the properties
+     */
     render() {
         return (
             <View>

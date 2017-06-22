@@ -9,6 +9,9 @@ import {
 	getColor
 } from './Tools';
 
+/**
+ * A page component in SoHo style
+ */
 export default class Page extends Component {
 	constructor(props) {
 		super(props);
@@ -16,6 +19,9 @@ export default class Page extends Component {
 		this.props = props;
 	}
 
+	/**
+	 * Renders a styled scroll view wrapper for pages
+	 */
 	render() {
 		return (
 			<ScrollView style={styles.scroll}>

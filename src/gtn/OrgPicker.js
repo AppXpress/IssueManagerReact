@@ -18,6 +18,9 @@ import {
 
 import * as AppX from './AppX';
 
+/**
+ * Picker component for displaying all organizations in a community
+ */
 export default class OrgPicker extends Component {
 	constructor(props) {
 		super(props);
@@ -28,6 +31,7 @@ export default class OrgPicker extends Component {
 			orgs: []
 		}
 
+		// Gets the list of organizations
 		AppX.query('Community').then(({ data }) => this.setState({ orgs: data.result[0].member }));
 	}
 
@@ -39,6 +43,9 @@ export default class OrgPicker extends Component {
 		this.setState({ value: value });
 	}
 
+	/**
+	 * Displays the picker with the organizations mapped into a list of picker items
+	 */
 	render() {
 		return (
 			<Picker

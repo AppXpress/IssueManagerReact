@@ -13,6 +13,9 @@ import {
 	getColor
 } from './Tools';
 
+/**
+ * Helper component for getting the right touch component for each platform
+ */
 export default class Touchable extends Component {
 	constructor(props) {
 		super(props);
@@ -20,6 +23,9 @@ export default class Touchable extends Component {
 		this.props = props;
 	}
 
+	/**
+	 * Renders the correct styled touchable item for each platform
+	 */
 	render() {
 		if (Platform.OS == 'android') {
 			return (

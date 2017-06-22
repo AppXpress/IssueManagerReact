@@ -17,6 +17,9 @@ import {
     getHandler
 } from './Tools';
 
+/**
+ * Component for displaying loading indicators in SoHo style
+ */
 export default class Loading extends Component {
     constructor(props) {
         super(props);
@@ -24,6 +27,11 @@ export default class Loading extends Component {
         this.props = props;
     }
 
+    /**
+     * Gets the loading indicator itself with the right size for each platform
+     * 
+     * @param {bool} modal whether or not the indicator is for a modal
+     */
     indicator(modal) {
         if (Platform.OS == 'android' && modal) {
             return (
@@ -44,12 +52,18 @@ export default class Loading extends Component {
         }
     }
 
+    /**
+     * Gets the style of the loading indicator text
+     */
     textStyle() {
         return [styles.text, {
             color: getColor(this.props.hue + '-6', 'azure-6')
         }];
     }
 
+    /**
+     * Renders the loading indicator, either in a modal or list item
+     */
     render() {
         if (this.props.block) {
             return (
