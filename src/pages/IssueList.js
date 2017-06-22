@@ -41,6 +41,10 @@ export default class IssueList extends Component {
 		Navigation.bind(this);
 	}
 
+	componentWillMount() {
+		this.reload();
+	}
+
 	willAppear() {
 		Navigation.set(this, {
 			title: 'Issue List',
@@ -52,18 +56,12 @@ export default class IssueList extends Component {
 		});
 	}
 
-	componentDidMount() {
-		this.reload();
-	}
-
 	logout() {
 		this.props.navigator.resetTo({ screen: 'Login' });
 	}
 
 	create() {
-		this.props.navigator.push({
-			screen: 'CreateIssue'
-		});
+		this.props.navigator.push({ screen: 'CreateIssue', passProps: { reload: () => this.reload() } });
 	}
 
 	async reload() {

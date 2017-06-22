@@ -13,6 +13,7 @@ import {
 import Button from './Button';
 import Card from './Card';
 import ComplexText from './ComplexText';
+import Icon from './Icon';
 import ListItem from './ListItem';
 import Modal from './Modal';
 import Touchable from './Touchable';
@@ -95,6 +96,9 @@ export default class Picker extends Component {
 						<Text style={styles.value}>
 							{this.getLabel()}
 						</Text>
+						<View style={styles.icon}>
+							<Icon name='launch' />
+						</View>
 					</Touchable>
 				</View>
 
@@ -130,7 +134,12 @@ const styles = StyleSheet.create({
 	},
 	touchable: {
 		height: 34,
-		justifyContent: 'center'
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'space-between'
+	},
+	icon: {
+		marginRight: 10
 	},
 	value: {
 		padding: 0,

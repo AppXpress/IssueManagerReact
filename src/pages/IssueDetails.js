@@ -29,8 +29,14 @@ export default class IssueDetails extends Component {
 
 		this.state = {};
 
+		Navigation.bind(this);
+
 		Navigation.set(this, {
 			title: 'Details',
+			hue: 'slate',
+			buttons: [
+				{ icon: 'refresh', id: 'reload' }
+			]
 		});
 	}
 
@@ -52,8 +58,8 @@ export default class IssueDetails extends Component {
 			this.setState({ acting: false });
 
 			if (!appx.data) {
-				if (appx.error.message) {
-					alert(appx.error.message);
+				if (appx.error) {
+					alert(appx.error);
 				} else {
 					alert('We were unable to perform the select action. Please try again later.');
 				}
@@ -64,7 +70,7 @@ export default class IssueDetails extends Component {
 	}
 
 	edit() {
-		this.props.navigation.navigate('CreateIssue', { issue: this.state.issue, page: this });
+		this.props.navigator.push({ screen: 'CreateIssue', passProps: { issue: this.state.issue, reload: () => this.reload() } });
 	}
 
 	reload() {
@@ -86,6 +92,32 @@ export default class IssueDetails extends Component {
 				}),
 				editable: data.actionSet.action.indexOf('modify') > -1
 			});
+
+			var nav = {
+				title: 'Details',
+				buttons: [
+					{ icon: 'refresh', id: 'reload' },
+					{ icon: 'launch', id: 'pickAction' }
+				]
+			};
+			switch (data.data.severity) {
+				case '1':
+					nav.hue = 'emerald';
+					break;
+				case '2':
+					nav.hue = 'amber';
+					break;
+				case '3':
+					nav.hue = 'ruby';
+					break;
+				default:
+					nav.hue = 'slate';
+			}
+			if (this.state.editable) {
+				nav.buttons.push({ icon: 'edit', id: 'edit' });
+			}
+
+			Navigation.set(this, nav);
 		});
 
 		AppX.query('$MessageT4', 'issue.rootId = ' + this.props.id + ' ORDER BY createTimestamp DESC').then(({ data }) => {
@@ -113,11 +145,11 @@ export default class IssueDetails extends Component {
 		console.log(appx);
 	}
 
-	switchHistory(){
-		if(this.state.historyShown==false){
-			this.setState({historyShown:true, historyButton: 'Hide'});
-		}else{
-			this.setState({historyShown:false, historyButton: 'Show'});
+	switchHistory() {
+		if (this.state.historyShown == false) {
+			this.setState({ historyShown: true, historyButton: 'Hide' });
+		} else {
+			this.setState({ historyShown: false, historyButton: 'Show' });
 		}
 	}
 
@@ -220,29 +252,29 @@ export default class IssueDetails extends Component {
 	renderHistory() {
 		return (
 			<Card title="History" >
-				<Button title={this.state.historyButton} onPress={()=> this.switchHistory()} />
-					{this.state.historyShown &&
+				<Button title={this.state.historyButton} onPress={() => this.switchHistory()} />
+				{this.state.historyShown &&
 					<FlatList
-					data={this.state.issue.history}
-					keyExtractor={item => item.uid}
-					renderItem={({ item }) => (
-						<ListItem>
-							<ComplexText
-								main={item.newState}
-								secondary={item.modifiedByOrg.name}
-								tertiary={item.modifiedDate}
-							/>
-						</ListItem>
-					)}
-				/>	
-			}
+						data={this.state.issue.history}
+						keyExtractor={item => item.uid}
+						renderItem={({ item }) => (
+							<ListItem>
+								<ComplexText
+									main={item.newState}
+									secondary={item.modifiedByOrg.name}
+									tertiary={item.modifiedDate}
+								/>
+							</ListItem>
+						)}
+					/>
+				}
 			</Card>
 
-			);
+		);
 	}
 
 	renderMessages() {
-	
+
 		return (
 			<Card title="Messages">
 				{this.state.messages &&
