@@ -39,6 +39,10 @@ export default class IssueDetails extends Component {
 			]
 		});
 	}
+ 
+ 	willAppear(){
+ 		this.setNavigation();
+ 	}
 
 	componentDidMount() {
 		this.reload();
@@ -71,6 +75,34 @@ export default class IssueDetails extends Component {
 
 	edit() {
 		this.props.navigator.push({ screen: 'CreateIssue', passProps: { issue: this.state.issue, reload: () => this.reload() } });
+	}
+
+	setNavigation(){
+		var nav = {
+				title: 'Details',
+				buttons: [
+					{ icon: 'refresh', id: 'reload' },
+					{ icon: 'launch', id: 'action' }
+				]
+			};
+			switch (this.severity) {
+				case '1':
+					nav.hue = 'emerald';
+					break;
+				case '2':
+					nav.hue = 'amber';
+					break;
+				case '3':
+					nav.hue = 'ruby';
+					break;
+				default:
+					nav.hue = 'slate';
+			}
+			if (this.state.editable) {
+				nav.buttons.push({ icon: 'edit', id: 'edit' });
+			}
+
+			Navigation.set(this, nav);
 	}
 
 	reload() {
