@@ -12,25 +12,9 @@ import {
 } from './Tools';
 
 export default class Icon extends Component {
-    constructor(props) {
-        super(props);
 
-        this.props = props;
-        this.state = {
-            icon: this.getChar(this.props.name)
-        }
-    }
-
-    componentWillReceiveProps(next) {
-        if (next.name) {
-            this.setState({
-                icon: this.getChar(next.name)
-            });
-        }
-    }
-
-    getChar(name) {
-        if (this.props.name) {
+    static getChar(name) {
+        if (name) {
             var char = config.glyphs.find(item => {
                 return item.css == name;
             });
@@ -38,7 +22,24 @@ export default class Icon extends Component {
                 return String.fromCharCode(char.code);
             }
         }
-        return '';
+        return '#';
+    }
+
+    constructor(props) {
+        super(props);
+
+        this.props = props;
+        this.state = {
+            icon: Icon.getChar(this.props.name)
+        }
+    }
+
+    componentWillReceiveProps(next) {
+        if (next.name) {
+            this.setState({
+                icon: Icon.getChar(next.name)
+            });
+        }
     }
 
     render() {

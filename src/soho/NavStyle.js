@@ -8,6 +8,8 @@ export default class NavStyle {
             config = {};
         }
 
+        this.navBarTextFontFamily = 'soho';
+        this.navBarSubtitleFontFamily = 'soho';
         this.navBarTextColor = getColor('white-0');
         this.navBarBackgroundColor = getColor(config.hue + '-7', 'azure-7');
         this.statusBarColor = getColor(config.hue + '-8', 'azure-8');

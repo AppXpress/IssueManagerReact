@@ -12,6 +12,7 @@ import {
 	Button,
 	Card,
 	ComplexText,
+	Icon,
 	ListItem,
 	Loading,
 	NavStyle,
@@ -40,6 +41,20 @@ export default class IssueList extends Component {
 
 		props.navigator.setTitle({ title: 'Issue List' });
 		props.navigator.setStyle(new NavStyle());
+		props.navigator.setOnNavigatorEvent(object => {
+			if (object.type == 'NavBarButtonPress') {
+				if (this[object.id]) {
+					this[object.id]();
+				}
+			}
+		});
+		this.props.navigator.setButtons({
+			rightButtons: [
+				{ title: Icon.getChar('add'), id: 'create', showAsAction: 'always' },
+				{ title: Icon.getChar('refresh'), id: 'reload', showAsAction: 'always' },
+				{ title: Icon.getChar('user'), id: 'logout', showAsAction: 'always' },
+			]
+		});
 	}
 
 	componentDidMount() {
