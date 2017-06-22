@@ -44,11 +44,11 @@ export default class IssueDetails extends Component {
 		this.reload();
 	}
 
-	pickAction() {
+	action() {
 		this.setState({ pickAction: true });
 	}
 
-	action(action) {
+	runAction(action) {
 		this.setState({
 			pickAction: false,
 			acting: true
@@ -57,15 +57,15 @@ export default class IssueDetails extends Component {
 		AppX.action(this.state.issue, action).then(appx => {
 			this.setState({ acting: false });
 
-			if (!appx.data) {
-				if (appx.error) {
+			if (appx.data) {
+				this.reload();
+			} else {
+				if (typeof appx.error == 'string') {
 					alert(appx.error);
 				} else {
 					alert('We were unable to perform the select action. Please try again later.');
 				}
 			}
-
-			this.reload();
 		});
 	}
 
@@ -97,7 +97,7 @@ export default class IssueDetails extends Component {
 				title: 'Details',
 				buttons: [
 					{ icon: 'refresh', id: 'reload' },
-					{ icon: 'launch', id: 'pickAction' }
+					{ icon: 'launch', id: 'action' }
 				]
 			};
 			switch (data.data.severity) {
@@ -328,7 +328,7 @@ export default class IssueDetails extends Component {
 						data={this.state.actions}
 						keyExtractor={item => item}
 						renderItem={({ item }) => (
-							<ListItem onPress={() => this.action(item)}>
+							<ListItem onPress={() => this.runAction(item)}>
 								<ComplexText main={item.charAt(3).toUpperCase() + item.substring(4)} />
 							</ListItem>
 						)}
