@@ -24,16 +24,6 @@ import {
 
 export default class IssueList extends Component {
 
-	static navigatorStyle = new NavStyle();
-
-	static navigatorButtons = {
-		rightButtons: [
-			{ title: Icon.getChar('user'), id: 'logout', buttonFontFamily: 'soho' },
-			{ title: Icon.getChar('add'), id: 'create', buttonFontFamily: 'soho' },
-			{ title: Icon.getChar('refresh'), id: 'reload', buttonFontFamily: 'soho' },
-		]
-	};
-
 	constructor(props) {
 		super(props);
 
@@ -50,10 +40,22 @@ export default class IssueList extends Component {
 		};
 
 		props.navigator.setTitle({ title: 'Issue List' });
-		props.navigator.setOnNavigatorEvent(object => {
-			if (object.type == 'NavBarButtonPress') {
-				if (this[object.id]) {
-					this[object.id]();
+		props.navigator.setStyle(new NavStyle());
+		props.navigator.setOnNavigatorEvent(event => {
+			console.log(event);
+			if (event.type == 'NavBarButtonPress') {
+				if (this[event.id]) {
+					this[event.id]();
+				}
+			} else if (event.type == 'ScreenChangedEvent') {
+				if (event.id == 'willAppear') {
+					props.navigator.setButtons({
+						rightButtons: [
+							{ title: Icon.getChar('user'), id: 'logout', buttonFontFamily: 'soho' },
+							{ title: Icon.getChar('add'), id: 'create', buttonFontFamily: 'soho' },
+							{ title: Icon.getChar('refresh'), id: 'reload', buttonFontFamily: 'soho' },
+						]
+					});
 				}
 			}
 		});
