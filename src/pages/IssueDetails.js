@@ -75,6 +75,7 @@ export default class IssueDetails extends Component {
 			attachments: null,
 			editable: false,
 			historyShown: false,
+			historyButton: 'Show',
 		});
 
 		AppX.fetch('$IssueT3', this.props.id, true).then(({ data }) => {
@@ -110,6 +111,14 @@ export default class IssueDetails extends Component {
 		console.log(item);
 		var appx = await AppX.fetchAttachment(item.attachmentUid);
 		console.log(appx);
+	}
+
+	switchHistory(){
+		if(this.state.historyShown==false){
+			this.setState({historyShown:true, historyButton: 'Hide'});
+		}else{
+			this.setState({historyShown:false, historyButton: 'Show'});
+		}
 	}
 
 	renderDetails() {
@@ -211,7 +220,8 @@ export default class IssueDetails extends Component {
 	renderHistory() {
 		return (
 			<Card title="History" >
-				<Button title="Show" onPress={()=> this.setState({historyShown:true})} />
+				<Button title={this.state.historyButton} onPress={()=> this.switchHistory()} />
+					{this.state.historyShown &&
 					<FlatList
 					data={this.state.issue.history}
 					keyExtractor={item => item.uid}
@@ -219,12 +229,13 @@ export default class IssueDetails extends Component {
 						<ListItem>
 							<ComplexText
 								main={item.newState}
-								secondary={item.name}
+								secondary={item.modifiedByOrg.name}
 								tertiary={item.modifiedDate}
 							/>
 						</ListItem>
 					)}
-				/>		
+				/>	
+			}
 			</Card>
 
 			);
