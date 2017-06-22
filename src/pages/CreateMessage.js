@@ -31,7 +31,7 @@ export default class CreateMessage extends Component {
 
 	async postMessage(event) {
 		this.setState({ loading: true });
-
+		console.log(this.props);
 		let today = new Date();
 
 		var body = {
@@ -41,20 +41,26 @@ export default class CreateMessage extends Component {
 			"issue": {
 				"reference": "Issue",
 				"rootType": "$IssueT3",
-				"rootId": this.props.id,
+				"rootId": this.props.issue,
 				"externalType": "$IssueT3",
 			},
 			"licensee": {
 				"memberId": "5717989018004281",
 			}
 		};
-
+		console.log(body);
+		console.log(this.props);
 		var appx = await AppX.create(body);
 
 		if (appx.data) {
-			this.props.navigation.goBack();
-			var page = this.props.navigation.state.params.page;
-			page.reload.call(page);
+			this.setState({loading:false});
+			this.props.navigator.pop({
+				animated: true,
+				animationType: 'fade',
+			});
+			// this.props.navigation.goBack();
+			// var page = this.props.navigation.state.params.page;
+			// page.reload.call(page);
 		} else {
 			this.setState({ loading: false });
 			alert('We were\'nt able to create your message. Please try again later.');

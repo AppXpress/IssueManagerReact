@@ -72,7 +72,8 @@ export default class IssueDetails extends Component {
 			actions: null,
 			messages: null,
 			attachments: null,
-			editable: false
+			editable: false,
+			historyShown: false,
 		});
 
 		AppX.fetch('$IssueT3', this.props.id, true).then(({ data }) => {
@@ -206,8 +207,30 @@ export default class IssueDetails extends Component {
 			</Card>
 		);
 	}
+	renderHistory() {
+		return (
+			<Card title="History" >
+				<Button title="Show" onPress={()=> this.setState({historyShown:true})} />
+					<FlatList
+					data={this.state.issue.history}
+					keyExtractor={item => item.uid}
+					renderItem={({ item }) => (
+						<ListItem>
+							<ComplexText
+								main={item.newState}
+								secondary={item.name}
+								tertiary={item.modifiedDate}
+							/>
+						</ListItem>
+					)}
+				/>		
+			</Card>
+
+			);
+	}
 
 	renderMessages() {
+	
 		return (
 			<Card title="Messages">
 				{this.state.messages &&
@@ -215,7 +238,7 @@ export default class IssueDetails extends Component {
 						<Button
 							icon='mingle-share'
 							title='New Message'
-							onPress={() => this.props.navigator.push({ screen: 'CreateMessage', passProps: { issue: this.id } })}
+							onPress={() => this.props.navigator.push({ screen: 'CreateMessage', passProps: { issue: this.props.id } })}
 						/>
 					</ListItem>
 				}
@@ -296,6 +319,7 @@ export default class IssueDetails extends Component {
 				{this.renderAttachments()}
 				{this.renderMessages()}
 				{this.renderActions()}
+				{this.renderHistory()}
 			</Page>
 		);
 	}
