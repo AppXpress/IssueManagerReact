@@ -36,7 +36,7 @@ export default class CreateIssue extends Component {
 
 		Navigation.set(this, {
 			title: 'Issue Editor',
-			hue: 'ruby'
+			hue: 'amethyst'
 		});
 
 		if (this.props.issue) {
@@ -135,7 +135,7 @@ export default class CreateIssue extends Component {
 
 					<Button
 						primary
-						hue='ruby'
+						hue='amethyst'
 						title={this.props.issue ? 'Update' : 'Create'}
 						onPress={() => this.persist()}
 					/>

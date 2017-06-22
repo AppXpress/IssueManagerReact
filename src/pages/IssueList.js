@@ -39,7 +39,9 @@ export default class IssueList extends Component {
 		};
 
 		Navigation.bind(this);
+	}
 
+	componentWillMount() {
 		this.reload();
 	}
 

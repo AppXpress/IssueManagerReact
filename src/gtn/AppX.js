@@ -234,7 +234,7 @@ export async function action(data, action) {
 		var data = await response.json();
 
 		if (data.transition.message) {
-			throw { message: data.transition.message[0].text };
+			throw data.transition.message[0].text;
 		}
 
 		return { data: data };

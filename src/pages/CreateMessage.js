@@ -55,7 +55,7 @@ export default class CreateMessage extends Component {
 		var appx = await AppX.create(body);
 
 		if (appx.data) {
-			this.setState({loading:false});
+			this.setState({ loading: false });
 			this.props.navigator.pop({
 				animated: true,
 				animationType: 'fade',
@@ -82,6 +82,7 @@ export default class CreateMessage extends Component {
 
 					<Button
 						primary
+						hue='turquoise'
 						title='Submit'
 						onPress={this.postMessage.bind(this)}
 					/>

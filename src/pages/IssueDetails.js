@@ -38,7 +38,9 @@ export default class IssueDetails extends Component {
 				{ icon: 'refresh', id: 'reload' }
 			]
 		});
+	}
 
+	componentDidMount() {
 		this.reload();
 	}
 
@@ -56,8 +58,8 @@ export default class IssueDetails extends Component {
 			this.setState({ acting: false });
 
 			if (!appx.data) {
-				if (appx.error.message) {
-					alert(appx.error.message);
+				if (appx.error) {
+					alert(appx.error);
 				} else {
 					alert('We were unable to perform the select action. Please try again later.');
 				}
