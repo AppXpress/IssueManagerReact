@@ -50,9 +50,9 @@ export default class IssueList extends Component {
 		});
 		this.props.navigator.setButtons({
 			rightButtons: [
-				{ title: Icon.getChar('add'), id: 'create', showAsAction: 'always' },
-				{ title: Icon.getChar('refresh'), id: 'reload', showAsAction: 'always' },
-				{ title: Icon.getChar('user'), id: 'logout', showAsAction: 'always' },
+				{ title: Icon.getChar('add'), id: 'create', showAsAction: 'always', buttonFontFamily: 'soho' },
+				{ title: Icon.getChar('refresh'), id: 'reload', showAsAction: 'always', buttonFontFamily: 'soho' },
+				{ title: Icon.getChar('user'), id: 'logout', showAsAction: 'always', buttonFontFamily: 'soho' },
 			]
 		});
 	}
