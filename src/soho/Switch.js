@@ -12,6 +12,9 @@ import {
 	getColor
 } from './Tools';
 
+/**
+ * Renders a SoHo styled switch component
+ */
 export default class Switch extends Component {
 	constructor(props) {
 		super(props);
@@ -30,6 +33,9 @@ export default class Switch extends Component {
 		this.setState({ value: value });
 	}
 
+	/**
+	 * Gets the color based on the current value
+	 */
 	getThumbTintColor() {
 		if (this.state.value) {
 			return getColor(this.props.hue + '-6', 'azure-6');
@@ -37,6 +43,9 @@ export default class Switch extends Component {
 		return getColor('white-0');
 	}
 
+	/**
+	 * Renders a native switch component with the correct SoHo colors
+	 */
 	render() {
 		return (
 			<View style={styles.view}>
@@ -60,10 +69,10 @@ export default class Switch extends Component {
 const styles = StyleSheet.create({
 	view: {
 		margin: 10,
+		alignItems: 'center',
 		flexDirection: 'row'
 	},
 	title: {
-		paddingTop: 3,
 		paddingLeft: 10,
 		fontSize: 14,
 		color: '#1a1a1a'

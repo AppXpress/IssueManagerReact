@@ -15,8 +15,14 @@ import {
 	getColor
 } from './Tools';
 
+/**
+ * SoHo style field with label component
+ */
 export default class Field extends Component {
 
+	/**
+	 * Helper component that rendered multiple items side by side in a row
+	 */
 	static Row = (props) => {
 		var i = 0;
 		return (
@@ -36,6 +42,9 @@ export default class Field extends Component {
 		this.props = props;
 	}
 
+	/**
+	 * Renders the label and entry text
+	 */
 	render() {
 		return (
 			<View style={styles.view}>

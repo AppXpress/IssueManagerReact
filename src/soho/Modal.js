@@ -17,6 +17,9 @@ import {
 	getColor
 } from './Tools';
 
+/**
+ * SoHo style modal component
+ */
 export default class Modal extends Component {
 	constructor(props) {
 		super(props);
@@ -27,6 +30,9 @@ export default class Modal extends Component {
 		}
 	}
 
+	/**
+	 * Sets the appropriate max height on mount and window size change
+	 */
 	componentDidMount() {
 		var self = this;
 		function setHeight(value) {
@@ -41,10 +47,16 @@ export default class Modal extends Component {
 		});
 	}
 
+	/**
+	 * Gets a style object based on the max height
+	 */
 	getScrollStyle() {
 		return { maxHeight: this.state.height - 150 };
 	}
 
+	/**
+	 * Renders a base modal with a card, sized scroll view, cancel button, and submit button if onSubmit exists
+	 */
 	render() {
 		return (
 			<ModalBase

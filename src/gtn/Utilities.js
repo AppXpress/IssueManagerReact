@@ -2,6 +2,12 @@ import {
 	AsyncStorage
 } from 'react-native';
 
+/**
+ * Helper function for getting from async storage
+ * 
+ * @param {string} key the key of the data to get
+ * @returns the data or null on failure
+ */
 export async function storageGet(key) {
 	try {
 		return await AsyncStorage.getItem(key);
@@ -10,6 +16,12 @@ export async function storageGet(key) {
 	}
 }
 
+/**
+ * Helper function for setting async storage data
+ * 
+ * @param {string} key the key to save the data under
+ * @param {*} value the data to save
+ */
 export async function storageSet(key, value) {
 	try {
 		await AsyncStorage.setItem(key, value);
@@ -18,6 +30,12 @@ export async function storageSet(key, value) {
 	}
 }
 
+/**
+ * Encodes a string into its base 64 representation
+ * 
+ * @param {string} toEncode the string to encode
+ * @returns the base 64 value
+ */
 export function base64Encode(toEncode) {
 
 	var base64chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";

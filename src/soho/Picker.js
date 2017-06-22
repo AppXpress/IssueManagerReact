@@ -23,8 +23,14 @@ import {
 	getColor
 } from './Tools';
 
+/**
+ * Picker component styled like SoHo
+ */
 export default class Picker extends Component {
 
+	/**
+	 * Helper component for listing picker items
+	 */
 	static Item = (props) => {
 		this.props = props;
 	}
@@ -47,6 +53,9 @@ export default class Picker extends Component {
 		});
 	}
 
+	/**
+	 * Gets the current label for the field based on the value
+	 */
 	getLabel() {
 		var selected = this.props.children.find(item => {
 			return item.props.value == this.state.value;
@@ -64,6 +73,11 @@ export default class Picker extends Component {
 		});
 	}
 
+	/**
+	 * Renders an option in the picker
+	 * 
+	 * @param {object} param0 the iterator data, where the item field is the option to render
+	 */
 	renderItem({ item }) {
 		return (
 			<ListItem onPress={() => getHandler(this, 'onValueChange')(item.props.value)}>
@@ -76,6 +90,9 @@ export default class Picker extends Component {
 		);
 	}
 
+	/**
+	 * Renders the picker as a field with a modal that lists the options
+	 */
 	render() {
 		return (
 			<View style={styles.view}>

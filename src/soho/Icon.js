@@ -11,8 +11,16 @@ import {
     getColor
 } from './Tools';
 
+/**
+ * Component for displaying SoHo icons
+ */
 export default class Icon extends Component {
 
+    /**
+     * Helper function for getting the character for an icon in the icon font
+     * 
+     * @param {string} name the name of the SoHo icon
+     */
     static getChar(name) {
         if (name) {
             var char = config.glyphs.find(item => {
@@ -35,13 +43,14 @@ export default class Icon extends Component {
     }
 
     componentWillReceiveProps(next) {
-        if (next.name) {
-            this.setState({
-                icon: Icon.getChar(next.name)
-            });
-        }
+        this.setState({
+            icon: Icon.getChar(next.name)
+        });
     }
 
+    /**
+     * Renders the icon character in a text item with the SoHo font
+     */
     render() {
         return (
             <Text style={styles.text}>

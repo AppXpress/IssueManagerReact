@@ -14,6 +14,9 @@ import {
 	getColor
 } from './Tools';
 
+/**
+ * SoHo style button component
+ */
 export default class Button extends Component {
 	constructor(props) {
 		super(props);
@@ -21,6 +24,9 @@ export default class Button extends Component {
 		this.props = props;
 	}
 
+	/**
+	 * Gets the style for the touchable container based on the components properties
+	 */
 	getTouchableStyle() {
 		var style = {};
 
@@ -42,6 +48,9 @@ export default class Button extends Component {
 		return [styles.touchable, style];
 	}
 
+	/**
+	 * Gets the style for the button text using the component properties
+	 */
 	getTextStyle() {
 		var style = {};
 
@@ -60,6 +69,9 @@ export default class Button extends Component {
 		return [styles.text, style];
 	}
 
+	/**
+	 * Returns a styled touchable and text with optional icon
+	 */
 	render() {
 		return (
 			<View style={styles.view}>

@@ -13,13 +13,19 @@ import {
     getColor
 } from './Tools';
 
-export default class Card extends Component {
+/**
+ * A component for item lists in SoHo style
+ */
+export default class ListItem extends Component {
     constructor(props) {
         super(props);
 
         this.props = props;
     }
 
+    /**
+     * Changed the style of the container based on the properties
+     */
     getStyle() {
         var style = {};
 
@@ -30,6 +36,9 @@ export default class Card extends Component {
         return [styles.view, style];
     }
 
+    /**
+     * Renders the elements in a styled view or touchable if an onPress is defined
+     */
     render() {
         if (this.props.onPress) {
             return (

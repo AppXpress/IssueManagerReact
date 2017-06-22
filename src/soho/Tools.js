@@ -1,3 +1,9 @@
+/**
+ * Gets a function that runs a property callback in the component and on the parent
+ * 
+ * @param {object} obj the component to run the callback on
+ * @param {string} name the name of the callback to run
+ */
 export function getHandler(obj, name) {
 	return function () {
 		if (obj.props[name]) {
@@ -9,6 +15,12 @@ export function getHandler(obj, name) {
 	}
 }
 
+/**
+ * Gets a SoHo color by name
+ * 
+ * @param {string} name the name of the color to get
+ * @param {string[]} args other names to lookup if the previous names couldn't be found
+ */
 export function getColor(name, ...args) {
 	if (typeof name == 'string') {
 		var data = name.split('-');

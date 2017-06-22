@@ -318,7 +318,7 @@ export default class IssueDetails extends Component {
 							onPress={() => this.props.navigator.push({
 								screen: 'CreateMessage',
 								passProps: {
-									issue: this.props.id, reload: () => this.reload()
+									id: this.props.id, reload: () => this.reload()
 								}
 							})}
 

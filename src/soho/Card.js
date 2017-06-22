@@ -10,6 +10,9 @@ import {
 	getColor
 } from './Tools';
 
+/**
+ * SoHo styled card container component
+ */
 export default class Card extends Component {
 	constructor(props) {
 		super(props);
@@ -17,6 +20,9 @@ export default class Card extends Component {
 		this.props = props;
 	}
 
+	/**
+	 * Returns a view with SoHo card styling
+	 */
 	render() {
 		return (
 			<View style={styles.view}>

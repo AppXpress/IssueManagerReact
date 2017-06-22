@@ -43,7 +43,7 @@ export default class CreateMessage extends Component {
 			"issue": {
 				"reference": "Issue",
 				"rootType": "$IssueT3",
-				"rootId": this.props.issue,
+				"rootId": this.props.id,
 				"externalType": "$IssueT3",
 			},
 			"licensee": {

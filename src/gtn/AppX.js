@@ -213,8 +213,8 @@ export async function design(type) {
 /**
  * Runs the given workflow action on a GT Nexus object
  * 
- * @param {*} data the object to run the action on
- * @param {*} action the workflow action to perform
+ * @param {object} data the object to run the action on
+ * @param {string} action the workflow action to perform
  */
 export async function action(data, action) {
 	try {
