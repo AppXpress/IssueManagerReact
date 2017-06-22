@@ -56,13 +56,8 @@ export default class CreateMessage extends Component {
 
 		if (appx.data) {
 			this.setState({ loading: false });
-			this.props.navigator.pop({
-				animated: true,
-				animationType: 'fade',
-			});
-			// this.props.navigation.goBack();
-			// var page = this.props.navigation.state.params.page;
-			// page.reload.call(page);
+			this.props.navigator.pop();
+			this.props.reload();
 		} else {
 			this.setState({ loading: false });
 			alert('We were\'nt able to create your message. Please try again later.');

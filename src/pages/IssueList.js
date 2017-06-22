@@ -61,7 +61,12 @@ export default class IssueList extends Component {
 	}
 
 	create() {
-		this.props.navigator.push({ screen: 'CreateIssue', passProps: { reload: () => this.reload() } });
+		this.props.navigator.push({
+			screen: 'CreateIssue',
+			passProps: {
+				reload: () => this.reload()
+			}
+		});
 	}
 
 	async reload() {
@@ -147,7 +152,12 @@ export default class IssueList extends Component {
 
 	renderItem({ item }) {
 		return (
-			<ListItem onPress={() => this.props.navigator.push({ screen: 'IssueDetails', passProps: { id: item.uid } })}>
+			<ListItem onPress={() => this.props.navigator.push({
+				screen: 'IssueDetails',
+				passProps: {
+					id: item.uid
+				}
+			})}>
 				<ComplexText
 					main={item.subject}
 					secondary={item.createdBy}

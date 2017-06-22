@@ -283,7 +283,12 @@ export default class IssueDetails extends Component {
 							icon='mingle-share'
 							title='New Message'
 
-							onPress={() => this.props.navigator.push({ screen: 'CreateMessage', passProps: { issue: this.props.id } })}
+							onPress={() => this.props.navigator.push({
+								screen: 'CreateMessage',
+								passProps: {
+									issue: this.props.id, reload: () => this.reload()
+								}
+							})}
 
 						/>
 					</ListItem>
