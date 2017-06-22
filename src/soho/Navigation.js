@@ -1,6 +1,12 @@
 import {
+    Platform
+} from 'react-native';
+
+import {
     getColor
 } from './Tools';
+
+import Icon from './Icon';
 
 export function bind(page) {
     page.props.navigator.setOnNavigatorEvent(event => {
@@ -32,18 +38,26 @@ export function set(page, config) {
     var buttons = [];
     config.buttons.map(button => {
         buttons.push({
-            title: button.title,
+            title: getTitle(button, buttons),
             id: button.id,
             buttonFontFamily: 'soho',
-            showAsAction: 'always'
+            showAsAction: buttons.length == 0 ? 'always' : 'never'
         });
     });
 
-    page.props.navigator.setButtons({ rightButtons: buttons });
+    page.props.navigator.setButtons({ rightButtons: buttons.reverse() });
 
     page.props.navigator.setOnNavigatorEvent(event => {
         if (page[event.id]) {
             page[event.id]();
         }
     });
+}
+
+function getTitle(button, buttons) {
+    if (Platform.OS == 'android' && buttons.length > 0) {
+        return Icon.getChar(button.icon) + '   ' + button.id.charAt(0).toUpperCase() + button.id.substring(1);
+    } else {
+        return Icon.getChar(button.icon);
+    }
 }

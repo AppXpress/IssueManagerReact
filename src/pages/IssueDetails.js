@@ -17,7 +17,7 @@ import {
 	ListItem,
 	Loading,
 	Modal,
-	Nav,
+	Navigation,
 	Page,
 	TextInput
 } from '../soho/All';
@@ -29,7 +29,7 @@ export default class IssueDetails extends Component {
 
 		this.state = {};
 
-		Nav.set(this, {
+		Navigation.set(this, {
 			title: 'Details',
 		});
 	}

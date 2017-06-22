@@ -7,7 +7,7 @@ import {
 import {
 	Button,
 	Card,
-	Nav,
+	Navigation,
 	Page,
 	Switch,
 	TextInput,
@@ -32,7 +32,7 @@ export default class Login extends Component {
 			loading: false
 		};
 
-		Nav.set(this, {
+		Navigation.set(this, {
 			title: ' Welcome'
 		});
 	}

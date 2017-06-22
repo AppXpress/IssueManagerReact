@@ -6,7 +6,7 @@ import {
 	Button,
 	Card,
 	Loading,
-	Nav,
+	Navigation,
 	Page,
 	Picker,
 	TextInput
@@ -34,7 +34,7 @@ export default class CreateIssue extends Component {
 			loading: false,
 		};
 
-		Nav.set(this, {
+		Navigation.set(this, {
 			title: 'Issue Editor',
 			hue: 'ruby'
 		});

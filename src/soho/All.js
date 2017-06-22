@@ -7,7 +7,7 @@ module.exports = {
 	get ListItem() { return require('./ListItem').default },
 	get Loading() { return require('./Loading').default },
 	get Modal() { return require('./Modal').default },
-	get Nav() { return require('./Nav') },
+	get Navigation() { return require('./Navigation') },
 	get Page() { return require('./Page').default },
 	get Picker() { return require('./Picker').default },
 	get Switch() { return require('./Switch').default },
