@@ -85,7 +85,8 @@ export default class IssueDetails extends Component {
 					{ icon: 'launch', id: 'action' }
 				]
 			};
-			switch (this.severity) {
+			if(this.state.issue){
+			switch (this.state.issue.severity) {
 				case '1':
 					nav.hue = 'emerald';
 					break;
@@ -101,7 +102,7 @@ export default class IssueDetails extends Component {
 			if (this.state.editable) {
 				nav.buttons.push({ icon: 'edit', id: 'edit' });
 			}
-
+		}
 			Navigation.set(this, nav);
 	}
 
