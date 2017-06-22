@@ -82,6 +82,7 @@ export default class CreateMessage extends Component {
 
 					<Button
 						primary
+						hue='turquoise'
 						title='Submit'
 						onPress={this.postMessage.bind(this)}
 					/>

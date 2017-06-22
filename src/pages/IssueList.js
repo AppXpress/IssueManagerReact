@@ -101,7 +101,7 @@ export default class IssueList extends Component {
 		}
 
 		if (this.state.typeFilter) {
-			oqlStmnt += " AND type = \'" + this.state.typeFilter + "\'";
+			oqlStmnt += " AND issueType = \'" + this.state.typeFilter + "\'";
 		}
 		if (this.state.daysFilter) {
 			oqlStmnt += " AND createdOn In @(Last " + this.state.daysFilter + " Days)"
@@ -112,7 +112,7 @@ export default class IssueList extends Component {
 
 		oqlStmnt += " ORDER BY modifyTimestamp DESC";
 
-
+		console.log(oqlStmnt);
 		var appx = await AppX.query('$IssueT3', oqlStmnt);
 		if (appx.data) {
 
