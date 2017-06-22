@@ -83,9 +83,11 @@ export default class CreateIssue extends Component {
 		}
 
 		if (appx.data) {
+
 			this.props.navigator.pop();
 			this.props.reload();
 		} else {
+
 			alert('Something went wrong!');
 		}
 	}
