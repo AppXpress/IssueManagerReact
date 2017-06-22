@@ -81,9 +81,11 @@ export default class CreateIssue extends Component {
 		}
 
 		if (appx.data) {
-			this.props.navigation.goBack();
-			var params = this.props.navigation.state.params;
-			params.page.reload.call(params.page);
+			this.setState({loading:false});
+				this.props.navigator.pop({
+				animated: true,
+				animationType: 'fade',
+			});
 		} else {
 			alert('Something went wrong!');
 		}
@@ -111,10 +113,12 @@ export default class CreateIssue extends Component {
 		var appx = await AppX.create(data);
 
 		if (appx.data) {
-			this.props.navigation.goBack();
-			var params = this.props.navigation.state.params;
-			params.page.reload.call(params.page);
-		} else {
+				this.setState({loading:false});
+				this.props.navigator.pop({
+				animated: true,
+				animationType: 'fade',
+			});
+				} else {
 			alert('Something went wrong!');
 		}
 	}
