@@ -13,7 +13,7 @@ import {
 	Card,
 	Field,
 	Loading,
-	NavStyle,
+	Navigation,
 	Page,
 	TextInput
 } from '../soho/All';
@@ -25,8 +25,10 @@ export default class CreateMessage extends Component {
 
 		this.state = {};
 
-		props.navigator.setTitle({ title: 'Message Editor' });
-		props.navigator.setStyle(new NavStyle({ hue: 'amethyst' }));
+		Navigation.set(this, {
+			title: 'Message Editor',
+			hue: 'turquoise'
+		});
 	}
 
 	async postMessage(event) {

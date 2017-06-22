@@ -7,7 +7,7 @@ import {
 import {
 	Button,
 	Card,
-	NavStyle,
+	Navigation,
 	Page,
 	Switch,
 	TextInput,
@@ -32,8 +32,9 @@ export default class Login extends Component {
 			loading: false
 		};
 
-		props.navigator.setTitle({ title: 'Welcome' });
-		props.navigator.setStyle(new NavStyle());
+		Navigation.set(this, {
+			title: ' Welcome'
+		});
 	}
 
 	async componentDidMount() {

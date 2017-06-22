@@ -12,10 +12,9 @@ import {
 	Button,
 	Card,
 	ComplexText,
-	Icon,
 	ListItem,
 	Loading,
-	NavStyle,
+	Navigation,
 	Page,
 	TextInput,
 	Modal,
@@ -39,30 +38,26 @@ export default class IssueList extends Component {
 			statusFilter: null,
 		};
 
-		props.navigator.setTitle({ title: 'Issue List' });
-		props.navigator.setStyle(new NavStyle());
-		props.navigator.setOnNavigatorEvent(event => {
-			console.log(event);
-			if (event.type == 'NavBarButtonPress') {
-				if (this[event.id]) {
-					this[event.id]();
-				}
-			} else if (event.type == 'ScreenChangedEvent') {
-				if (event.id == 'willAppear') {
-					props.navigator.setButtons({
-						rightButtons: [
-							{ title: Icon.getChar('user'), id: 'logout', buttonFontFamily: 'soho' },
-							{ title: Icon.getChar('add'), id: 'create', buttonFontFamily: 'soho' },
-							{ title: Icon.getChar('refresh'), id: 'reload', buttonFontFamily: 'soho' },
-						]
-					});
-				}
-			}
+		Navigation.bind(this);
+	}
+
+	willAppear() {
+		Navigation.set(this, {
+			title: 'Issue List',
+			buttons: [
+				{ icon: 'refresh', id: 'reload' },
+				{ icon: 'user', id: 'logout' },
+				{ icon: 'add', id: 'create' },
+			]
 		});
 	}
 
 	componentDidMount() {
 		this.reload();
+	}
+
+	logout() {
+		this.props.navigator.resetTo({ screen: 'Login' });
 	}
 
 	create() {

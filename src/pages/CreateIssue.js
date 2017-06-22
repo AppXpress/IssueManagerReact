@@ -6,7 +6,7 @@ import {
 	Button,
 	Card,
 	Loading,
-	NavStyle,
+	Navigation,
 	Page,
 	Picker,
 	TextInput
@@ -34,8 +34,10 @@ export default class CreateIssue extends Component {
 			loading: false,
 		};
 
-		props.navigator.setTitle({ title: 'Issue Editor' });
-		props.navigator.setStyle(new NavStyle({ hue: 'ruby' }));
+		Navigation.set(this, {
+			title: 'Issue Editor',
+			hue: 'ruby'
+		});
 
 		if (this.props.issue) {
 			this.state.subject = this.props.issue.subject;

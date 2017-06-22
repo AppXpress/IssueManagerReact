@@ -1,47 +1,63 @@
-import React, { Component } from 'react';
-
 import {
-	View
+    Platform
 } from 'react-native';
 
-import Button from './Button';
-
 import {
-	getColor
+    getColor
 } from './Tools';
 
-export default function Navigation(options) {
-	return (context) => {
+import Icon from './Icon';
 
-		var page = null;
-		try {
-			page = context.navigation.state.params.page;
-		} catch (error) {
-			// Ignore
-		}
+export function bind(page) {
+    page.props.navigator.setOnNavigatorEvent(event => {
+        if (page[event.id]) {
+            page[event.id]();
+        }
+    });
+}
 
-		function evaluate(value) {
-			if (typeof value == 'function') {
-				if (page) {
-					return value.call(page);
-				} else {
-					return null;
-				}
-			}
-			return value;
-		}
+export function set(page, config) {
+    if (!config) {
+        config = {};
+    }
+    if (!config.buttons) {
+        config.buttons = [];
+    }
 
-		return {
-			title: evaluate(options.title),
-			headerTintColor: getColor('white-0'),
-			headerStyle: {
-				backgroundColor: getColor(evaluate(options.hue) + '-7', 'azure-7')
-			},
-			headerRight: page ? (
-				<View style={{ flexDirection: 'row' }}>
-					{evaluate(options.buttons)}
-				</View>
-			) : null
-		};
-	}
+    page.props.navigator.setTitle({ title: config.title });
+
+    page.props.navigator.setStyle({
+        navBarTextFontFamily: 'soho',
+        navBarSubtitleFontFamily: 'soho',
+        navBarTextColor: getColor('white-0'),
+        navBarBackgroundColor: getColor(config.hue + '-7', 'azure-7'),
+        statusBarColor: getColor(config.hue + '-8', 'azure-8'),
+        navBarButtonColor: getColor('white-0')
+    });
+
+    var buttons = [];
+    config.buttons.map(button => {
+        buttons.push({
+            title: getTitle(button, buttons),
+            id: button.id,
+            buttonFontFamily: 'soho',
+            showAsAction: buttons.length == 0 ? 'always' : 'never'
+        });
+    });
+
+    page.props.navigator.setButtons({ rightButtons: buttons.reverse() });
+
+    page.props.navigator.setOnNavigatorEvent(event => {
+        if (page[event.id]) {
+            page[event.id]();
+        }
+    });
+}
+
+function getTitle(button, buttons) {
+    if (Platform.OS == 'android' && buttons.length > 0) {
+        return Icon.getChar(button.icon) + '   ' + button.id.charAt(0).toUpperCase() + button.id.substring(1);
+    } else {
+        return Icon.getChar(button.icon);
+    }
 }

@@ -17,7 +17,7 @@ import {
 	ListItem,
 	Loading,
 	Modal,
-	NavStyle,
+	Navigation,
 	Page,
 	TextInput
 } from '../soho/All';
@@ -29,8 +29,9 @@ export default class IssueDetails extends Component {
 
 		this.state = {};
 
-		props.navigator.setTitle({ title: 'Details' });
-		props.navigator.setStyle(new NavStyle());
+		Navigation.set(this, {
+			title: 'Details',
+		});
 	}
 
 	componentDidMount() {
@@ -238,7 +239,9 @@ export default class IssueDetails extends Component {
 						<Button
 							icon='mingle-share'
 							title='New Message'
+
 							onPress={() => this.props.navigator.push({ screen: 'CreateMessage', passProps: { issue: this.props.id } })}
+
 						/>
 					</ListItem>
 				}
