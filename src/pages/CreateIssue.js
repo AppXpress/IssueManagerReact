@@ -26,13 +26,7 @@ export default class CreateIssue extends Component {
 	constructor(props) {
 		super(props);
 
-		this.state = {
-			subject: '',
-			description: '',
-			issueType: '0',
-			severity: '0',
-			loading: false,
-		};
+		this.state = {};
 
 		Navigation.set(this, {
 			title: 'Issue Editor',
@@ -71,6 +65,12 @@ export default class CreateIssue extends Component {
 		issue.description = this.state.description;
 		issue.assignedTo = { memberId: this.state.assignedTo };
 
+		if (!this.state.issueType) {
+			delete issue.issueType;
+		}
+		if (!this.state.severity) {
+			delete issue.severity;
+		}
 		if (!this.state.assignedTo) {
 			delete issue.assignedTo;
 		}
@@ -83,13 +83,13 @@ export default class CreateIssue extends Component {
 		}
 
 		if (appx.data) {
-
 			this.props.navigator.pop();
 			this.props.reload();
 		} else {
-
 			alert('Something went wrong!');
 		}
+
+		this.setState({ loading: false });
 	}
 
 	render() {
@@ -114,6 +114,7 @@ export default class CreateIssue extends Component {
 						selectedValue={this.state.issueType}
 						onValueChange={(item, index) => this.setState({ issueType: item })}
 					>
+						<Picker.Item label='None' value={null} />
 						<Picker.Item label="Shipping" value='1' />
 						<Picker.Item label="Factory Supply" value='2' />
 						<Picker.Item label="Quality Control" value='3' />
@@ -124,6 +125,7 @@ export default class CreateIssue extends Component {
 						selectedValue={this.state.severity}
 						onValueChange={(item, index) => this.setState({ severity: item })}
 					>
+						<Picker.Item label='None' value={null} />
 						<Picker.Item label="Low" value="1" />
 						<Picker.Item label="Medium" value="2" />
 						<Picker.Item label="High" value="3" />

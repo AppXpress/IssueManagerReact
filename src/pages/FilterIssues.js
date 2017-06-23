@@ -89,11 +89,11 @@ export default class FilterIssues extends Component {
                         selectedValue={this.state.severity}
                         onValueChange={item => this.setState({ severity: item })}
                     >
-                        <Picker.Item label='High' value='3' />
-                        <Picker.Item label='Medium' value='2' />
-                        <Picker.Item label='Low' value='1' />
-                        <Picker.Item label='Not Set' value='0' />
                         <Picker.Item label='None' value={null} />
+                        <Picker.Item label='Not Set' value='0' />
+                        <Picker.Item label='Low' value='1' />
+                        <Picker.Item label='Medium' value='2' />
+                        <Picker.Item label='High' value='3' />
                     </Picker>
                     <Picker
                         label='Status'
@@ -101,11 +101,11 @@ export default class FilterIssues extends Component {
                         selectedValue={this.state.status}
                         onValueChange={item => this.setState({ status: item })}
                     >
+                        <Picker.Item label='None' value={null} />
                         <Picker.Item label='Opened' value='opened' />
                         <Picker.Item label='Assigned' value='assigned' />
                         <Picker.Item label='Resolved' value='resolved' />
                         <Picker.Item label='Closed' value='closed' />
-                        <Picker.Item label='None' value={null} />
                     </Picker>
                     <Picker
                         label='Issue Type'
@@ -113,11 +113,11 @@ export default class FilterIssues extends Component {
                         selectedValue={this.state.issueType}
                         onValueChange={item => this.setState({ issueType: item })}
                     >
+                        <Picker.Item label='None' value={null} />
+                        <Picker.Item label='Not Set' value='0' />
                         <Picker.Item label='Shipping' value='1' />
                         <Picker.Item label='Factory Supply' value='2' />
                         <Picker.Item label='Quality Control' value='3' />
-                        <Picker.Item label='Not Set' value='0' />
-                        <Picker.Item label='None' value={null} />
                     </Picker>
                     <OrgPicker
                         label='Assigned To'
