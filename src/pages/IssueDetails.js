@@ -23,6 +23,9 @@ import {
 	TextInput
 } from '../soho/All';
 
+/**
+ * Page component for viewing a singular issue
+ */
 export default class IssueDetails extends Component {
 
 	constructor(props) {
@@ -41,38 +44,40 @@ export default class IssueDetails extends Component {
 		});
 	}
 
-	willAppear() {
-		this.setNavigation();
-	}
-
 	componentDidMount() {
 		this.reload();
 	}
 
+	/**
+	 * Resets the navigation appearance when the page is viewed
+	 */
+	willAppear() {
+		this.setNavigation();
+	}
+
+	/**
+	 * Opens the modal for vieiwng and running actions
+	 */
 	action() {
 		this.setState({ pickAction: true });
 	}
 
-	setOwnership(){
-		console.log('atleast2');
-		this.setState({ownerModalVisible: true});
-		console.log(this.state.ownerModalVisible);
-
-	}
-
+	/**
+	 * Runs a workflow action, or if selected, opens user picker
+	 * 
+	 * @param {string} action 
+	 */
 	runAction(action) {
-
-		if(action=='wf_setOwnership'){
+		if (action == 'wf_setOwnership') {
 			this.setOwnership();
-			(console.log('atleast'));
-			this.setState({pickAction: false, acting: false});
+			this.setState({ pickAction: false, acting: false, ownerModalVisible: true });
 			return;
 		}
+
 		this.setState({
 			pickAction: false,
 			acting: true
 		});
-
 
 		AppX.action(this.state.issue, action).then(appx => {
 			this.setState({ acting: false });
@@ -89,10 +94,28 @@ export default class IssueDetails extends Component {
 		});
 	}
 
-	edit() {
-		this.props.navigator.push({ screen: 'CreateIssue', passProps: { issue: this.state.issue, reload: () => this.reload() } });
+	/**
+	 * Sets the new owner on an assigned issue
+	 */
+	async changeOwner() {
+		this.state.issue.owner = this.state.owner;
+		await AppX.persist(this.state.issue);
+		this.reload();
 	}
 
+	/**
+	 * Opens the issue editing page with the current issue
+	 */
+	edit() {
+		this.props.navigator.push({
+			screen: 'CreateIssue',
+			passProps: { issue: this.state.issue, reload: () => this.reload() }
+		});
+	}
+
+	/**
+	 * Styles the navigation based on the issue properties and actions available
+	 */
 	setNavigation() {
 		var nav = {
 			title: 'Details',
@@ -122,6 +145,15 @@ export default class IssueDetails extends Component {
 		Navigation.set(this, nav);
 	}
 
+	async showAttachment(item) {
+		console.log(item);
+		var appx = await AppX.fetchAttachment(item.attachmentUid);
+		console.log(appx);
+	}
+
+	/**
+	 * Loads the issue, its messages, and attachments from the REST API
+	 */
 	reload() {
 		this.setState({
 			issue: null,
@@ -134,10 +166,8 @@ export default class IssueDetails extends Component {
 			ownerModalVisible: false,
 		});
 
+		/* Get the current issue */
 		AppX.fetch('$IssueT3', this.props.id, true).then(({ data }) => {
-
-
-
 			this.setState({
 				issue: data.data,
 				actions: data.actionSet.action.filter(action => {
@@ -145,18 +175,17 @@ export default class IssueDetails extends Component {
 				}),
 				editable: data.actionSet.action.indexOf('modify') > -1
 			});
-			if(this.state.actions.indexOf('wf_takeOwnership') > -1){
+
+			if (this.state.actions.indexOf('wf_takeOwnership') > -1) {
 				var newActions = this.state.actions;
 				newActions.push('wf_setOwnership');
-				this.setState({actions: newActions});
+				this.setState({ actions: newActions });
 			}
-			console.log(this.state.actions);
-		
 
 			this.setNavigation();
 		});
 
-
+		/* Get the issue messages */
 		AppX.query('$MessageT4', 'issue.rootId = ' + this.props.id + ' ORDER BY createTimestamp DESC').then(({ data }) => {
 			if (data) {
 				this.setState({ messages: data.result || [] });
@@ -165,6 +194,7 @@ export default class IssueDetails extends Component {
 			}
 		});
 
+		/* Get the attachments on the issue */
 		AppX.fetchAttachList('$IssueT3', this.props.id).then(({ data }) => {
 			if (data) {
 				this.setState({ attachments: data.result || [] });
@@ -172,48 +202,6 @@ export default class IssueDetails extends Component {
 				alert('We weren\'t able to load any attachments. Please try again later!');
 			}
 		});
-	}
-
-
-	async showAttachment(item) {
-
-		console.log(item);
-		var appx = await AppX.fetchAttachment(item.attachmentUid);
-		console.log(appx);
-	}
-	async changeOwner(){
-		var newIssue= this.state.issue;
-		newIssue.owner= this.state.owner;
-		await AppX.persist(newIssue);
-		this.reload();
-
-	}
-
-	renderOwnerModal(){
-		return(
-		<View>	
-		<Modal visible={this.state.ownerModalVisible} 
-				title='Select an Owner'
-				onClose={()=>this.setState({ownerModalVisible: false})}
-				onSubmit={()=>this.changeOwner()}
-		>
-
-			<UserPicker
-			selectedValue={this.state.owner}
-			onValueChange={(item, index) => this.setState({ owner: item })}
-			 />
-
-		</Modal>
-		</View>
-		);	
-	}
-
-	switchHistory() {
-		if (this.state.historyShown == false) {
-			this.setState({ historyShown: true, historyButton: 'Hide' });
-		} else {
-			this.setState({ historyShown: false, historyButton: 'Show' });
-		}
 	}
 
 	renderDetails() {
@@ -315,32 +303,8 @@ export default class IssueDetails extends Component {
 			</Card>
 		);
 	}
-	renderHistory() {
-		return (
-			<Card title="History" >
-				<Button title={this.state.historyButton} onPress={() => this.switchHistory()} />
-				{this.state.historyShown &&
-					<FlatList
-						data={this.state.issue.history}
-						keyExtractor={item => item.uid}
-						renderItem={({ item }) => (
-							<ListItem>
-								<ComplexText
-									main={item.newState}
-									secondary={item.modifiedByOrg.name}
-									tertiary={item.modifiedDate}
-								/>
-							</ListItem>
-						)}
-					/>
-				}
-			</Card>
-
-		);
-	}
 
 	renderMessages() {
-
 		return (
 			<Card title="Messages">
 				{this.state.messages &&
@@ -419,8 +383,52 @@ export default class IssueDetails extends Component {
 		);
 	}
 
+	renderHistory() {
+		return (
+			<Card title="History" >
+				<Button
+					title={this.state.historyShown ? 'Hide' : 'Show'}
+					onPress={() => this.setState({ historyShown: !this.state.historyShown })}
+				/>
+				{this.state.historyShown &&
+					<FlatList
+						data={this.state.issue.history}
+						keyExtractor={item => item.uid}
+						renderItem={({ item }) => (
+							<ListItem>
+								<ComplexText
+									main={item.newState}
+									secondary={item.modifiedByOrg.name}
+									tertiary={item.modifiedDate}
+								/>
+							</ListItem>
+						)}
+					/>
+				}
+			</Card>
+		);
+	}
 
+	renderOwnerModal() {
+		return (
+			<View>
+				<Modal visible={this.state.ownerModalVisible}
+					title='Select an Owner'
+					onClose={() => this.setState({ ownerModalVisible: false })}
+					onSubmit={() => this.changeOwner()}
+				>
+					<UserPicker
+						selectedValue={this.state.owner}
+						onValueChange={(item, index) => this.setState({ owner: item })}
+					/>
+				</Modal>
+			</View>
+		);
+	}
 
+	/**
+	 * Renders each page component, or a loader if the issue is not available
+	 */
 	render() {
 		if (!this.state.issue) {
 			return (
@@ -428,20 +436,20 @@ export default class IssueDetails extends Component {
 					<Loading />
 				</Page>
 			);
+		} else {
+			return (
+				<Page>
+					{this.renderDetails()}
+					{this.renderTimestamps()}
+					{this.renderParticipants()}
+					{this.renderAttachments()}
+					{this.renderMessages()}
+					{this.renderActions()}
+					{this.renderHistory()}
+					{this.renderOwnerModal()}
+				</Page>
+			);
 		}
-
-		return (
-			<Page>
-				{this.renderDetails()}
-				{this.renderTimestamps()}
-				{this.renderParticipants()}
-				{this.renderAttachments()}
-				{this.renderMessages()}
-				{this.renderActions()}
-				{this.renderHistory()}
-				{this.renderOwnerModal()}
-			</Page>
-		);
 	}
 }
 

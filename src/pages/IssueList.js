@@ -31,7 +31,9 @@ export default class IssueList extends Component {
 
 		this.props = props;
 
-		this.state = {};
+		this.state = {
+			filter: ''
+		};
 
 		Navigation.bind(this);
 	}
@@ -46,7 +48,6 @@ export default class IssueList extends Component {
 	willAppear() {
 		Navigation.set(this, {
 			title: 'Issue List',
-			filter: '',
 			buttons: [
 				{ icon: 'refresh', id: 'reload' },
 				{ icon: 'user', id: 'logout' },
@@ -99,10 +100,10 @@ export default class IssueList extends Component {
 	/**
 	 * Function called by the filter page to set the query for the list
 	 * 
-	 * @param {*} query the oql query to use when getting issue items
+	 * @param {string} query the oql query to use when getting issue items
 	 */
 	setFilter(query) {
-		this.state.filter = query;
+		this.state.filter = query
 		this.reload();
 	}
 
