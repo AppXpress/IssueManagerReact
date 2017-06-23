@@ -39,10 +39,10 @@ export default class IssueDetails extends Component {
 			]
 		});
 	}
- 
- 	willAppear(){
- 		this.setNavigation();
- 	}
+
+	willAppear() {
+		this.setNavigation();
+	}
 
 	componentDidMount() {
 		this.reload();
@@ -77,15 +77,15 @@ export default class IssueDetails extends Component {
 		this.props.navigator.push({ screen: 'CreateIssue', passProps: { issue: this.state.issue, reload: () => this.reload() } });
 	}
 
-	setNavigation(){
+	setNavigation() {
 		var nav = {
-				title: 'Details',
-				buttons: [
-					{ icon: 'refresh', id: 'reload' },
-					{ icon: 'launch', id: 'action' }
-				]
-			};
-			if(this.state.issue){
+			title: 'Details',
+			buttons: [
+				{ icon: 'refresh', id: 'reload' },
+				{ icon: 'launch', id: 'action' }
+			]
+		};
+		if (this.state.issue) {
 			switch (this.state.issue.severity) {
 				case '1':
 					nav.hue = 'emerald';
@@ -103,7 +103,7 @@ export default class IssueDetails extends Component {
 				nav.buttons.push({ icon: 'edit', id: 'edit' });
 			}
 		}
-			Navigation.set(this, nav);
+		Navigation.set(this, nav);
 	}
 
 	reload() {
@@ -126,31 +126,7 @@ export default class IssueDetails extends Component {
 				editable: data.actionSet.action.indexOf('modify') > -1
 			});
 
-			var nav = {
-				title: 'Details',
-				buttons: [
-					{ icon: 'refresh', id: 'reload' },
-					{ icon: 'launch', id: 'action' }
-				]
-			};
-			switch (data.data.severity) {
-				case '1':
-					nav.hue = 'emerald';
-					break;
-				case '2':
-					nav.hue = 'amber';
-					break;
-				case '3':
-					nav.hue = 'ruby';
-					break;
-				default:
-					nav.hue = 'slate';
-			}
-			if (this.state.editable) {
-				nav.buttons.push({ icon: 'edit', id: 'edit' });
-			}
-
-			Navigation.set(this, nav);
+			this.setNavigation();
 		});
 
 		AppX.query('$MessageT4', 'issue.rootId = ' + this.props.id + ' ORDER BY createTimestamp DESC').then(({ data }) => {
@@ -198,21 +174,24 @@ export default class IssueDetails extends Component {
 					<Field label='Issue type' entry={getType(this.state.issue.issueType)} />
 				</Field.Row>
 
-				<Field label='Assigned to'>
-					{this.state.issue.assignedTo &&
-						<ComplexText
-							nopadding
-							noborder
-							main={this.state.issue.assignedTo.name}
-							secondary={(this.state.issue.assignedTo.address || {}).addressLine1}
-							tertiary={(this.state.issue.assignedTo.address || {}).city}
-						/>
-					}
+				<Field.Row>
+					<Field label='Assigned to'>
+						{this.state.issue.assignedTo &&
+							<ComplexText
+								nopadding
+								noborder
+								main={this.state.issue.assignedTo.name}
+								secondary={(this.state.issue.assignedTo.address || {}).addressLine1}
+								tertiary={(this.state.issue.assignedTo.address || {}).city}
+							/>
+						}
 
-					{!this.state.issue.assignedTo &&
-						<ComplexText main='Unassigned' />
-					}
-				</Field>
+						{!this.state.issue.assignedTo &&
+							<ComplexText main='Unassigned' />
+						}
+					</Field>
+					<Field label='Owner' entry={this.state.issue.owner} />
+				</Field.Row>
 
 				<Field label='Description' entry={this.state.issue.description} />
 			</Card>
@@ -367,7 +346,7 @@ export default class IssueDetails extends Component {
 						keyExtractor={item => item}
 						renderItem={({ item }) => (
 							<ListItem onPress={() => this.runAction(item)}>
-								<ComplexText main={item.charAt(3).toUpperCase() + item.substring(4)} />
+								<ComplexText main={formatAction(item)} />
 							</ListItem>
 						)}
 					/>
@@ -431,4 +410,8 @@ function getSeverity(level) {
 	if (level == 1) {
 		return 'Low';
 	}
+}
+
+function formatAction(name) {
+	return name.charAt(3).toUpperCase() + name.substring(4).replace(/([A-Z])/g, ' $1').trim();
 }
