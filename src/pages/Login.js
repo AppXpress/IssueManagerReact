@@ -20,6 +20,9 @@ import {
 	Utilities
 } from '../gtn/All';
 
+/**
+ * Page component for loggin in
+ */
 export default class Login extends Component {
 
 	constructor(props) {
@@ -66,10 +69,13 @@ export default class Login extends Component {
 		}
 	}
 
+	/**
+	 * Signs in the user with the current username, password, and eid
+	 */
 	async login(event) {
 		this.setState({ loading: true });
+
 		var appx = await AppX.login(this.state.username, this.state.password, this.state.eid);
-		this.setState({ loading: false });
 
 		if (appx.data) {
 			if (__DEV__) {
@@ -82,8 +88,13 @@ export default class Login extends Component {
 		} else {
 			alert('Login failed. Please try again.');
 		}
+
+		this.setState({ loading: false });
 	}
 
+	/**
+	 * Renders a page with a login fields and a button to submit
+	 */
 	render() {
 		return (
 			<Page>
