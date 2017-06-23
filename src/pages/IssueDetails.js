@@ -6,7 +6,8 @@ import {
 } from 'react-native';
 
 import {
-	AppX
+	AppX,
+	UserPicker,
 } from '../gtn/All';
 
 import {
@@ -52,11 +53,26 @@ export default class IssueDetails extends Component {
 		this.setState({ pickAction: true });
 	}
 
+	setOwnership(){
+		console.log('atleast2');
+		this.setState({ownerModalVisible: true});
+		console.log(this.state.ownerModalVisible);
+
+	}
+
 	runAction(action) {
+
+		if(action=='wf_setOwnership'){
+			this.setOwnership();
+			(console.log('atleast'));
+			this.setState({pickAction: false, acting: false});
+			return;
+		}
 		this.setState({
 			pickAction: false,
 			acting: true
 		});
+
 
 		AppX.action(this.state.issue, action).then(appx => {
 			this.setState({ acting: false });
@@ -115,9 +131,13 @@ export default class IssueDetails extends Component {
 			editable: false,
 			historyShown: false,
 			historyButton: 'Show',
+			ownerModalVisible: false,
 		});
 
 		AppX.fetch('$IssueT3', this.props.id, true).then(({ data }) => {
+
+
+
 			this.setState({
 				issue: data.data,
 				actions: data.actionSet.action.filter(action => {
@@ -125,9 +145,17 @@ export default class IssueDetails extends Component {
 				}),
 				editable: data.actionSet.action.indexOf('modify') > -1
 			});
+			if(this.state.actions.indexOf('wf_takeOwnership') > -1){
+				var newActions = this.state.actions;
+				newActions.push('wf_setOwnership');
+				this.setState({actions: newActions});
+			}
+			console.log(this.state.actions);
+		
 
 			this.setNavigation();
 		});
+
 
 		AppX.query('$MessageT4', 'issue.rootId = ' + this.props.id + ' ORDER BY createTimestamp DESC').then(({ data }) => {
 			if (data) {
@@ -152,6 +180,32 @@ export default class IssueDetails extends Component {
 		console.log(item);
 		var appx = await AppX.fetchAttachment(item.attachmentUid);
 		console.log(appx);
+	}
+	async changeOwner(){
+		var newIssue= this.state.issue;
+		newIssue.owner= this.state.owner;
+		await AppX.persist(newIssue);
+		this.reload();
+
+	}
+
+	renderOwnerModal(){
+		return(
+		<View>	
+		<Modal visible={this.state.ownerModalVisible} 
+				title='Select an Owner'
+				onClose={()=>this.setState({ownerModalVisible: false})}
+				onSubmit={()=>this.changeOwner()}
+		>
+
+			<UserPicker
+			selectedValue={this.state.owner}
+			onValueChange={(item, index) => this.setState({ owner: item })}
+			 />
+
+		</Modal>
+		</View>
+		);	
 	}
 
 	switchHistory() {
@@ -365,6 +419,8 @@ export default class IssueDetails extends Component {
 		);
 	}
 
+
+
 	render() {
 		if (!this.state.issue) {
 			return (
@@ -383,6 +439,7 @@ export default class IssueDetails extends Component {
 				{this.renderMessages()}
 				{this.renderActions()}
 				{this.renderHistory()}
+				{this.renderOwnerModal()}
 			</Page>
 		);
 	}
