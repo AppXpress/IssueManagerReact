@@ -32,7 +32,11 @@ export default class OrgPicker extends Component {
 		}
 
 		// Gets the list of organizations
-		AppX.query('Community').then(({ data }) => this.setState({ orgs: data.result[0].member }));
+		AppX.query('Community').then(({ data }) => {
+			var list = data.result[0].member;
+			list.unshift({ name: 'None' });
+			return this.setState({ orgs: list });
+		});
 	}
 
 	componentWillReceiveProps(next) {
@@ -55,7 +59,7 @@ export default class OrgPicker extends Component {
 				onValueChange={getHandler(this, 'onValueChange')}
 			>
 				{this.state.orgs.map(org => (
-					<Picker.Item label={org.name} secondary={org.memberId} value={org.memberId} key={org.memberId} />
+					<Picker.Item label={org.name} secondary={org.memberId} value={org.memberId} key={'Org' + org.memberId} />
 				))}
 			</Picker>
 		);
