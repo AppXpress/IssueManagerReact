@@ -21,6 +21,9 @@ import {
 	IssueList
 } from './IssueList.js';
 
+/**
+ * Page component for editing or creating issues
+ */
 export default class CreateIssue extends Component {
 
 	constructor(props) {
@@ -44,6 +47,9 @@ export default class CreateIssue extends Component {
 		}
 	}
 
+	/**
+	 * Saves the current issue being edited or creates it if it doesn't exist
+	 */
 	async persist() {
 		this.setState({ loading: true });
 
@@ -92,6 +98,9 @@ export default class CreateIssue extends Component {
 		this.setState({ loading: false });
 	}
 
+	/**
+	 * Renders field editors for each property in an issue
+	 */
 	render() {
 		return (
 			<Page>

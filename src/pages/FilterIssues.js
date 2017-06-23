@@ -20,6 +20,9 @@ import {
     Utilities
 } from '../gtn/All';
 
+/**
+ * Page component for filtering issues
+ */
 export default class FilterIssues extends Component {
 
     constructor(props) {
@@ -32,6 +35,9 @@ export default class FilterIssues extends Component {
         });
     }
 
+    /**
+     * Builds the OQL from the fields and sets the filter on the issue list page
+     */
     setFilter() {
         constraints = [];
 
@@ -77,6 +83,9 @@ export default class FilterIssues extends Component {
         this.props.setFilter(query);
     }
 
+    /**
+     * Renders a set of fields to filter the issues by
+     */
     render() {
         return (
             <Page>

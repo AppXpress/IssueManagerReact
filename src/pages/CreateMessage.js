@@ -1,9 +1,5 @@
 import React, { Component } from 'react';
 
-import { NavigationActions } from 'react-navigation';
-
-import { } from 'react-native';
-
 import {
 	AppX
 } from '../gtn/All';
@@ -18,6 +14,9 @@ import {
 	TextInput
 } from '../soho/All';
 
+/**
+ * Page component for writing messages
+ */
 export default class CreateMessage extends Component {
 
 	constructor(props) {
@@ -31,14 +30,15 @@ export default class CreateMessage extends Component {
 		});
 	}
 
-	async postMessage(event) {
+	/**
+	 * Saves a message on the system on the current issue
+	 */
+	async postMessage() {
 		this.setState({ loading: true });
-		console.log(this.props);
-		let today = new Date();
 
 		var body = {
 			"type": "$MessageT4",
-			"createdOn": today,
+			"createdOn": new Date(),
 			"text": this.state.message,
 			"issue": {
 				"reference": "Issue",
@@ -50,20 +50,22 @@ export default class CreateMessage extends Component {
 				"memberId": "5717989018004281",
 			}
 		};
-		console.log(body);
-		console.log(this.props);
+
 		var appx = await AppX.create(body);
 
 		if (appx.data) {
-			this.setState({ loading: false });
 			this.props.navigator.pop();
 			this.props.reload();
 		} else {
-			this.setState({ loading: false });
 			alert('We were\'nt able to create your message. Please try again later.');
 		}
+
+		this.setState({ loading: false });
 	}
 
+	/**
+	 * Renders a textbox for typing a message and button to submit
+	 */
 	render() {
 		return (
 			<Page>
@@ -72,7 +74,7 @@ export default class CreateMessage extends Component {
 						label='Message Text'
 						onChangeText={(text) => this.setState({ message: text })}
 						multiline
-						rows={5}
+						rows={7}
 					/>
 
 					<Button
