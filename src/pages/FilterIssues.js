@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import {
-    View
+    View,
 } from 'react-native';
 
 import {
@@ -83,6 +83,14 @@ export default class FilterIssues extends Component {
                         value={this.state.subject}
                         onChangeText={(text) => this.setState({ subject: text })}
                     />
+
+                    <TextInput
+                        label='Description'
+                        value={this.state.description}
+                        onChangeText={(text) => this.setState({ description: text })}
+                        multiline
+                        rows={3}
+                    />
                     <Picker
                         label='Severity'
                         title='Select a severity'
@@ -124,18 +132,15 @@ export default class FilterIssues extends Component {
                         selectedValue={this.state.assignedTo}
                         onValueChange={item => this.setState({ assignedTo: value })}
                     />
-                    <TextInput
-                        label='Description'
-                        value={this.state.description}
-                        onChangeText={(text) => this.setState({ description: text })}
-                        multiline
-                        rows={3}
-                    />
+            
+
+                
                     <Button
                         title='Set filter'
                         onPress={() => this.setFilter()}
                         primary
                     />
+
                 </Card>
             </Page>
         );
