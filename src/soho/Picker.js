@@ -127,7 +127,7 @@ export default class Picker extends Component {
 				>
 					<FlatList
 						data={this.state.data}
-						keyExtractor={item => item.props.value}
+						keyExtractor={item => 'Picker' + item.props.value}
 						renderItem={this.renderItem.bind(this)}
 					/>
 				</Modal>
