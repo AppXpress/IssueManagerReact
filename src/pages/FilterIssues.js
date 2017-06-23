@@ -61,6 +61,9 @@ export default class FilterIssues extends Component {
         if (this.state.description) {
             constraints.push(`description CONTAINS "${this.state.description}"`);
         }
+        if (this.state.lastDays) {
+            constraints.push(`createdOn IN @(LAST ${this.state.lastDays} DAYS INCLUSIVE)`);
+        }
 
         query = '';
         constraints.forEach(item => {
@@ -83,13 +86,18 @@ export default class FilterIssues extends Component {
                         value={this.state.subject}
                         onChangeText={(text) => this.setState({ subject: text })}
                     />
-
                     <TextInput
                         label='Description'
                         value={this.state.description}
                         onChangeText={(text) => this.setState({ description: text })}
                         multiline
                         rows={3}
+                    />
+                    <TextInput
+                        label='Created in last X days'
+                        value={this.state.lastDays}
+                        onChangeText={(text) => this.setState({ lastDays: text })}
+                        keyboardType='numeric'
                     />
                     <Picker
                         label='Severity'
@@ -132,15 +140,11 @@ export default class FilterIssues extends Component {
                         selectedValue={this.state.assignedTo}
                         onValueChange={item => this.setState({ assignedTo: value })}
                     />
-            
-
-                
                     <Button
                         title='Set filter'
                         onPress={() => this.setFilter()}
                         primary
                     />
-
                 </Card>
             </Page>
         );
