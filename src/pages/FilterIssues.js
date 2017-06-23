@@ -85,6 +85,7 @@ export default class FilterIssues extends Component {
                     />
                     <Picker
                         label='Severity'
+                        title='Select a severity'
                         selectedValue={this.state.severity}
                         onValueChange={item => this.setState({ severity: item })}
                     >
@@ -96,6 +97,7 @@ export default class FilterIssues extends Component {
                     </Picker>
                     <Picker
                         label='Status'
+                        title='Select a status'
                         selectedValue={this.state.status}
                         onValueChange={item => this.setState({ status: item })}
                     >
@@ -107,6 +109,7 @@ export default class FilterIssues extends Component {
                     </Picker>
                     <Picker
                         label='Issue Type'
+                        title='Select a type'
                         selectedValue={this.state.issueType}
                         onValueChange={item => this.setState({ issueType: item })}
                     >
