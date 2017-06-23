@@ -69,8 +69,11 @@ export default class IssueDetails extends Component {
 	 */
 	runAction(action) {
 		if (action == 'wf_setOwnership') {
-			this.setOwnership();
-			this.setState({ pickAction: false, acting: false, ownerModalVisible: true });
+			this.setState({
+				pickAction: false,
+				acting: false,
+				ownerModalVisible: true
+			});
 			return;
 		}
 
@@ -97,10 +100,18 @@ export default class IssueDetails extends Component {
 	/**
 	 * Sets the new owner on an assigned issue
 	 */
-	async changeOwner() {
+	changeOwner() {
+		this.setState({ ownerModalVisible: false, acting: true });
 		this.state.issue.owner = this.state.owner;
-		await AppX.persist(this.state.issue);
-		this.reload();
+
+		AppX.persist(this.state.issue).then(({ data }) => {
+			if (data) {
+				this.reload();
+			} else {
+				alert('We were unable to perform the select action. Please try again later.');
+			}
+			this.setState({ acting: false });
+		});
 	}
 
 	/**

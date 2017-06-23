@@ -55,7 +55,7 @@ export default class UserPicker extends Component {
 				onValueChange={getHandler(this, 'onValueChange')}
 			>
 				{this.state.users.map(user => (
-					<Picker.Item label={user.name}  value={user.uid} key={user.uid} />
+					<Picker.Item label={user.login} value={user.uid} key={user.uid} />
 				))}
 			</Picker>
 		);

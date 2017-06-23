@@ -84,11 +84,8 @@ export default class IssueList extends Component {
 			issues: null,
 			loading: true
 		});
-		if(this.state.filter){
+
 		var appx = await AppX.query('$IssueT3', this.state.filter + ' ORDER BY modifyTimestamp DESC');
-		}else{
-			var appx = await AppX.query('$IssueT3', ' ORDER BY modifyTimestamp DESC');
-		}
 		if (appx.data) {
 			this.setState({
 				fullIssues: appx.data.result,
