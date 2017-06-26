@@ -76,7 +76,7 @@ export default class Login extends Component {
 		this.setState({ loading: true });
 
 		var appx = await AppX.login(this.state.username, this.state.password, this.state.eid);
-
+		this.setState({ loading: false });
 		if (appx.data) {
 			if (__DEV__) {
 				this.setCredentials()
@@ -86,10 +86,10 @@ export default class Login extends Component {
 				screen: 'IssueList'
 			});
 		} else {
-			alert('Login failed. Please try again.');
+			setTimeout(()=> {alert('Login failed. Please try again.')}, 1000);
 		}
 
-		this.setState({ loading: false });
+		
 	}
 
 	/**
