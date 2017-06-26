@@ -89,9 +89,9 @@ export default class IssueDetails extends Component {
 				this.reload();
 			} else {
 				if (typeof appx.error == 'string') {
-					setTimeout(()=>{
-						Alert.alert(appx.error);
-					},600);
+					setTimeout(() => {
+						alert(appx.error);
+					}, 600);
 				} else {
 					alert('We were unable to perform the select action. Please try again later.');
 				}
@@ -390,8 +390,8 @@ export default class IssueDetails extends Component {
 				</Modal>
 
 				{this.state.acting &&
-				 	<Loading block />
-				 }
+					<Loading block />
+				}
 			</View>
 		);
 	}
