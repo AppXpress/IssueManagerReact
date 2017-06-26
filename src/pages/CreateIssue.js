@@ -88,14 +88,16 @@ export default class CreateIssue extends Component {
 			appx = await AppX.create(issue);
 		}
 
+		this.setState({ loading: false });
+
 		if (appx.data) {
 			this.props.navigator.pop();
 			this.props.reload();
 		} else {
-			alert('Something went wrong!');
+			setTimeout(()=>{ alert('Something went wrong!'); }, 800);
 		}
 
-		this.setState({ loading: false });
+		
 	}
 
 	/**
