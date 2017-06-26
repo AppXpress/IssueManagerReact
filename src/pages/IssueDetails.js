@@ -92,8 +92,12 @@ export default class IssueDetails extends Component {
 					setTimeout(() => {
 						alert(appx.error);
 					}, 600);
+					this.reload();
 				} else {
-					alert('We were unable to perform the select action. Please try again later.');
+					setTimeout(()=>{
+						alert('We were unable to perform the select action. Please try again later.');
+					}, 600);
+					this.reload();
 				}
 			}
 		});
