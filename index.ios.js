@@ -6,6 +6,7 @@ import FilterIssues from './src/pages/FilterIssues';
 import IssueDetails from './src/pages/IssueDetails';
 import CreateIssue from './src/pages/CreateIssue';
 import CreateMessage from './src/pages/CreateMessage';
+import CameraScreen from './src/pages/CameraScreen';
 
 
 /**
@@ -18,6 +19,7 @@ Navigation.registerComponent('FilterIssues', () => FilterIssues)
 Navigation.registerComponent('IssueDetails', () => IssueDetails);
 Navigation.registerComponent('CreateIssue', () => CreateIssue);
 Navigation.registerComponent('CreateMessage', () => CreateMessage);
+Navigation.registerComponent('CameraScreen', () => CameraScreen);
 
 Navigation.startSingleScreenApp({
 	screen: { screen: 'Login' }

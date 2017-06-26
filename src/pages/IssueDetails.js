@@ -10,7 +10,6 @@ import {
 	UserPicker,
 } from '../gtn/All';
 
-import Camera from 'react-native-camera';
 
 import {
 	Button,
@@ -183,7 +182,6 @@ export default class IssueDetails extends Component {
 			historyShown: false,
 			historyButton: 'Show',
 			ownerModalVisible: false,
-			cameraOpen: false,
 		});
 
 		/* Get the current issue */
@@ -295,8 +293,14 @@ export default class IssueDetails extends Component {
 		);
 	}
 
+
+	
+
 	addAttachment(){
-		this.setState({cameraOpen: true});
+		this.props.navigator.push({
+							screen: 'CameraScreen',
+							passProps: { issue: this.state.issue }
+						});
 	}
 
 	renderAttachments() {
@@ -318,9 +322,7 @@ export default class IssueDetails extends Component {
 					<ComplexText main="Add Attachment" />
 				</ListItem>	
 
-				{this.state.cameraOpen &&
-					<Camera />
-				}	
+					
 
 				{this.state.attachments && this.state.attachments.length == 0 &&
 					<ListItem>
