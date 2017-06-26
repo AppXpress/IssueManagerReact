@@ -19,9 +19,46 @@ import {
 export default class Rest {
 
 	static _token;
+	static _credentials;
 
-	static token(value) {
-		Rest._token = value;
+	/**
+	 * Sets the login credentials for rest calls
+	 * 
+	 * @param {*} user the username
+	 * @param {*} pass the password
+	 * @param {*} eid the eidentity
+	 */
+	static credentials(user, pass, eid) {
+		var auth = user + ':' + pass;
+		if (eid) {
+			auth += ':' + eid;
+		}
+
+		Rest._credentials = base64Encode(auth);
+	}
+
+	/**
+	 * Runs the authentication rest call on the system
+	 * 
+	 * @returns an object with the rest results
+	 */
+	static async authenticate() {
+		try {
+			var response = await new Rest()
+				.base()
+				.header('Authorization', 'Basic ' + Rest._credentials)
+				.get();
+
+			if (!response.ok) {
+				throw response;
+			}
+
+			Rest._token = response.headers.get('Authorization');
+			return { data: true };
+		} catch (error) {
+			console.warn(error);
+			return { error: error }
+		}
 	}
 
 	/**
@@ -69,7 +106,15 @@ export default class Rest {
 				}
 			}
 
-			return await fetch(this._getUrl(), args);
+			var result = await fetch(this._getUrl(), args);
+
+			// Reauthenticates and retries the call if the token was expired
+			if (result.status == 401) {
+				await Rest.authenticate();
+				result = await fetch(this._getUrl(), args);
+			}
+
+			return result;
 		}
 	}
 

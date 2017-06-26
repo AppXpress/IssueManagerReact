@@ -10,27 +10,8 @@ import { base64Encode } from './Utilities';
  * @returns true if successful, null otherwise
  */
 export async function login(user, pass, eid) {
-	var auth = user + ':' + pass;
-	if (eid) {
-		auth += ':' + eid;
-	}
-
-	try {
-		var response = await new Rest()
-			.base()
-			.header('Authorization', 'Basic ' + base64Encode(auth))
-			.get();
-
-		if (!response.ok) {
-			throw response;
-		}
-
-		Rest.token(response.headers.get('Authorization'));
-		return { data: true };
-	} catch (error) {
-		console.warn(error);
-		return { error: error }
-	}
+	Rest.credentials(user, pass, eid);
+	return Rest.authenticate();
 }
 
 /**
