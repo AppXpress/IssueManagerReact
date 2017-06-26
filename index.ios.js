@@ -7,6 +7,11 @@ import IssueDetails from './src/pages/IssueDetails';
 import CreateIssue from './src/pages/CreateIssue';
 import CreateMessage from './src/pages/CreateMessage';
 
+
+/**
+*	Entry-point for iOS devices. Registers all necesarry pages
+*	to the navigation library.
+*/
 Navigation.registerComponent('Login', () => Login);
 Navigation.registerComponent('IssueList', () => IssueList);
 Navigation.registerComponent('FilterIssues', () => FilterIssues)
