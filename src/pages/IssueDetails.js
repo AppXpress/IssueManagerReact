@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import {
 	FlatList,
-	View
+	View,
 } from 'react-native';
 
 import {
@@ -89,7 +89,9 @@ export default class IssueDetails extends Component {
 				this.reload();
 			} else {
 				if (typeof appx.error == 'string') {
-					alert(appx.error);
+					setTimeout(()=>{
+						Alert.alert(appx.error);
+					},600);
 				} else {
 					alert('We were unable to perform the select action. Please try again later.');
 				}
@@ -388,8 +390,8 @@ export default class IssueDetails extends Component {
 				</Modal>
 
 				{this.state.acting &&
-					<Loading block />
-				}
+				 	<Loading block />
+				 }
 			</View>
 		);
 	}
