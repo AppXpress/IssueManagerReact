@@ -13,6 +13,7 @@ import {
 	Navigation,
 	Page,
 	Card,
+	Button,
 } from '../soho/All'
 
 
@@ -31,12 +32,17 @@ export default class CameraDisplay extends Component {
 		console.log(this.props.image);
 
     }
+    upload(){
+    	this.props.navigator.pop();
+    	this.props.navigator.pop();
+    }
 
     render(){
     	return(
     		<Page>
     			<Card>
-    				<Image source={{uri:this.props.image.path}} style={{width: 400, height: 400}}/>
+    				<Image source={{uri:this.props.image.path}} style={styles.img} />
+    				<Button primary onPress={()=>this.upload()} title='Upload' />
     			</Card>
     		</Page>	
 
@@ -49,3 +55,13 @@ export default class CameraDisplay extends Component {
 
 
 }
+const styles = StyleSheet.create({
+
+  img: {
+  	width: 350,
+  	height: 400,
+    flex: 1,
+    alignSelf: 'stretch',
+    resizeMode: 'contain',
+	}
+});			
