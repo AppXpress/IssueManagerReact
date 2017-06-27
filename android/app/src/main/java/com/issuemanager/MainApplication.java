@@ -3,6 +3,7 @@ package com.issuemanager;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.RNFetchBlob.RNFetchBlobPackage;
 import com.lwansbrough.RCTCamera.RCTCameraPackage;
 import com.reactnativenavigation.NavigationApplication;
 import com.facebook.react.ReactNativeHost;
@@ -26,7 +27,8 @@ public class MainApplication extends NavigationApplication {
         // No need to add RnnPackage and MainReactPackage
         return Arrays.<ReactPackage>asList(
             // eg. new VectorIconsPackage()
-            new RCTCameraPackage()
+            new RCTCameraPackage(),
+            new RNFetchBlobPackage()
         );
     }
 

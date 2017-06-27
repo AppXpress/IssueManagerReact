@@ -13,6 +13,15 @@ import {
 	base64Encode
 } from './Utilities';
 
+import RNFetchBlob from 'react-native-fetch-blob'
+
+const Fetch = RNFetchBlob.polyfill.Fetch
+
+window.fetch = new Fetch({
+	auto: true,
+	binaryContentTypes: ['image/']
+}).build()
+
 /**
  * Builder class for performing REST API queries
  */
@@ -53,7 +62,7 @@ export default class Rest {
 				throw response;
 			}
 
-			Rest._token = response.headers.get('Authorization');
+			Rest._token = response.headers.Authorization;
 			return { data: true };
 		} catch (error) {
 			console.warn(error);
