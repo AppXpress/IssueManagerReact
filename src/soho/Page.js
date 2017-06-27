@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 
 import {
 	StyleSheet,
-	ScrollView
+	ScrollView,
+	View
 } from 'react-native';
 
 import {
@@ -20,21 +21,31 @@ export default class Page extends Component {
 	}
 
 	/**
-	 * Renders a styled scroll view wrapper for pages
+	 * Renders a styled scroll view or regular view wrapper for pages
 	 */
 	render() {
-		return (
-			<ScrollView style={styles.scroll}>
-				{this.props.children}
-			</ScrollView>
-		);
+		if (this.props.fill) {
+			return (
+				<View style={[styles.view, styles.fill]}>
+					{this.props.children}
+				</View>
+			);
+		} else {
+			return (
+				<ScrollView style={styles.view}>
+					{this.props.children}
+				</ScrollView>
+			);
+		}
 	}
 };
 
 const styles = StyleSheet.create({
-	scroll: {
-		padding: 0,
-		flexDirection: 'column',
+	view: {
 		backgroundColor: getColor('graphite-1')
+	},
+	fill: {
+		flex: 1,
+		alignItems: 'stretch'
 	}
 });

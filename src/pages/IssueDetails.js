@@ -166,16 +166,10 @@ export default class IssueDetails extends Component {
 
 	async showAttachment(item) {
 		this.setState({ loading: true });
-
-		console.log(item);
 		var appx = await AppX.fetchAttachment(item.attachmentUid);
-		console.log(appx);
+		this.setState({ loading: false });
 
-		this.setState({
-			loading: false,
-			viewImage: true,
-			image: appx.data
-		});
+		this.props.navigator.push({ screen: 'ImageDisplay', passProps: { image: appx.data } });
 	}
 
 	/**

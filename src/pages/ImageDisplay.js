@@ -30,21 +30,18 @@ export default class ImageDisplay extends Component {
 
 	render() {
 		return (
-			<View style={styles.view}>
+			<Page fill>
 				<Image
 					style={styles.image}
-					source={{ url: this.props.image }}
+					resizeMode='contain'
+					source={{ uri: this.props.image }}
 				/>
-			</View>
+			</Page>
 		);
 	}
 }
 
 const styles = StyleSheet.create({
-	view: {
-		flex: 1,
-		alignContents: 'stretch'
-	},
 	image: {
 		flex: 1
 	}

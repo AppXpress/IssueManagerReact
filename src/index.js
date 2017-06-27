@@ -18,6 +18,9 @@ Navigation.registerComponent('IssueList', () => IssueList);
 Navigation.registerComponent('FilterIssues', () => FilterIssues)
 Navigation.registerComponent('IssueDetails', () => IssueDetails);
 Navigation.registerComponent('CreateIssue', () => CreateIssue);
+Navigation.registerComponent(
+    'ImageDisplay', () => require('./pages/ImageDisplay').default
+);
 Navigation.registerComponent('CreateMessage', () => CreateMessage);
 Navigation.registerComponent('CameraScreen', () => CameraScreen);
 Navigation.registerComponent('CameraDisplay', () => CameraDisplay);
