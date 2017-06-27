@@ -39,10 +39,6 @@ export async function fetch(type, uid, meta) {
 
 		var response = await query.get();
 
-		if (!response.ok) {
-			throw response;
-		}
-
 		return { data: await response.json() };
 	} catch (error) {
 		console.warn(error);
@@ -70,10 +66,6 @@ export async function query(type, oql) {
 
 		var response = await query.get();
 
-		if (!response.ok) {
-			throw response;
-		}
-
 		return { data: await response.json() };
 	} catch (error) {
 		console.warn(error);
@@ -93,10 +85,6 @@ export async function create(data) {
 			.base()
 			.path(data.type)
 			.post(JSON.stringify(data));
-
-		if (!response.ok) {
-			throw response;
-		}
 
 		return { data: await response.json() };
 	} catch (error) {
@@ -120,10 +108,6 @@ export async function persist(data) {
 			.path(data.uid)
 			.post(JSON.stringify(data));
 
-		if (!response.ok) {
-			throw response;
-		}
-
 		return { data: await response.json() };
 	} catch (error) {
 		console.warn(error);
@@ -143,10 +127,6 @@ export async function design(type) {
 			.base()
 			.path(type)
 			.get();
-
-		if (!response.ok) {
-			throw response;
-		}
 
 		return { data: await response.json() };
 	} catch (error) {
@@ -172,10 +152,6 @@ export async function action(data, action) {
 			.path(action)
 			.post(JSON.stringify(data));
 
-		if (!response.ok) {
-			throw response;
-		}
-
 		var data = await response.json();
 
 		if (data.transition.message) {
@@ -198,10 +174,6 @@ export async function fetchAttachList(type, uid) {
 			.path(uid)
 			.path('attachment')
 			.get();
-
-		if (!response.ok) {
-			throw response;
-		}
 
 		return { data: await response.json() };
 	} catch (error) {
@@ -227,10 +199,6 @@ export async function fetchAttachment(item) {
 
 		var response = await query.get();
 
-		if (!response.ok) {
-			throw response;
-		}
-
 		var type = response.info().headers['Content-Type'];
 		var data = await response.path();
 
@@ -246,16 +214,21 @@ export async function fetchAttachment(item) {
 }
 
 export async function persistAttachment(data, attachment, name, description) {
-	var query = new Rest()
-		.base()
-		.path(data.type)
-		.path(data.uid)
-		.path('attach')
-		.header('Connection', 'Keep-Alive')
-		.header('Content-Type', 'application/octect-stream')
-		.header('Content-Disposition', `form-data; filename=${name}`)
-		.header('Description', description)
-		.post(Rest.wrap(attachment));
+	try {
+		var response = await new Rest()
+			.base()
+			.path(data.type)
+			.path(data.uid)
+			.path('attach')
+			.header('Connection', 'Keep-Alive')
+			.header('Content-Type', 'application/octect-stream')
+			.header('Content-Disposition', `form-data; filename=${name}`)
+			.header('Description', description)
+			.post(Rest.wrap(attachment));
 
-	var response = await query.post(attachment);
+		return { data: response.json() };
+	} catch (error) {
+		console.warn(error);
+		return { error: error };
+	}
 }

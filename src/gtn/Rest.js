@@ -60,10 +60,6 @@ export default class Rest {
 				.header('Authorization', 'Basic ' + Rest._credentials)
 				.get();
 
-			if (!response.ok) {
-				throw response;
-			}
-
 			Rest._token = response.info().headers.Authorization;
 			return { data: true };
 		} catch (error) {
@@ -115,13 +111,12 @@ export default class Rest {
 			var result = await RNFetchBlob.config(config)
 				.fetch(method, this._getUrl(), this._headers, body);
 
-			if (result.info().status == 401) {
-				await Rest.authenticate();
-				var result = await RNFetchBlob.config(config)
-					.fetch(method, this._getUrl(), this._headers, body);
+			// TODO: re-add token expiration handling
+
+			if (result.info().status < 200 || result.info().status >= 300) {
+				throw new Error('Rest API call failed');
 			}
 
-			result.ok = result.info().status >= 200 && result.info().status < 300;
 			return result;
 		}
 	}
