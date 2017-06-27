@@ -166,16 +166,10 @@ export default class IssueDetails extends Component {
 
 	async showAttachment(item) {
 		this.setState({ loading: true });
-
-		console.log(item);
 		var appx = await AppX.fetchAttachment(item.attachmentUid);
-		console.log(appx);
+		this.setState({ loading: false });
 
-		this.setState({
-			loading: false,
-			viewImage: true,
-			image: appx.data
-		});
+		this.props.navigator.push({ screen: 'ImageDisplay', passProps: { image: appx.data } });
 	}
 
 	/**
@@ -327,17 +321,6 @@ export default class IssueDetails extends Component {
 						</ListItem>
 					)}
 				/>
-
-				<Modal
-					title='Attachment'
-					visible={this.state.viewImage}
-					onClose={() => this.setState({ viewImage: false })}
-					onRequestClose={() => this.setState({ viewImage: false })}
-				>
-					{this.state.image &&
-						<Image source={{ uri: this.state.image }} style={{ flex: 1, minHeight: 100 }} />
-					}
-				</Modal>
 
 				<ListItem onPress={() => this.addAttachment()} >
 					<ComplexText main="Add Attachment" />
