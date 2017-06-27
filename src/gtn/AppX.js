@@ -50,6 +50,146 @@ export async function fetch(type, uid, meta) {
 	}
 }
 
+/**
+ * Runs an OQL query on the GT Nexus REST API
+ * 
+ * @param {string} type the type of object to run the query on
+ * @param {string} oql the oql statement to use, or null to get all objects
+ * @returns the json query data, or null on failure
+ */
+export async function query(type, oql) {
+	try {
+		var query = new Rest()
+			.base()
+			.path(type)
+			.path('query')
+
+		if (oql) {
+			query.param('oql', oql);
+		}
+
+		var response = await query.get();
+
+		if (!response.ok) {
+			throw response;
+		}
+
+		return { data: await response.json() };
+	} catch (error) {
+		console.warn(error);
+		return { error: error };
+	}
+}
+
+/**
+ * Creates an object on GT Nexus systems
+ * 
+ * @param {object} data the object data to create
+ * @returns the response json, or null on error
+ */
+export async function create(data) {
+	try {
+		var response = await new Rest()
+			.base()
+			.path(data.type)
+			.post(JSON.stringify(data));
+
+		if (!response.ok) {
+			throw response;
+		}
+
+		return { data: await response.json() };
+	} catch (error) {
+		console.warn(error);
+		return { error: error };
+	}
+}
+
+/**
+ * Saves changes in an object to GT Nexus
+ * 
+ * @param {object} data the data to save
+ * @returns the response json, or null on error
+ */
+export async function persist(data) {
+	try {
+		var response = await new Rest()
+			.base()
+			.header('If-Match', data.__metadata.fingerprint)
+			.path(data.type)
+			.path(data.uid)
+			.post(JSON.stringify(data));
+
+		if (!response.ok) {
+			throw response;
+		}
+
+		return { data: await response.json() };
+	} catch (error) {
+		console.warn(error);
+		return { error: error };
+	}
+}
+
+/**
+ * Gets an objects design from GT Nexus REST API
+ * 
+ * @param {string} type the type of object to get the design for
+ * @returns the design json, or null on error
+ */
+export async function design(type) {
+	try {
+		var response = await new Rest()
+			.base()
+			.path(type)
+			.get();
+
+		if (!response.ok) {
+			throw response;
+		}
+
+		return { data: await response.json() };
+	} catch (error) {
+		console.warn(error);
+		return { error: error };
+	}
+}
+
+/**
+ * Runs the given workflow action on a GT Nexus object
+ * 
+ * @param {object} data the object to run the action on
+ * @param {string} action the workflow action to perform
+ */
+export async function action(data, action) {
+	try {
+		var response = await new Rest()
+			.base()
+			.header('If-Match', data.__metadata.fingerprint)
+			.path(data.type)
+			.path(data.uid)
+			.path('actionSet')
+			.path(action)
+			.post(JSON.stringify(data));
+
+		if (!response.ok) {
+			throw response;
+		}
+
+		var data = await response.json();
+
+		if (data.transition.message) {
+			throw data.transition.message[0].text;
+		}
+
+		return { data: data };
+	} catch (error) {
+		console.warn(error);
+		return { error: error };
+	}
+}
+
+
 export async function fetchAttachList(type, uid) {
 	try {
 		var response = await new Rest()
@@ -105,141 +245,17 @@ export async function fetchAttachment(item) {
 	}
 }
 
-/**
- * Runs an OQL query on the GT Nexus REST API
- * 
- * @param {string} type the type of object to run the query on
- * @param {string} oql the oql statement to use, or null to get all objects
- * @returns the json query data, or null on failure
- */
-export async function query(type, oql) {
-	try {
-		var query = new Rest()
-			.base()
-			.path(type)
-			.path('query')
+export async function persistAttachment(data, attachment, name, description) {
+	var query = new Rest()
+		.base()
+		.path(data.type)
+		.path(data.uid)
+		.path('attach')
+		.header('Connection', 'Keep-Alive')
+		.header('Content-Type', 'application/octect-stream')
+		.header('Content-Disposition', `form-data; filename=${name}`)
+		.header('Description', description)
+		.post(Rest.wrap(attachment));
 
-		if (oql) {
-			query.param('oql', oql);
-		}
-
-		var response = await query.get();
-
-		if (!response.ok) {
-			throw response;
-		}
-
-		return { data: await response.json() };
-	} catch (error) {
-		console.warn(error);
-		return { error: error };
-	}
-}
-
-/**
- * Creates an object on GT Nexus systems
- * 
- * @param {object} data the object data to create
- * @returns the response json, or null on error
- */
-export async function create(data) {
-	try {
-		var response = await new Rest()
-			.base()
-			.path(data.type)
-			.post(data);
-
-		if (!response.ok) {
-			throw response;
-		}
-
-		return { data: await response.json() };
-	} catch (error) {
-		console.warn(error);
-		return { error: error };
-	}
-}
-
-/**
- * Saves changes in an object to GT Nexus
- * 
- * @param {object} data the data to save
- * @returns the response json, or null on error
- */
-export async function persist(data) {
-	try {
-		var response = await new Rest()
-			.base()
-			.header('If-Match', data.__metadata.fingerprint)
-			.path(data.type)
-			.path(data.uid)
-			.post(data);
-
-		if (!response.ok) {
-			throw response;
-		}
-
-		return { data: await response.json() };
-	} catch (error) {
-		console.warn(error);
-		return { error: error };
-	}
-}
-
-/**
- * Gets an objects design from GT Nexus REST API
- * 
- * @param {string} type the type of object to get the design for
- * @returns the design json, or null on error
- */
-export async function design(type) {
-	try {
-		var response = await new Rest()
-			.base()
-			.path(type)
-			.get();
-
-		if (!response.ok) {
-			throw response;
-		}
-
-		return { data: await response.json() };
-	} catch (error) {
-		console.warn(error);
-		return { error: error };
-	}
-}
-
-/**
- * Runs the given workflow action on a GT Nexus object
- * 
- * @param {object} data the object to run the action on
- * @param {string} action the workflow action to perform
- */
-export async function action(data, action) {
-	try {
-		var response = await new Rest()
-			.base()
-			.header('If-Match', data.__metadata.fingerprint)
-			.path(data.type)
-			.path(data.uid)
-			.path('actionSet')
-			.path(action)
-			.post(data);
-
-		if (!response.ok) {
-			throw response;
-		}
-
-		var data = await response.json();
-
-		if (data.transition.message) {
-			throw data.transition.message[0].text;
-		}
-
-		return { data: data };
-	} catch (error) {
-		console.warn(error);
-		return { error: error };
-	}
+	var response = await query.post(attachment);
 }

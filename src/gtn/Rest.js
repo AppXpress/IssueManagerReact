@@ -27,6 +27,8 @@ window.fetch = new Fetch({
  */
 export default class Rest {
 
+	static wrap = RNFetchBlob.wrap;
+
 	static _token;
 	static _credentials;
 
@@ -103,7 +105,6 @@ export default class Rest {
 		 */
 		this._run = async (method, body) => {
 			var config = {};
-
 			if (this._ext) {
 				config = {
 					fileCache: true,
@@ -116,11 +117,11 @@ export default class Rest {
 
 			if (result.info().status == 401) {
 				await Rest.authenticate();
-				result = await RNFetchBlob.fetch(method, this._getUrl(), this._headers, body);
+				var result = await RNFetchBlob.config(config)
+					.fetch(method, this._getUrl(), this._headers, body);
 			}
 
 			result.ok = result.info().status >= 200 && result.info().status < 300;
-
 			return result;
 		}
 	}
