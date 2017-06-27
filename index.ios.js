@@ -7,7 +7,7 @@ import IssueDetails from './src/pages/IssueDetails';
 import CreateIssue from './src/pages/CreateIssue';
 import CreateMessage from './src/pages/CreateMessage';
 import CameraScreen from './src/pages/CameraScreen';
-
+import CameraDisplay from './src/pages/CameraDisplay'
 
 /**
 *	Entry-point for iOS devices. Registers all necesarry pages
@@ -20,6 +20,7 @@ Navigation.registerComponent('IssueDetails', () => IssueDetails);
 Navigation.registerComponent('CreateIssue', () => CreateIssue);
 Navigation.registerComponent('CreateMessage', () => CreateMessage);
 Navigation.registerComponent('CameraScreen', () => CameraScreen);
+Navigation.registerComponent('CameraDisplay', ()=> CameraDisplay);
 
 Navigation.startSingleScreenApp({
 	screen: { screen: 'Login' }
