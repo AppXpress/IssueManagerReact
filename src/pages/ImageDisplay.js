@@ -17,7 +17,7 @@ import {
 	Card,
 	Field,
 	List,
-	Navigataion,
+	Navigation,
 	Page,
 	TextInput
 } from '../soho/All';
@@ -27,6 +27,10 @@ export default class ImageDisplay extends Component {
 
 	constructor(props) {
 		super(props);
+
+		Navigation.set(this, {
+			title: 'Attachment',
+		});
 	}
 
 	saveImage(){

@@ -35,7 +35,7 @@ export default class CameraDisplay extends Component {
 		});
 		console.log(this.props.image);
 		this.state ={
-			description: ''
+			description: '',
             filename: ''
 		};
 
@@ -54,7 +54,7 @@ export default class CameraDisplay extends Component {
     		<KeyboardAvoidingView behavior='position'>
     			<Card>
     				<Image source={{uri:this.props.image.path}} style={styles.img} />
-                    <TextInput label="File Name" value={this.state.filename} onChangeText={(text) => this.setState({ filename: text })}
+                    <TextInput label="File Name" value={this.state.filename} onChangeText={(text) => this.setState({ filename: text })} />
     				<TextInput
                         label='Description'
                         value={this.state.description}
