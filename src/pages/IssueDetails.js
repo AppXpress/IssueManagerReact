@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import {
 	FlatList,
 	View,
+	Image
 } from 'react-native';
 
 import {
@@ -95,7 +96,7 @@ export default class IssueDetails extends Component {
 					}, 600);
 					this.reload();
 				} else {
-					setTimeout(()=>{
+					setTimeout(() => {
 						alert('We were unable to perform the select action. Please try again later.');
 					}, 600);
 					this.reload();
@@ -164,9 +165,17 @@ export default class IssueDetails extends Component {
 	}
 
 	async showAttachment(item) {
+		this.setState({ loading: true });
+
 		console.log(item);
 		var appx = await AppX.fetchAttachment(item.attachmentUid);
 		console.log(appx);
+
+		this.setState({
+			loading: false,
+			viewImage: true,
+			image: appx.data
+		});
 	}
 
 	/**
@@ -294,13 +303,13 @@ export default class IssueDetails extends Component {
 	}
 
 
-	
 
-	addAttachment(){
+
+	addAttachment() {
 		this.props.navigator.push({
-							screen: 'CameraScreen',
-							passProps: { issue: this.state.issue }
-						});
+			screen: 'CameraScreen',
+			passProps: { issue: this.state.issue }
+		});
 	}
 
 	renderAttachments() {
@@ -318,11 +327,21 @@ export default class IssueDetails extends Component {
 						</ListItem>
 					)}
 				/>
-				<ListItem onPress={()=> this.addAttachment()} >
-					<ComplexText main="Add Attachment" />
-				</ListItem>	
 
-					
+				<Modal
+					title='Attachment'
+					visible={this.state.viewImage}
+					onClose={() => this.setState({ viewImage: false })}
+					onRequestClose={() => this.setState({ viewImage: false })}
+				>
+					{this.state.image &&
+						<Image source={{ uri: this.state.image }} style={{ flex: 1, minHeight: 100 }} />
+					}
+				</Modal>
+
+				<ListItem onPress={() => this.addAttachment()} >
+					<ComplexText main="Add Attachment" />
+				</ListItem>
 
 				{this.state.attachments && this.state.attachments.length == 0 &&
 					<ListItem>
@@ -332,6 +351,10 @@ export default class IssueDetails extends Component {
 
 				{!this.state.attachments &&
 					<Loading />
+				}
+
+				{this.state.loading &&
+					<Loading block />
 				}
 			</Card>
 		);

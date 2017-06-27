@@ -33,9 +33,9 @@ export default class Rest {
 	/**
 	 * Sets the login credentials for rest calls
 	 * 
-	 * @param {*} user the username
-	 * @param {*} pass the password
-	 * @param {*} eid the eidentity
+	 * @param {string} user the username
+	 * @param {string} pass the password
+	 * @param {string} eid the eidentity
 	 */
 	static credentials(user, pass, eid) {
 		var auth = user + ':' + pass;

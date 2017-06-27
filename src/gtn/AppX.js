@@ -74,16 +74,19 @@ export async function fetchAttachment(attachUid) {
 			.path('media')
 			.path(attachUid)
 			.get();
+
 		if (!response.ok) {
 			throw response;
 		}
 
-		return { data: await response };
+		var type = response.headers['Content-Type'];
+		var data = await response.resp.base64();
+
+		return { data: `data:${type};base64,${data}` };
 	} catch (error) {
 		console.warn(error);
 		return { error: error };
 	}
-
 }
 
 /**
