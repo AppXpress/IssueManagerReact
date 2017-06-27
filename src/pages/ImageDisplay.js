@@ -2,15 +2,8 @@ import React, { Component } from 'react';
 import { NavigationActions } from 'react-navigation';
 
 import {
-	Alert,
-	AppRegistry,
 	StyleSheet,
-	Text,
 	View,
-	ScrollView,
-	StatusBar,
-	AsyncStorage,
-	ListView,
 	Image
 } from 'react-native';
 
@@ -33,21 +26,26 @@ export default class ImageDisplay extends Component {
 
 	constructor(props) {
 		super(props);
-		this.state = {
-			root: this.props.image,
-		}
-		console.log(this.state.root);
-
 	}
 
 	render() {
 		return (
-			<View>
+			<View style={styles.view}>
 				<Image
-					style={{ width: 50, height: 50 }}
-					source={this.state.root}
+					style={styles.image}
+					source={{ url: this.props.image }}
 				/>
 			</View>
 		);
 	}
 }
+
+const styles = StyleSheet.create({
+	view: {
+		flex: 1,
+		alignContents: 'stretch'
+	},
+	image: {
+		flex: 1
+	}
+});
