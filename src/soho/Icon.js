@@ -48,12 +48,22 @@ export default class Icon extends Component {
         });
     }
 
+    getStyle() {
+        var style = styles.text;
+
+        if (this.props.size) {
+            style.fontSize = this.props.size;
+        }
+
+        return style;
+    }
+
     /**
      * Renders the icon character in a text item with the SoHo font
      */
     render() {
         return (
-            <Text style={styles.text}>
+            <Text style={this.getStyle()}>
                 {this.state.icon}
             </Text>
         );

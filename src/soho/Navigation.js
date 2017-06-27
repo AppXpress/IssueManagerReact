@@ -37,14 +37,27 @@ export function set(page, config) {
 
     page.props.navigator.setTitle({ title: config.title });
 
-    page.props.navigator.setStyle({
+    var style = {
         navBarTextFontFamily: 'soho',
         navBarSubtitleFontFamily: 'soho',
         navBarTextColor: getColor('white-0'),
-        navBarBackgroundColor: getColor(config.hue + '-7', 'azure-7'),
-        statusBarColor: getColor(config.hue + '-8', 'azure-8'),
         navBarButtonColor: getColor('white-0')
-    });
+    };
+
+    if (config.clear) {
+        Object.assign(style, {
+            navBarTranslucent: true,
+            drawUnderNavBar: true,
+            navBarBlur: true
+        });
+    } else {
+        Object.assign(style, {
+            navBarBackgroundColor: getColor(config.hue + '-7', 'azure-7'),
+            statusBarColor: getColor(config.hue + '-8', 'azure-8'),
+        });
+    }
+
+    page.props.navigator.setStyle(style);
 
     var buttons = [];
     config.buttons.map(button => {

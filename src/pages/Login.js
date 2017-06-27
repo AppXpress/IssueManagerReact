@@ -86,10 +86,10 @@ export default class Login extends Component {
 				screen: 'IssueList'
 			});
 		} else {
-			setTimeout(()=> {alert('Login failed. Please try again.')}, 1000);
+			setTimeout(() => { alert('Login failed. Please try again.') }, 1000);
 		}
 
-		
+
 	}
 
 	/**
