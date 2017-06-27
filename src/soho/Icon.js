@@ -49,13 +49,12 @@ export default class Icon extends Component {
     }
 
     getStyle() {
-        var style = styles.text;
-
+        var style = {};
         if (this.props.size) {
             style.fontSize = this.props.size;
         }
 
-        return style;
+        return [styles.text, style];
     }
 
     /**
