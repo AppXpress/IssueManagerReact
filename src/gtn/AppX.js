@@ -1,3 +1,7 @@
+import {
+	Platform
+} from 'react-native';
+
 import Rest from './Rest';
 import { base64Encode } from './Utilities';
 
@@ -67,22 +71,34 @@ export async function fetchAttachList(type, uid) {
 }
 
 
-export async function fetchAttachment(attachUid) {
+export async function fetchAttachment(item) {
 	try {
-		var response = await new Rest()
+		var query = new Rest()
 			.base()
 			.path('media')
-			.path(attachUid)
-			.get();
+			.path(item.attachmentUid);
+
+		if (item.mimeType == 'image/jpg') {
+			query.fileExt('jpg');
+		}
+		if (item.mimeType == 'image/png') {
+			query.fileExt('png');
+		}
+
+		var response = await query.get();
 
 		if (!response.ok) {
 			throw response;
 		}
 
-		var type = response.headers['Content-Type'];
-		var data = await response.resp.base64();
+		var type = response.info().headers['Content-Type'];
+		var data = await response.path();
 
-		return { data: `data:${type};base64,${data}` };
+		if (Platform.OS == 'android') {
+			data = 'file://' + data;
+		}
+
+		return { data: data };
 	} catch (error) {
 		console.warn(error);
 		return { error: error };

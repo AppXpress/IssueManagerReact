@@ -62,7 +62,7 @@ export default class Rest {
 				throw response;
 			}
 
-			Rest._token = response.headers.Authorization;
+			Rest._token = response.info().headers.Authorization;
 			return { data: true };
 		} catch (error) {
 			console.warn(error);
@@ -102,26 +102,24 @@ export default class Rest {
 		 * Runs a REST query on the system and returns the result
 		 */
 		this._run = async (method, body) => {
-			var args = {
-				method: method,
-				headers: this._headers
+			var config = {};
+
+			if (this._ext) {
+				config = {
+					fileCache: true,
+					appendExt: this._ext
+				};
 			}
 
-			if (body) {
-				if (typeof body == 'string') {
-					args.body = body;
-				} else {
-					args.body = JSON.stringify(body);
-				}
-			}
+			var result = await RNFetchBlob.config(config)
+				.fetch(method, this._getUrl(), this._headers, body);
 
-			var result = await fetch(this._getUrl(), args);
-
-			// Reauthenticates and retries the call if the token was expired
-			if (result.status == 401) {
+			if (result.info().status == 401) {
 				await Rest.authenticate();
-				result = await fetch(this._getUrl(), args);
+				result = await RNFetchBlob.fetch(method, this._getUrl(), this._headers, body);
 			}
+
+			result.ok = result.info().status >= 200 && result.info().status < 300;
 
 			return result;
 		}
@@ -167,6 +165,16 @@ export default class Rest {
 	 */
 	header(key, value) {
 		this._headers[key] = value;
+		return this;
+	}
+
+	/**
+	 * Saves the response body with the specified file extension
+	 * 
+	 * @param {string} ext the extension to use
+	 */
+	fileExt(ext) {
+		this._ext = ext;
 		return this;
 	}
 
