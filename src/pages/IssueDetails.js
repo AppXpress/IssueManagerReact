@@ -22,6 +22,7 @@ import {
 	Modal,
 	Navigation,
 	Page,
+	Tag,
 	TextInput
 } from '../soho/All';
 
@@ -228,6 +229,14 @@ export default class IssueDetails extends Component {
 					<Field label='Status' entry={this.state.issue.status.charAt(0).toUpperCase() + this.state.issue.status.substring(1)} />
 					<Field label='Issue type' entry={getType(this.state.issue.issueType)} />
 				</Field.Row>
+				<Field.Row>
+					<Field label='Created by' entry={this.state.issue.createdBy} />
+					<Field label='Created on' entry={this.state.issue.createdOn} />
+				</Field.Row>
+				<Field.Row>
+					<Field label='Modified by' entry={this.state.issue.modifiedBy} />
+					<Field label='Modified on' entry={this.state.issue.modifiedOn} />
+				</Field.Row>
 
 				<Field.Row>
 					<Field label='Assigned to'>
@@ -249,21 +258,6 @@ export default class IssueDetails extends Component {
 				</Field.Row>
 
 				<Field label='Description' entry={this.state.issue.description} />
-			</Card>
-		);
-	}
-
-	renderTimestamps() {
-		return (
-			<Card title='Timestamps'>
-				<Field.Row>
-					<Field label='Created by' entry={this.state.issue.createdBy} />
-					<Field label='Created on' entry={this.state.issue.createdOn} />
-				</Field.Row>
-				<Field.Row>
-					<Field label='Modified by' entry={this.state.issue.modifiedBy} />
-					<Field label='Modified on' entry={this.state.issue.modifiedOn} />
-				</Field.Row>
 			</Card>
 		);
 	}
@@ -346,13 +340,9 @@ export default class IssueDetails extends Component {
 					onRequestClose={() => this.setState({ viewImage: false })}
 				>
 					{this.state.image &&
-						<Image source={{ uri: this.state.image }} style={{ flex: 1, minHeight:400 }} />
+						<Image source={{ uri: this.state.image }} style={{ flex: 1, minHeight: 400 }} />
 					}
 				</Modal>
-
-				<ListItem onPress={() => this.addAttachment()} >
-					<ComplexText main="Add Attachment" />
-				</ListItem>
 
 				{this.state.attachments && this.state.attachments.length == 0 &&
 					<ListItem>
@@ -363,6 +353,10 @@ export default class IssueDetails extends Component {
 				{!this.state.attachments &&
 					<Loading />
 				}
+
+				<ListItem onPress={() => this.addAttachment()} >
+					<ComplexText main="Add Attachment" />
+				</ListItem>
 
 				{this.state.loading &&
 					<Loading block />
@@ -398,8 +392,12 @@ export default class IssueDetails extends Component {
 						<ListItem>
 							<ComplexText
 								main={item.createdBy}
-								secondary={item.text}
+								secondary={item.createdOn + ' ' + item.createdOnTime}
+								tertiary={item.text}
 							/>
+							<Tag.List>
+								<Tag>{item.createdByOrg}</Tag>
+							</Tag.List>
 						</ListItem>
 					)}
 				/>
@@ -459,15 +457,18 @@ export default class IssueDetails extends Component {
 				/>
 				{this.state.historyShown &&
 					<FlatList
-						data={this.state.issue.history}
+						data={parseHistory(this.state.issue.history)}
 						keyExtractor={item => item.uid}
 						renderItem={({ item }) => (
 							<ListItem>
 								<ComplexText
-									main={item.newState}
-									secondary={item.modifiedByOrg.name}
-									tertiary={item.modifiedDate}
+									main={item.newState.charAt(0).toUpperCase() + item.newState.substring(1)}
+									secondary={item.modifiedDate + ' ' + item.modifiedTime}
+									tertiary={item.modifiedByUser}
 								/>
+								<Tag.List>
+									<Tag>{item.modifiedByOrg.name}</Tag>
+								</Tag.List>
 							</ListItem>
 						)}
 					/>
@@ -507,10 +508,9 @@ export default class IssueDetails extends Component {
 			return (
 				<Page>
 					{this.renderDetails()}
-					{this.renderTimestamps()}
 					{this.renderParticipants()}
-					{this.renderAttachments()}
 					{this.renderMessages()}
+					{this.renderAttachments()}
 					{this.renderActions()}
 					{this.renderHistory()}
 					{this.renderOwnerModal()}
@@ -518,6 +518,16 @@ export default class IssueDetails extends Component {
 			);
 		}
 	}
+}
+
+function parseHistory(input) {
+	var i;
+	for (i = 0; i < input.length - 1; i++) {
+		if (input[i].newState == input[i + 1].newState) {
+			input[i].newState = 'modified';
+		}
+	}
+	return input;
 }
 
 function getType(level) {
