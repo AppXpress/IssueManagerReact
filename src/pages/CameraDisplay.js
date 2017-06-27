@@ -55,7 +55,7 @@ export default class CameraDisplay extends Component {
                         multiline
                         rows={2}
                     />
-    				<Button primary onPress={()=>this.upload()} title='Upload' />
+    				<Button primary icon='upload' onPress={()=>this.upload()} title='Upload' />
     			</Card>
     			</KeyboardAvoidingView>
     		</Page>	

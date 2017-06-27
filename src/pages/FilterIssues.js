@@ -52,7 +52,7 @@ export default class FilterIssues extends Component {
             }
         }
         if (this.state.status) {
-            constraints.push(`state = "${this.state.status}"`);
+            constraints.push(`status = "${this.state.status}"`);
         }
         if (this.state.issueType) {
             if (this.state.issueType == '0') {
