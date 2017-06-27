@@ -19,6 +19,7 @@ import {
 	TextInput,
 	Modal,
 	Picker,
+	Tag
 } from '../soho/All';
 
 /**
@@ -126,6 +127,17 @@ export default class IssueList extends Component {
 					secondary={issue.createdBy}
 					tertiary={issue.description}
 				/>
+				<Tag.List>
+					<Tag>{issue.modifiedOn}</Tag>
+					{issue.issueType &&
+						<Tag>{getType(issue.issueType)}</Tag>
+					}
+					{issue.severity &&
+						<Tag alert={getSeverityAlert(issue.severity)}>
+							{getSeverity(issue.severity)}
+						</Tag>
+					}
+				</Tag.List>
 			</ListItem>
 		);
 	}
@@ -159,5 +171,41 @@ export default class IssueList extends Component {
 				}
 			</Page>
 		);
+	}
+}
+
+function getType(level) {
+	if (level == 3) {
+		return 'Quality Control';
+	}
+	if (level == 2) {
+		return 'Factory Supply';
+	}
+	if (level == 1) {
+		return 'Shipping';
+	}
+}
+
+function getSeverity(level) {
+	if (level == 3) {
+		return 'High';
+	}
+	if (level == 2) {
+		return 'Medium';
+	}
+	if (level == 1) {
+		return 'Low';
+	}
+}
+
+function getSeverityAlert(level) {
+	if (level == 3) {
+		return 1;
+	}
+	if (level == 2) {
+		return 3;
+	}
+	if (level == 1) {
+		return 4;
 	}
 }

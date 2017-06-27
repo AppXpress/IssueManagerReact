@@ -11,5 +11,6 @@ module.exports = {
 	get Page() { return require('./Page').default },
 	get Picker() { return require('./Picker').default },
 	get Switch() { return require('./Switch').default },
+	get Tag() { return require('./Tag').default },
 	get TextInput() { return require('./TextInput').default }
 };
