@@ -18,7 +18,9 @@ import {
 	TextInput,
 } from '../soho/All'
 
-
+import {
+    AppX
+} from '../gtn/All'
 
 export default class CameraDisplay extends Component {
 
@@ -34,12 +36,16 @@ export default class CameraDisplay extends Component {
 		console.log(this.props.image);
 		this.state ={
 			description: ''
+            filename: ''
 		};
 
     }
-    upload(){
+    async upload(){
+
+        await AppX.persistAttachment(this.props.issue, this.props.image.path,this.state.filename+'.jpg', this.state.description);
     	this.props.navigator.pop();
     	this.props.navigator.pop();
+        this.props.reload();
     }
 
     render(){
@@ -48,6 +54,7 @@ export default class CameraDisplay extends Component {
     		<KeyboardAvoidingView behavior='position'>
     			<Card>
     				<Image source={{uri:this.props.image.path}} style={styles.img} />
+                    <TextInput label="File Name" value={this.state.filename} onChangeText={(text) => this.setState({ filename: text })}
     				<TextInput
                         label='Description'
                         value={this.state.description}
@@ -69,6 +76,8 @@ export default class CameraDisplay extends Component {
 
 
 }
+
+
 const styles = StyleSheet.create({
 
   img: {
