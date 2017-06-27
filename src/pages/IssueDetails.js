@@ -164,14 +164,6 @@ export default class IssueDetails extends Component {
 		Navigation.set(this, nav);
 	}
 
-	async showAttachment(item) {
-		this.setState({ loading: true });
-		var appx = await AppX.fetchAttachment(item.attachmentUid);
-		this.setState({ loading: false });
-
-		this.props.navigator.push({ screen: 'ImageDisplay', passProps: { image: appx.data } });
-	}
-
 	/**
 	 * Loads the issue, its messages, and attachments from the REST API
 	 */
@@ -306,20 +298,45 @@ export default class IssueDetails extends Component {
 		});
 	}
 
+	async showAttachment(item) {
+		this.setState({ loading: true });
+		var appx = await AppX.fetchAttachment(item);
+		this.setState({ loading: false });
+
+		this.props.navigator.push({ screen: 'ImageDisplay', passProps: { image: appx.data } });
+	}
+
+	renderAttach({ item }) {
+		if (item.mimeType == 'image/jpg' || item.mimeType == 'image/png') {
+			return (
+				<ListItem onPress={() => this.showAttachment(item)} >
+					<ComplexText
+						main={item.name}
+						secondary={item.description}
+						tertiary={item.createUserId}
+					/>
+				</ListItem>
+			);
+		} else {
+			return (
+				<ListItem>
+					<ComplexText
+						main={item.name}
+						secondary={item.description}
+						tertiary={item.createUserId}
+					/>
+				</ListItem>
+			);
+		}
+	}
+
 	renderAttachments() {
 		return (
 			<Card title='Attachments'>
 				<FlatList
 					data={this.state.attachments}
 					keyExtractor={item => item.attachmentUid}
-					renderItem={({ item }) => (
-						<ListItem onPress={() => this.showAttachment(item)} >
-							<ComplexText
-								main={item.name}
-								secondary={item.description}
-							/>
-						</ListItem>
-					)}
+					renderItem={item => this.renderAttach(item)}
 				/>
 
 				<ListItem onPress={() => this.addAttachment()} >
