@@ -81,9 +81,7 @@ export default class CameraScreen extends Component {
           			flashMode={this.state.camera.flashMode}
           			style={styles.preview}
           			captureTarget={Camera.constants.CaptureTarget.temp} >
-          			<Text style={styles.flashButton} onPress={()=>this.switchFlash()}>
-          				<Icon name='star-filled' size={40}/>
-          			</Text>
+
           			<Text style={styles.capture} onPress={()=> this.grabCapture()}>
           				<Icon name='camera' size={40}/>
           			</Text>

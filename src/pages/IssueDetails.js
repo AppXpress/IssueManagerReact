@@ -339,6 +339,17 @@ export default class IssueDetails extends Component {
 					renderItem={item => this.renderAttach(item)}
 				/>
 
+				<Modal
+					title='Attachment'
+					visible={this.state.viewImage}
+					onClose={() => this.setState({ viewImage: false })}
+					onRequestClose={() => this.setState({ viewImage: false })}
+				>
+					{this.state.image &&
+						<Image source={{ uri: this.state.image }} style={{ flex: 1, minHeight:400 }} />
+					}
+				</Modal>
+
 				<ListItem onPress={() => this.addAttachment()} >
 					<ComplexText main="Add Attachment" />
 				</ListItem>
