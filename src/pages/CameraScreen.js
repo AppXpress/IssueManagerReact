@@ -72,7 +72,8 @@ export default class CameraScreen extends Component {
     		this.props.navigator.push({
     			screen: 'CameraDisplay',
 				passProps: {
-					image: data 
+					image: data, 
+					issue: this.props.issue
 				}
     		})
     		);
