@@ -4,7 +4,8 @@ import { NavigationActions } from 'react-navigation';
 import {
 	StyleSheet,
 	View,
-	Image
+	Image,
+	CameraRoll
 } from 'react-native';
 
 import {
@@ -28,6 +29,10 @@ export default class ImageDisplay extends Component {
 		super(props);
 	}
 
+	saveImage(){
+		CameraRoll.saveToCameraRoll(this.props.image).then(()=> alert("Image saved to camera roll."));
+	}
+
 	render() {
 		return (
 			<Page fill>
@@ -36,6 +41,7 @@ export default class ImageDisplay extends Component {
 					resizeMode='contain'
 					source={{ uri: this.props.image }}
 				/>
+				<Button primary title="Save" onPress={()=>this.saveImage()} />
 			</Page>
 		);
 	}

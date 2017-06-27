@@ -16,6 +16,13 @@ import Camera from 'react-native-camera';
 
 export default class CameraScreen extends Component {
 
+	static navigatorStyle = {
+    	navBarBlur: false, 
+    	drawUnderNavBar: true,
+    	drawUnderTabBar: true,
+    	navBarTranslucent: true
+	};
+
 	    constructor(props) {
         super(props);
 
@@ -34,6 +41,7 @@ export default class CameraScreen extends Component {
       			},
 			}
 		};
+
 
     
 

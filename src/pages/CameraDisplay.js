@@ -6,6 +6,7 @@ import {
     Dimensions,
     Text,
     Image,
+    KeyboardAvoidingView,
 } from 'react-native';
 
 import {
@@ -14,6 +15,7 @@ import {
 	Page,
 	Card,
 	Button,
+	TextInput,
 } from '../soho/All'
 
 
@@ -30,6 +32,9 @@ export default class CameraDisplay extends Component {
 			hue: 'slate',
 		});
 		console.log(this.props.image);
+		this.state ={
+			description: ''
+		};
 
     }
     upload(){
@@ -40,10 +45,19 @@ export default class CameraDisplay extends Component {
     render(){
     	return(
     		<Page>
+    		<KeyboardAvoidingView behavior='position'>
     			<Card>
     				<Image source={{uri:this.props.image.path}} style={styles.img} />
+    				<TextInput
+                        label='Description'
+                        value={this.state.description}
+                        onChangeText={(text) => this.setState({ description: text })}
+                        multiline
+                        rows={2}
+                    />
     				<Button primary onPress={()=>this.upload()} title='Upload' />
     			</Card>
+    			</KeyboardAvoidingView>
     		</Page>	
 
 
@@ -63,5 +77,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignSelf: 'stretch',
     resizeMode: 'contain',
+    marginTop: 20,
 	}
 });			
