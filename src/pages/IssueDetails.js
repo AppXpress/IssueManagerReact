@@ -335,7 +335,7 @@ export default class IssueDetails extends Component {
 					onRequestClose={() => this.setState({ viewImage: false })}
 				>
 					{this.state.image &&
-						<Image source={{ uri: this.state.image }} style={{ flex: 1, minHeight: 100 }} />
+						<Image source={{ uri: this.state.image }} style={{ flex: 1, minHeight:400 }} />
 					}
 				</Modal>
 
