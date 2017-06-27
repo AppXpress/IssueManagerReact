@@ -288,7 +288,7 @@ export default class IssueDetails extends Component {
 	addAttachment() {
 		this.props.navigator.push({
 			screen: 'CameraScreen',
-			passProps: { issue: this.state.issue }
+			passProps: { issue: this.state.issue, reload: () => this.reload() }
 		});
 	}
 
@@ -355,7 +355,7 @@ export default class IssueDetails extends Component {
 				}
 
 				<ListItem onPress={() => this.addAttachment()} >
-					<ComplexText main="Add Attachment" />
+					<ComplexText main="Take picture" />
 				</ListItem>
 
 				{this.state.loading &&
