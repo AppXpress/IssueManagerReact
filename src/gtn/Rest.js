@@ -125,9 +125,7 @@ export default class Rest {
 	 * Populates the query with the dataKey and basic headers
 	 */
 	base() {
-		let baseUrl = storageGet('env');
-		console.log(baseUrl);
-		this._url = baseUrl;
+		this._url = restUrl;
 		this._params['dataKey'] = dataKey;
 		this._headers['Authorization'] = Rest._token;
 		this._headers['Content-Type'] = 'application/json';
