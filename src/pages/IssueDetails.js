@@ -8,6 +8,7 @@ import {
 
 import {
 	AppX,
+	OrgPicker,
 	UserPicker,
 } from '../gtn/All';
 
@@ -262,6 +263,25 @@ export default class IssueDetails extends Component {
 		);
 	}
 
+	/**
+	 * Adds a participant to an issue
+	 */
+	addParticipant() {
+		this.setState({ participantModal: false, acting: true });
+
+		this.state.issue.participants.push({ party: { memberId: this.state.newParticipant } });
+
+		AppX.persist(this.state.issue).then(({ data }) => {
+			if (data) {
+				this.reload();
+			} else {
+				this.state.issue.participants.pop();
+				alert('We were to add the participant. Please try again later.');
+			}
+			this.setState({ acting: false });
+		});
+	}
+
 	renderParticipants() {
 		return (
 			<Card title='Participants'>
@@ -272,12 +292,27 @@ export default class IssueDetails extends Component {
 						<ListItem>
 							<ComplexText
 								main={item.party.name}
-								secondary={item.party.address.addressLine1}
-								tertiary={item.party.address.city}
+								secondary={item.party.address ? item.party.address.addressLine1 : null}
+								tertiary={item.party.address ? item.party.address.city : null}
 							/>
 						</ListItem>
 					)}
 				/>
+
+				<ListItem onPress={() => this.setState({ participantModal: true })} >
+					<ComplexText main="Add participant" />
+				</ListItem>
+
+				<Modal visible={this.state.participantModal}
+					title='Select a participant'
+					onClose={() => this.setState({ participantModal: false })}
+					onSubmit={() => this.addParticipant()}
+				>
+					<OrgPicker
+						selectedValue={this.state.newParticipant}
+						onValueChange={(item, index) => this.setState({ newParticipant: item })}
+					/>
+				</Modal>
 			</Card>
 		);
 	}
@@ -303,7 +338,7 @@ export default class IssueDetails extends Component {
 		var appx = await AppX.fetchAttachment(item);
 		this.setState({ loading: false });
 
-		setTimeout(()=>{this.props.navigator.push({ screen: 'ImageDisplay', passProps: { image: appx.data } });}, 800);
+		setTimeout(() => { this.props.navigator.push({ screen: 'ImageDisplay', passProps: { image: appx.data } }); }, 800);
 	}
 
 	renderAttach({ item }) {
