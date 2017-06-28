@@ -303,7 +303,7 @@ export default class IssueDetails extends Component {
 		var appx = await AppX.fetchAttachment(item);
 		this.setState({ loading: false });
 
-		this.props.navigator.push({ screen: 'ImageDisplay', passProps: { image: appx.data } });
+		setTimeout(()=>{this.props.navigator.push({ screen: 'ImageDisplay', passProps: { image: appx.data } });}, 800);
 	}
 
 	renderAttach({ item }) {
