@@ -44,6 +44,7 @@ export default class ImageDisplay extends Component {
 					style={styles.image}
 					resizeMode='contain'
 					source={{ uri: this.props.image }}
+					marginTop={10}
 				/>
 				<Button primary title="Save" onPress={()=>this.saveImage()} />
 			</Page>

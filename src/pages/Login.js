@@ -36,8 +36,26 @@ export default class Login extends Component {
 		};
 
 		Navigation.set(this, {
-			title: ' Welcome'
+			title: ' Welcome',
+			buttons: [
+				{ icon: 'settings', id: 'settings' }
+			]
 		});
+	}
+
+	settings(){
+		this.props.navigator.push({
+			screen: 'Settings'
+		});
+	}
+
+	willAppear(){
+		Navigation.set(this, {
+			title: ' Welcome',
+			buttons: [
+				{ icon: 'settings', id: 'settings' }
+			]
+		});	
 	}
 
 	async componentDidMount() {

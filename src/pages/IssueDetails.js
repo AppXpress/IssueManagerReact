@@ -290,14 +290,19 @@ export default class IssueDetails extends Component {
 
 
 
-
+	/**
+	 *  Sends user to the camera page to add an attachment.
+	 */	
 	addAttachment() {
 		this.props.navigator.push({
 			screen: 'CameraScreen',
-			passProps: { issue: this.state.issue }
+			passProps: { issue: this.state.issue, reload: () => this.reload()}
 		});
 	}
-
+	
+	/**
+	 *	Fetches an attachment and displays it on an image page.
+	 */
 	async showAttachment(item) {
 		this.setState({ loading: true });
 		var appx = await AppX.fetchAttachment(item);

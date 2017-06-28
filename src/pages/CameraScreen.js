@@ -73,7 +73,8 @@ export default class CameraScreen extends Component {
     			screen: 'CameraDisplay',
 				passProps: {
 					image: data, 
-					issue: this.props.issue
+					issue: this.props.issue,
+					reload: this.props.reload
 				}
     		})
     		);
