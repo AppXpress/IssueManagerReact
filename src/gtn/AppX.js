@@ -14,8 +14,16 @@ import { base64Encode } from './Utilities';
  * @returns true if successful, null otherwise
  */
 export async function login(user, pass, eid) {
-	Rest.credentials(user, pass, eid);
-	return Rest.authenticate();
+	try {
+		await new Rest()
+			.base()
+			.auth(user, pass, eid);
+
+		return { data: true };
+	} catch (error) {
+		console.warn(error);
+		return { error: error };
+	}
 }
 
 /**

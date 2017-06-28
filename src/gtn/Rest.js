@@ -33,42 +33,6 @@ export default class Rest {
 	static _credentials;
 
 	/**
-	 * Sets the login credentials for rest calls
-	 * 
-	 * @param {string} user the username
-	 * @param {string} pass the password
-	 * @param {string} eid the eidentity
-	 */
-	static credentials(user, pass, eid) {
-		var auth = user + ':' + pass;
-		if (eid) {
-			auth += ':' + eid;
-		}
-
-		Rest._credentials = base64Encode(auth);
-	}
-
-	/**
-	 * Runs the authentication rest call on the system
-	 * 
-	 * @returns an object with the rest results
-	 */
-	static async authenticate() {
-		try {
-			var response = await new Rest()
-				.base()
-				.header('Authorization', 'Basic ' + Rest._credentials)
-				.get();
-
-			Rest._token = response.info().headers.Authorization;
-			return { data: true };
-		} catch (error) {
-			console.warn(error);
-			return { error: error }
-		}
-	}
-
-	/**
 	 * Creates a new Rest API call
 	 */
 	constructor() {
@@ -108,10 +72,16 @@ export default class Rest {
 				};
 			}
 
-			var result = await RNFetchBlob.config(config)
+			var result = await RNFetchBlob
+				.config(config)
 				.fetch(method, this._getUrl(), this._headers, body);
 
-			// TODO: re-add token expiration handling
+			// Re-auths Retries if this is not an auth request and it hasn't retried already
+			if (!this._auth && !this._retry && result.info().status == 401) {
+				this._retry = true;
+				await new Rest().base().auth();
+				return await this._run(method, body);
+			}
 
 			if (result.info().status < 200 || result.info().status >= 300) {
 				throw new Error('Rest API call failed');
@@ -172,6 +142,30 @@ export default class Rest {
 	fileExt(ext) {
 		this._ext = ext;
 		return this;
+	}
+
+	/**
+	 * Authenticate the user with the previous or specified credentials
+	 * 
+	 * @param {string?} user the username
+	 * @param {string?} pass the password
+	 * @param {string?} eid the eidentity
+	 */
+	async auth(user, pass, eid) {
+		if (user && pass) {
+			var auth = user + ':' + pass;
+			if (eid) {
+				auth += ':' + eid;
+			}
+			Rest._credentials = base64Encode(auth);
+		}
+
+		this._auth = true;
+		this._headers['Authorization'] = 'Basic ' + Rest._credentials;
+
+		var response = await this._run('GET');
+		Rest._token = response.info().headers.Authorization;
+		return response;
 	}
 
 	/**
