@@ -129,10 +129,10 @@ export default class IssueList extends Component {
 				/>
 				<Tag.List>
 					<Tag>{issue.modifiedOn}</Tag>
-					{issue.issueType &&
+					{issue.issueType && issue.issueType!='0' &&
 						<Tag>{getType(issue.issueType)}</Tag>
 					}
-					{issue.severity &&
+					{issue.severity && issue.severity!='0' && 
 						<Tag alert={getSeverityAlert(issue.severity)}>
 							{getSeverity(issue.severity)}
 						</Tag>
