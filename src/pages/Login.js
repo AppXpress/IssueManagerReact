@@ -62,8 +62,8 @@ export default class Login extends Component {
 	}
 
 	async componentDidMount() {
+		this.loadEnvironment();
 		if (__DEV__) {
-			this.loadEnvironment();
 			await this.getCredentials();
 		}
 	}
