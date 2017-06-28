@@ -9,10 +9,19 @@ Clone the project repository
 
 In the project folder, run `npm install`
 
-Create the file `src/gtn/Environment.js` with the following contents:
+Create the file `src/gtn/Environments.js` with the following contents:
 ```
-export const restUrl = '[REST URL HERE]';
-export const dataKey = '[REST DATAKEY HERE]';
+export default [
+    {
+        name: 'Demo',
+        url: 'https://demo.gtnexus.com/rest/310',
+        key: '[DATA KEY HERE]',
+        issue: '$IssueT3',
+        message: '$MessageT4'
+    },
+    // repeat for additional environments
+    ...
+];
 ```
 
 Run the project with:
