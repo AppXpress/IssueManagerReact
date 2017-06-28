@@ -56,4 +56,4 @@ fastlane/screenshots
 
 
 
-src/gtn/Environment.js
+src/gtn/Environments.js

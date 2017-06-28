@@ -20,6 +20,8 @@ import {
 	Utilities
 } from '../gtn/All';
 
+import Environments from '../gtn/Environments';
+
 /**
  * Page component for loggin in
  */
@@ -43,23 +45,25 @@ export default class Login extends Component {
 		});
 	}
 
-	settings(){
+	settings() {
 		this.props.navigator.push({
-			screen: 'Settings'
+			screen: 'Settings',
+			passProps: { loadEnvironment: () => this.loadEnvironment() }
 		});
 	}
 
-	willAppear(){
+	willAppear() {
 		Navigation.set(this, {
 			title: ' Welcome',
 			buttons: [
 				{ icon: 'settings', id: 'settings' }
 			]
-		});	
+		});
 	}
 
 	async componentDidMount() {
 		if (__DEV__) {
+			this.loadEnvironment();
 			await this.getCredentials();
 		}
 	}
@@ -87,13 +91,24 @@ export default class Login extends Component {
 		}
 	}
 
+	async loadEnvironment() {
+		this.environment = JSON.parse(await Utilities.storageGet('environment'));
+		if (!this.environment) {
+			this.environment = Environments[0];
+		}
+
+		AppX.objects.issue = this.environment.issue;
+		AppX.objects.message = this.environment.message;
+	}
+
 	/**
 	 * Signs in the user with the current username, password, and eid
 	 */
 	async login(event) {
 		this.setState({ loading: true });
 
-		var appx = await AppX.login(this.state.username, this.state.password, this.state.eid);
+		var appx = await AppX.login(this.state.username, this.state.password, this.state.eid, this.environment);
+
 		this.setState({ loading: false });
 		if (appx.data) {
 			if (__DEV__) {
@@ -106,8 +121,6 @@ export default class Login extends Component {
 		} else {
 			setTimeout(() => { alert('Login failed. Please try again.') }, 1000);
 		}
-
-
 	}
 
 	/**

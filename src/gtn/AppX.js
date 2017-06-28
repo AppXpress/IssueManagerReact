@@ -6,17 +6,23 @@ import Rest from './Rest';
 import { base64Encode } from './Utilities';
 
 /**
+ * Storage for the environment names of objects
+ */
+export const objects = {};
+
+/**
  * Authenticate the user with GT Nexus API
  * 
  * @param {string} user the username to authenticate with
  * @param {string} pass the password to authenticate with
  * @param {string} eid the eid to authenticate with
+ * @param {object} env the environment to login to
  * @returns true if successful, null otherwise
  */
-export async function login(user, pass, eid) {
+export async function login(user, pass, eid, env) {
 	try {
 		await new Rest()
-			.base()
+			.base(env.url, env.key)
 			.auth(user, pass, eid);
 
 		return { data: true };

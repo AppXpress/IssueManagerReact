@@ -41,16 +41,12 @@ export default class Picker extends Component {
 		this.props = props;
 		this.state = {
 			value: this.props.selectedValue,
-			data: props.children,
 			visible: false
 		}
 	}
 
 	componentWillReceiveProps(next) {
-		this.setState({
-			value: next.selectedValue,
-			data: next.children
-		});
+		this.setState({ value: next.selectedValue });
 	}
 
 	/**
@@ -126,7 +122,7 @@ export default class Picker extends Component {
 					onRequestClose={() => this.setState({ visible: false })}
 				>
 					<FlatList
-						data={this.state.data}
+						data={this.props.children}
 						keyExtractor={item => 'Picker' + item.props.value}
 						renderItem={this.renderItem.bind(this)}
 					/>

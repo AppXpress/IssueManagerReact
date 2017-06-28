@@ -59,7 +59,7 @@ export default class CreateIssue extends Component {
 				issue[key] = this.props.issue[key];
 			}
 		} else {
-			issue.type = '$IssueT3';
+			issue.type = AppX.objects.issue;
 			issue.licensee = {
 				memberId: '5717989018004281'
 			};
@@ -94,10 +94,10 @@ export default class CreateIssue extends Component {
 			this.props.navigator.pop();
 			this.props.reload();
 		} else {
-			setTimeout(()=>{ alert('Something went wrong!'); }, 800);
+			setTimeout(() => { alert('Something went wrong!'); }, 800);
 		}
 
-		
+
 	}
 
 	/**

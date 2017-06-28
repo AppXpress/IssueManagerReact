@@ -3,11 +3,6 @@ import {
 } from 'react-native';
 
 import {
-	restUrl,
-	dataKey
-} from './Environment';
-
-import {
 	storageGet,
 	storageSet,
 	base64Encode
@@ -31,6 +26,7 @@ export default class Rest {
 
 	static _token;
 	static _credentials;
+	static _environment;
 
 	/**
 	 * Creates a new Rest API call
@@ -92,11 +88,19 @@ export default class Rest {
 	}
 
 	/**
-	 * Populates the query with the dataKey and basic headers
+	 * Populates the query with the default or specified environment and headers
+	 * 
+	 * @param {string?} url the environment url to use
+	 * @param {string?} key the data key to use
 	 */
-	base() {
-		this._url = restUrl;
-		this._params['dataKey'] = dataKey;
+	base(url, key) {
+		if (url && key) {
+			Rest._url = url;
+			Rest._key = key;
+		}
+
+		this._url = Rest._url;
+		this._params['dataKey'] = Rest._key;
 		this._headers['Authorization'] = Rest._token;
 		this._headers['Content-Type'] = 'application/json';
 		return this;

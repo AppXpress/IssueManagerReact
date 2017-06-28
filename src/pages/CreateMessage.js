@@ -37,17 +37,17 @@ export default class CreateMessage extends Component {
 		this.setState({ loading: true });
 
 		var body = {
-			"type": "$MessageT4",
-			"createdOn": new Date(),
-			"text": this.state.message,
-			"issue": {
-				"reference": "Issue",
-				"rootType": "$IssueT3",
-				"rootId": this.props.id,
-				"externalType": "$IssueT3",
+			type: AppX.objects.message,
+			createdOn: new Date(),
+			text: this.state.message,
+			issue: {
+				reference: 'Issue',
+				rootType: '$IssueT3',
+				rootId: this.props.id,
+				externalType: '$IssueT3',
 			},
-			"licensee": {
-				"memberId": "5717989018004281",
+			licensee: {
+				'memberId': '5717989018004281',
 			}
 		};
 

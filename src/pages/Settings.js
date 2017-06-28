@@ -10,8 +10,11 @@ import {
 } from '../soho/All';
 
 import {
+	AppX,
 	Utilities
 } from '../gtn/All';
+
+import Environments from '../gtn/Environments';
 
 /**
  * Page component for choosing settings, such as global object and environment
@@ -21,62 +24,109 @@ export default class Settings extends Component {
 	constructor(props) {
 		super(props);
 
-		this.state = {
-			environment: 'https://network-rctq.qa.gtnexus.com/rest/310',
-			objType: '$IssueT3'
-		};
+		this.state = {};
 
 		Navigation.set(this, {
-			title: 'Settings',
-			
+			title: 'Settings'
 		});
 	}
 
-	async saveSettings(){
-		await Utilities.storageSet('env', this.state.environment);
-		await Utilities.storageSet('objType', this.state.objType);
+	async componentDidMount() {
+		var env = JSON.parse(await Utilities.storageGet('environment'));
+		if (!env) {
+			env = Environments[0];
+		}
+
+		this.setState({
+			key: env.key,
+			url: env.url,
+			issue: env.issue,
+			message: env.message
+		});
+	}
+
+	async saveSettings() {
+		await Utilities.storageSet('environment', JSON.stringify({
+			url: this.state.url,
+			key: this.state.key,
+			issue: this.state.issue,
+			message: this.state.message
+		}));
+
+		await this.props.loadEnvironment();
 		this.props.navigator.pop();
 	}
 
+	getEnv() {
+		var env = Environments.find(item => {
+			return item.url == this.state.url &&
+				item.key == this.state.key &&
+				item.issue == this.state.issue &&
+				item.message == this.state.message;
+		});
 
-	render(){
-		return(
+		if (env) {
+			return env.name;
+		}
+	}
 
+	setEnv(name) {
+		var env = Environments.find(item => item.name == name);
+
+		if (env) {
+			this.setState({
+				url: env.url,
+				key: env.key,
+				issue: env.issue,
+				message: env.message
+			});
+		}
+	}
+
+	render() {
+		return (
 			<Page>
 				<Card>
 					<Picker
-                        label='Environment'
-                        title='Select an Environment'
-                        selectedValue={this.state.environment}
-                        onValueChange={item => this.setState({ environment: item })}
-                    >
-                        <Picker.Item label='PRODUCTION' value='https://network.gtnexus.com/rest/310' />
-                        <Picker.Item label='PRE PROD' value='https://preprod.gtnexus.com/rest/310' />
-                        <Picker.Item label='DEMO' value='https://demo.gtnexus.com/rest/310' />
-                        <Picker.Item label='BETA' value='https://network-beta.gtnexus.com/rest/310' />
-                        <Picker.Item label='RCTP' value='https://network-rctp.qa.gtnexus.com/rest/310' />
-                        <Picker.Item label='SUPP' value='https://network-suportp.qa.gtnexus.com/rest/310' />
-                        <Picker.Item label='SUPPORTQ' value= 'https://network-suportq.qa.gtnexus.com/rest/310' />
-                        <Picker.Item label="RCTQ" value='https://network-rctq.qa.gtnexus.com/rest/310' />
-                        <Picker.Item label="ALPHAQ" value='https://network-alphaq.qa.gtnexus.com/rest/310' />
+						label='Environment'
+						title='Select an Environment'
+						selectedValue={this.getEnv()}
+						onValueChange={name => this.setEnv(name)}
+					>
+						{Environments.map(item =>
+							<Picker.Item label={item.name} key={item.name} value={item.name} />
+						)}
+					</Picker>
 
-                    </Picker>
-                   	<TextInput	label='Global Object Identifier'
-								value={this.state.objType}
-								onChangeText={(text) => this.setState({ objType: text })}
-								autoCapitalize='none'
+					<TextInput label='REST API URL'
+						value={this.state.url}
+						onChangeText={(text) => this.setState({ url: text })}
+						autoCapitalize='none'
 					/>
-					<Button
-					primary
-					title="Save"
-					icon='save'
-					onPress={()=>this.saveSettings()}
-					/>	
-				</Card>
+					<TextInput label='REST API Data Key'
+						value={this.state.key}
+						onChangeText={(text) => this.setState({ key: text })}
+						autoCapitalize='none'
+					/>
+					<TextInput label='Issue Object Identifier'
+						value={this.state.issue}
+						onChangeText={(text) => this.setState({ issue: text })}
+						autoCapitalize='none'
+					/>
+					<TextInput label='Message Object Identifier'
+						value={this.state.message}
+						onChangeText={(text) => this.setState({ message: text })}
+						autoCapitalize='none'
+					/>
 
-			</Page>	
+					<Button
+						primary
+						title='Save'
+						icon='save'
+						onPress={() => this.saveSettings()}
+					/>
+				</Card>
+			</Page>
 		);
 	}
-
-
 }

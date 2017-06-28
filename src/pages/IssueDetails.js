@@ -181,7 +181,7 @@ export default class IssueDetails extends Component {
 		});
 
 		/* Get the current issue */
-		AppX.fetch('$IssueT3', this.props.id, true).then(({ data }) => {
+		AppX.fetch(AppX.objects.issue, this.props.id, true).then(({ data }) => {
 			this.setState({
 				issue: data.data,
 				actions: data.actionSet.action.filter(action => {
@@ -200,7 +200,7 @@ export default class IssueDetails extends Component {
 		});
 
 		/* Get the issue messages */
-		AppX.query('$MessageT4', 'issue.rootId = ' + this.props.id + ' ORDER BY createTimestamp DESC').then(({ data }) => {
+		AppX.query(AppX.objects.message, 'issue.rootId = ' + this.props.id + ' ORDER BY createTimestamp DESC').then(({ data }) => {
 			if (data) {
 				this.setState({ messages: data.result || [] });
 			} else {
@@ -209,7 +209,7 @@ export default class IssueDetails extends Component {
 		});
 
 		/* Get the attachments on the issue */
-		AppX.fetchAttachList('$IssueT3', this.props.id).then(({ data }) => {
+		AppX.fetchAttachList(AppX.objects.issue, this.props.id).then(({ data }) => {
 			if (data) {
 				this.setState({ attachments: data.result || [] });
 			} else {
@@ -286,15 +286,15 @@ export default class IssueDetails extends Component {
 
 	/**
 	 *  Sends user to the camera page to add an attachment.
-	 */	
+	 */
 	addAttachment() {
 		this.props.navigator.push({
 			screen: 'CameraScreen',
-			passProps: { issue: this.state.issue, reload: () => this.reload()}
+			passProps: { issue: this.state.issue, reload: () => this.reload() }
 
 		});
 	}
-	
+
 	/**
 	 *	Fetches an attachment and displays it on an image page.
 	 */
