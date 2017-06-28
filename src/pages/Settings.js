@@ -57,6 +57,9 @@ export default class Settings extends Component {
 		this.props.navigator.pop();
 	}
 
+	/**
+	 * Gets the name of the current environment based on the given values
+	 */
 	getEnv() {
 		var env = Environments.find(item => {
 			return item.url == this.state.url &&
@@ -70,6 +73,11 @@ export default class Settings extends Component {
 		}
 	}
 
+	/**
+	 * Sets the envrionment based on the name
+	 * 
+	 * @param {string} name the new environment name
+	 */
 	setEnv(name) {
 		var env = Environments.find(item => item.name == name);
 
@@ -83,6 +91,9 @@ export default class Settings extends Component {
 		}
 	}
 
+	/**
+	 * Displays a settings page with fields for environment varaibles and a save button
+	 */
 	render() {
 		return (
 			<Page>
