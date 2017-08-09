@@ -1,4 +1,3 @@
-
 # Issue Manager Mobile
 
 Issue Manager Mobile is a mobile application written in React Native used to access the GT Nexus Issue system from anywhere.
@@ -15,6 +14,8 @@ Issue Manager Mobile is a mobile application written in React Native used to acc
 
 
 ## Setup
+These instructions will get a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project for release.
+
   1. Set up React-Native environment according to their [documentation](https://facebook.github.io/react-native/docs/getting-started.html)
   2. Clone this repository:
     `git clone  https://github.com/AppXpress/IssueManagerReact.git`
@@ -36,6 +37,10 @@ export default [
 
   5. Run the project with:
 `react-native start` followed by `react-native run-android` or `react-native run-ios`
+
+## Deployment
+  * Android: Created a [signed APK](https://facebook.github.io/react-native/docs/signed-apk-android.html)
+  * iOS: Configure release scheme in [xCode](https://facebook.github.io/react-native/docs/running-on-device.html#3-build-app-for-release)
 
 ## Dependencies
    * [React Native Fetch Blob](https://github.com/wkh237/react-native-fetch-blob) - For downloading and uploading image attachments to GTN
