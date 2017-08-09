@@ -44,5 +44,5 @@ export default [
 
 ## Dependencies
    * [React Native Fetch Blob](https://github.com/wkh237/react-native-fetch-blob) - For downloading and uploading image attachments to GTN
-   * [React Native Navigation](https://github.com/wix/react-native-navigation) - For smooth stack navigation an both Android and iOs
+   * [React Native Navigation](https://github.com/wix/react-native-navigation) - For smooth stack navigation an both Android and iOS
    * [React Native Camera](https://github.com/lwansbrough/react-native-camera) - For accessing native camera
